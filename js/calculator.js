@@ -16,7 +16,7 @@ export const CONFIG = {
   vat: 0.2,
   panels: {
     residential: {
-      maxReferenceKwp: 20,
+      maxReferenceKwp: 7,
       watts: 455,
       areaM2: 1.998,
       brand: "JA Solar",
