@@ -60,7 +60,7 @@ function buildSummaryText(result, name) {
     "",
     "A mund të më ndihmoni me një verifikim teknik dhe ofertë të saktë? Faleminderit!",
   ];
-  return lines.join("\n");
+  return lines.join("\n").replace(/ë/g, "e").replace(/Ë/g, "E");
 }
 
 function renderChart(result) {
