@@ -2,22 +2,25 @@ const VERSION = "hisol-v1";
 const PRECACHE = `${VERSION}-precache`;
 const RUNTIME = `${VERSION}-runtime`;
 
+// Relative to this script's own location, so this works whether the app is
+// served from a domain root or a subpath (e.g. GitHub Pages project sites).
 const PRECACHE_URLS = [
-  "/",
-  "/index.html",
-  "/css/styles.css",
-  "/js/app.js",
-  "/js/calculator.js",
-  "/js/format.js",
-  "/js/pdf.js",
-  "/vendor/pdf-lib.min.js",
-  "/manifest.webmanifest",
-  "/assets/favicon.svg",
-  "/assets/hisol-logo-header.png",
-  "/assets/hisol-logo-pdf.png",
-  "/assets/app-icon-180.png",
-  "/assets/app-icon-192.png",
-  "/assets/app-icon-512.png",
+  "./",
+  "index.html",
+  "css/styles.css",
+  "js/app.js",
+  "js/calculator.js",
+  "js/format.js",
+  "js/catalog.js",
+  "js/pdf.js",
+  "vendor/pdf-lib.min.js",
+  "manifest.webmanifest",
+  "assets/favicon.svg",
+  "assets/hisol-logo-header.png",
+  "assets/hisol-logo-pdf.png",
+  "assets/app-icon-180.png",
+  "assets/app-icon-192.png",
+  "assets/app-icon-512.png",
 ];
 
 self.addEventListener("install", (event) => {
@@ -48,10 +51,10 @@ self.addEventListener("fetch", (event) => {
       fetch(request)
         .then((response) => {
           const clone = response.clone();
-          caches.open(PRECACHE).then((cache) => cache.put("/index.html", clone));
+          caches.open(PRECACHE).then((cache) => cache.put("index.html", clone));
           return response;
         })
-        .catch(() => caches.match("/index.html"))
+        .catch(() => caches.match("index.html"))
     );
     return;
   }
