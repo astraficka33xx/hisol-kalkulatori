@@ -165,7 +165,7 @@
           </div>
 
           <div class="results-card__actions">
-            <a id="offerLink" class="btn btn--lime" href="mailto:contact@hisolenergy.com">Kërko ofertë të saktë</a>
+            <button id="offerBtn" class="btn btn--lime" type="button">Kërko ofertë të saktë</button>
             <button id="pdfBtn" class="btn btn--white" type="button">Shkarko ofertën PDF</button>
             <button id="copySummaryBtn" class="btn btn--ghost" type="button">Kopjo</button>
           </div>
@@ -237,6 +237,20 @@
     <p><strong>Android:</strong> Hape në Chrome → menuja ⋮ → Instalo aplikacionin ose Shto në ekranin kryesor.</p>
     <p class="muted">Nëse e hape brenda WhatsApp ose Instagram, zgjidh fillimisht hapjen në shfletues.</p>
     <button class="btn btn--outline" type="button" data-close-dialog>Mbyll</button>
+  </dialog>
+
+  <dialog id="offerDialog" class="dialog">
+    <h3>Kërko ofertë të saktë</h3>
+    <p class="muted">Lini kontaktin tuaj — do t'ju hapet WhatsApp me një mesazh të gatshëm drejt hiSol, gati për ta dërguar.</p>
+    <label class="field-label" for="offerName">Emri e mbiemri</label>
+    <input type="text" id="offerName" class="text-input" placeholder="p.sh. Elton Hoxha" />
+    <label class="field-label" for="offerPhone">Numri i telefonit</label>
+    <input type="tel" id="offerPhone" class="text-input" placeholder="p.sh. 069 123 4567" inputmode="tel" />
+    <p class="pdf-error" id="offerError" role="alert" hidden></p>
+    <div class="dialog__actions">
+      <button class="btn btn--outline" type="button" data-close-dialog>Anulo</button>
+      <button id="offerSubmitBtn" class="btn btn--primary" type="button">Dërgo në WhatsApp</button>
+    </div>
   </dialog>
 
   <dialog id="pdfDialog" class="dialog">
