@@ -66,7 +66,7 @@ export async function downloadQuotePdf({ clientName = "", clientLocation = "", c
   rect(0, 0, width, 110, blue);
   line(35, 108, 560, 108, border);
   try {
-    const logoBytes = await fetch("/assets/hisol-logo-pdf.png").then((r) => r.arrayBuffer());
+    const logoBytes = await fetch("assets/hisol-logo-pdf.png").then((r) => r.arrayBuffer());
     const logo = await doc.embedPng(logoBytes);
     const logoW = 90;
     const logoH = (logo.height / logo.width) * logoW;
