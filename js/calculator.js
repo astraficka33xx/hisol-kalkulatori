@@ -23,7 +23,7 @@ export const CONFIG = {
       model: "JAM54D41-455/LB",
       series: "DEEP BLUE 4.0 Pro",
       name: "JA Solar 455 W",
-      datasheet: "/datasheets/ja-solar-455w.pdf",
+      datasheet: "datasheets/ja-solar-455w.pdf",
     },
     commercial: {
       watts: 730,
@@ -32,7 +32,7 @@ export const CONFIG = {
       model: "JKM730N-66HL5-BDV",
       series: "Tiger Neo",
       name: "Jinko Solar 730 W",
-      datasheet: "/datasheets/jinko-solar-730w.pdf",
+      datasheet: "datasheets/jinko-solar-730w.pdf",
     },
   },
   roofSpaceFactors: {
@@ -60,7 +60,7 @@ export const INVERTER_TIERS = [
     minAcKw: 0,
     maxAcKw: 6.2,
     steps: [3.6, 4, 4.2, 4.6, 5, 5.2, 6, 6.2],
-    datasheet: "/datasheets/deye-mono-3.6-6.2kw.pdf",
+    datasheet: "datasheets/deye-mono-3.6-6.2kw.pdf",
   },
   {
     // Every trefazor need above the Deye monofazor ceiling (6.2 kW AC) uses Solis
@@ -80,7 +80,7 @@ export const INVERTER_TIERS = [
     combo: true,
     comboUnitKw: [15, 18],
     comboMaxUnits: 6,
-    datasheet: "/datasheets/solis-eh3p-15-18kw-parallel.pdf",
+    datasheet: "datasheets/solis-eh3p-15-18kw-parallel.pdf",
   },
   {
     id: "solis-trefazor-50-75",
@@ -91,7 +91,7 @@ export const INVERTER_TIERS = [
     minAcKw: 50,
     maxAcKw: 75,
     steps: [50, 60, 75],
-    datasheet: "/datasheets/solis-trefazor-50-75kw.pdf",
+    datasheet: "datasheets/solis-trefazor-50-75kw.pdf",
   },
   {
     id: "solis-trefazor-80-125",
@@ -102,7 +102,7 @@ export const INVERTER_TIERS = [
     minAcKw: 75,
     maxAcKw: 125,
     steps: [80, 100, 110, 125],
-    datasheet: "/datasheets/solis-trefazor-80-125kw.pdf",
+    datasheet: "datasheets/solis-trefazor-80-125kw.pdf",
   },
 ];
 
