@@ -38,21 +38,27 @@ function currentResult() {
   });
 }
 
-function buildSummaryText(result) {
+function buildSummaryText(result, name) {
+  const forWhom = state.customer === "familjar" ? "shtëpinë time" : "biznesin tim";
+  const placement = ROOF_LABELS[state.roof].toLowerCase();
+  const sizingClause = state.method === "fatura"
+    ? `me faturë mesatare rreth ${formatNumber(state.monthlyBill)} lekë/muaj dhe ${placement}`
+    : `me ${placement} dhe fuqi të kërkuar rreth ${formatDecimal(state.desiredKwp)} kWp`;
+  const equipmentClause = `${result.panelCount} panele ${result.panelBrand}${result.inverterIsCustom ? "" : ` + inverter ${result.inverterBrand}`}`;
+  const priceClause = result.priceWithVat
+    ? `me çmim orientues rreth ${formatNumber(result.priceWithVat)} lekë me TVSH`
+    : "si projekt të personalizuar (kërkon çmim të veçantë)";
+
+  const intro = name
+    ? `Jam ${name}. Bëra një llogaritje te kalkulatori juaj dhe doja pak informacion.`
+    : "Përshëndetje hiSol! Bëra një llogaritje te kalkulatori juaj dhe doja pak informacion.";
+
   const lines = [
-    "Përshëndetje hiSol! Bëra një përllogaritje në kalkulator:",
-    `• Klienti: ${state.customer === "familjar" ? "Familjar" : "Biznes"}`,
-    `• Vendosja: ${ROOF_LABELS[state.roof]}`,
-    state.method === "fatura"
-      ? `• Fatura mesatare: ${formatNumber(state.monthlyBill)} lekë/muaj`
-      : `• Fuqia e kërkuar: ${formatDecimal(state.desiredKwp)} kWp`,
-    `• Sistemi i sugjeruar: ${formatDecimal(result.installedKwp)} kWp`,
-    `• Panelet: ${result.panelCount} × ${result.panelBrand} ${result.panelModel} (${result.panelWatts}W)`,
-    `• Inverteri: ${result.inverterIsCustom ? "sipas projektit" : `${result.inverterBrand} ${result.inverterModel} (${result.inverterPhase})`}`,
-    result.priceWithVat
-      ? `• Çmimi orientues: ${formatNumber(result.priceWithVat)} lekë me TVSH`
-      : "• Kërkoj ofertë për projekt të personalizuar",
-    "Dua verifikim teknik dhe ofertë të saktë.",
+    intro,
+    "",
+    `Për ${forWhom}, ${sizingClause}, më doli një sistem rreth ${formatDecimal(result.installedKwp)} kWp (${equipmentClause}), ${priceClause}.`,
+    "",
+    "A mund të më ndihmoni me një verifikim teknik dhe ofertë të saktë? Faleminderit!",
   ];
   return lines.join("\n");
 }
@@ -208,8 +214,8 @@ offerSubmitBtn.addEventListener("click", () => {
   }
   offerError.hidden = true;
 
-  const { summary } = render();
-  const message = [`Emri: ${name}`, `Telefoni: ${phone}`, "", summary].join("\n");
+  const { result } = render();
+  const message = buildSummaryText(result, name);
   const waUrl = `https://wa.me/${HISOL_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   window.open(waUrl, "_blank", "noopener");
   offerDialog.close();
