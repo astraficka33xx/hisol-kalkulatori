@@ -115,9 +115,6 @@ function render() {
   el("minimumNote").hidden = !result.minimumApplied;
 
   const summary = buildSummaryText(result);
-  const subject = encodeURIComponent(`Kërkesë oferte hiSol — ${formatDecimal(result.installedKwp)} kWp`);
-  const body = encodeURIComponent(summary);
-  el("offerLink").href = `mailto:contact@hisolenergy.com?subject=${subject}&body=${body}`;
 
   renderChart(result);
 
@@ -183,6 +180,41 @@ el("copyLinkBtn").addEventListener("click", async () => {
   window.setTimeout(() => {
     btn.textContent = "Kopjo linkun për miqtë";
   }, 2200);
+});
+
+// --- Offer request (WhatsApp) -------------------------------------------
+
+const HISOL_WHATSAPP_NUMBER = "355684377766"; // +355 684 377 766, no leading +, no spaces
+
+const offerDialog = el("offerDialog");
+const offerBtn = el("offerBtn");
+const offerSubmitBtn = el("offerSubmitBtn");
+const offerError = el("offerError");
+const offerNameInput = el("offerName");
+const offerPhoneInput = el("offerPhone");
+
+offerBtn.addEventListener("click", () => {
+  offerError.hidden = true;
+  offerDialog.showModal();
+});
+
+offerSubmitBtn.addEventListener("click", () => {
+  const name = offerNameInput.value.trim();
+  const phone = offerPhoneInput.value.trim();
+  if (!name || !phone) {
+    offerError.textContent = "Ju lutem plotësoni emrin dhe numrin e telefonit.";
+    offerError.hidden = false;
+    return;
+  }
+  offerError.hidden = true;
+
+  const { summary } = render();
+  const message = [`Emri: ${name}`, `Telefoni: ${phone}`, "", summary].join("\n");
+  const waUrl = `https://wa.me/${HISOL_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  window.open(waUrl, "_blank", "noopener");
+  offerDialog.close();
+  offerNameInput.value = "";
+  offerPhoneInput.value = "";
 });
 
 // --- PDF dialog --------------------------------------------------------
