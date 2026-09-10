@@ -1,4 +1,4 @@
-const VERSION = "hisol-v1";
+const VERSION = "hisol-v2";
 const PRECACHE = `${VERSION}-precache`;
 const RUNTIME = `${VERSION}-runtime`;
 
@@ -46,12 +46,17 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   // Navigations: network-first so users always get the latest app shell when online.
+  // Only a genuinely OK response is cached as the offline fallback — caching an
+  // error/redirect here would otherwise "brick" the app for repeat visitors even
+  // after the real problem (e.g. a transient CDN hiccup) is fixed.
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          const clone = response.clone();
-          caches.open(PRECACHE).then((cache) => cache.put("index.html", clone));
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(PRECACHE).then((cache) => cache.put("index.html", clone));
+          }
           return response;
         })
         .catch(() => caches.match("index.html"))
