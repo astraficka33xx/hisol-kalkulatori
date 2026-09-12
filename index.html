@@ -1,284 +1,527 @@
-<!doctype html>
-<html lang="sq">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Kalkulatori Solar | hiSol</title>
-  <meta name="description" content="Llogarit fuqinë, panelet, prodhimin dhe çmimin orientues të sistemit fotovoltaik hiSol." />
+<title>hiSol Energy</title>
+<style>
+:root {
+  --blue: #1429c2;
+  --blue-dark: #10229f;
+  --navy: #0d1747;
+  --lime: #c5ef78;
+  --lime-dark: #a7d94d;
+  --ink: #0d1747;
+  --muted: #66708d;
+  --muted-2: #4a5578;
+  --border: #dfe4f0;
+  --page-bg-1: #eef2fb;
+  --page-bg-2: #f7f8fc;
+  --surface: #ffffff;
+  --surface-alt: #f6f7fb;
+  --white: #ffffff;
+  --shadow: 0 20px 70px rgba(22, 32, 77, 0.07);
+  --shadow-sm: 0 8px 24px rgba(22, 32, 77, 0.06);
+  --font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #eef1fb; --muted: #9aa3c7; --muted-2: #b6bedd;
+    --border: rgba(255,255,255,0.12);
+    --page-bg-1: #0a1130; --page-bg-2: #0d1538;
+    --surface: #121a3e; --surface-alt: #0f1730; --white: #eef1fb;
+    --shadow: 0 20px 70px rgba(0,0,0,0.35); --shadow-sm: 0 8px 24px rgba(0,0,0,0.3);
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #eef1fb; --muted: #9aa3c7; --muted-2: #b6bedd;
+  --border: rgba(255,255,255,0.12);
+  --page-bg-1: #0a1130; --page-bg-2: #0d1538;
+  --surface: #121a3e; --surface-alt: #0f1730; --white: #eef1fb;
+  --shadow: 0 20px 70px rgba(0,0,0,0.35); --shadow-sm: 0 8px 24px rgba(0,0,0,0.3);
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--page-bg-2);
+  color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased;
+}
+img, svg { max-width: 100%; }
+a { color: inherit; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+h1, h2, h3 { text-wrap: balance; }
 
-  <link rel="icon" href="assets/favicon.svg" />
-  <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <meta name="theme-color" content="#1429c2" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="hiSol" />
+.hero-bg {
+  background: linear-gradient(180deg, var(--page-bg-1) 0%, var(--page-bg-2) 480px, var(--page-bg-2) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(20,41,194,0.09) 1.5px, transparent 1.5px);
+  background-size: 26px 26px;
+  -webkit-mask-image: linear-gradient(180deg, black, transparent 480px);
+  mask-image: linear-gradient(180deg, black, transparent 480px);
+  pointer-events: none;
+}
 
-  <link rel="stylesheet" href="css/styles.css" />
-</head>
-<body>
-  <div class="page">
-    <header class="topbar">
-      <div class="topbar__inner">
-        <img class="logo" src="assets/hisol-logo-header.png" alt="hiSol" />
-        <div class="topbar__actions">
-          <button id="modelsBtn" class="btn btn--outline" type="button">Modelet tona</button>
-          <button id="installBtn" class="btn btn--outline" type="button" hidden>Shto hiSol në celular</button>
-          <button id="copyLinkBtn" class="btn btn--outline" type="button">Kopjo linkun për miqtë</button>
+.topbar { padding: 16px 0; position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--page-bg-2) 82%, transparent); backdrop-filter: blur(10px); transition: box-shadow 0.2s ease; }
+.topbar.is-scrolled { box-shadow: 0 1px 0 var(--border), 0 8px 24px rgba(13,23,71,0.06); }
+.topbar__inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; position: relative; z-index: 1; }
+.logo-mark { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 21px; color: var(--blue); letter-spacing: -0.01em; text-decoration: none; }
+.logo-mark svg { width: 28px; height: 28px; }
+.nav-center { display: none; gap: 26px; font-size: 14px; font-weight: 600; color: var(--muted-2); }
+.nav-center a { text-decoration: none; }
+.nav-center a:hover { color: var(--blue); }
+@media (min-width: 860px) { .nav-center { display: flex; } }
+.nav-links { display: flex; align-items: center; gap: 10px; }
+
+.btn { appearance: none; border: none; cursor: pointer; border-radius: 12px; font-family: var(--font); font-weight: 700; font-size: 14px; padding: 12px 20px; height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; white-space: nowrap; transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease; }
+.btn:active { transform: scale(0.98); }
+.btn--lime { background: var(--lime); color: #0c1a7a; }
+.btn--lime:hover { background: var(--lime-dark); }
+.btn--outline { background: transparent; border: 1px solid var(--border); color: var(--ink); }
+.btn--outline:hover { border-color: var(--blue); color: var(--blue); }
+.btn--white { background: #fff; color: var(--blue); }
+.btn--white:hover { background: #eef1fd; }
+.btn--sm { height: 40px; padding: 0 16px; font-size: 13px; }
+
+.hero { padding: 40px 0 8px; display: grid; gap: 40px; grid-template-columns: 1fr; position: relative; z-index: 1; }
+@media (min-width: 960px) { .hero { grid-template-columns: 1.05fr 0.95fr; align-items: center; padding: 40px 0 16px; } }
+.eyebrow { display: inline-flex; align-items: center; gap: 6px; color: var(--blue); font-weight: 700; font-size: 12.5px; letter-spacing: 0.08em; margin: 0 0 14px; text-transform: uppercase; }
+.hero h1 { font-size: clamp(32px, 5vw, 52px); line-height: 1.06; margin: 0 0 16px; letter-spacing: -0.02em; }
+.hero h1 em { font-style: normal; color: var(--blue); }
+.hero__lead { color: var(--muted-2); font-size: 17px; line-height: 1.65; margin: 0 0 26px; max-width: 46ch; }
+.hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+.hero__trust { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--muted); }
+.hero__trust span { display: inline-flex; align-items: center; gap: 6px; }
+.hero__trust svg { width: 15px; height: 15px; color: var(--lime-dark); }
+
+.sun-card { background: linear-gradient(160deg, var(--navy) 0%, #16215c 55%, var(--blue) 130%); color: #fff; border-radius: 28px; padding: 26px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.sun-card::after { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(197,239,120,0.22), transparent 70%); pointer-events: none; }
+.sun-card__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.sun-card__label { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: rgba(255,255,255,0.75); text-transform: uppercase; }
+.sun-card__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 4px rgba(197,239,120,0.25); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
+.sun-card__loc { font-size: 12px; color: rgba(255,255,255,0.55); }
+.sun-arc-wrap { margin: 14px 0 10px; }
+.sun-arc-wrap svg { width: 100%; height: auto; display: block; }
+.sun-card__time { font-size: 26px; font-weight: 800; margin: 2px 0 0; font-variant-numeric: tabular-nums; }
+.sun-card__timelabel { font-size: 12.5px; color: rgba(255,255,255,0.6); margin: 0 0 14px; }
+.sun-sentence { font-size: 16px; line-height: 1.6; margin: 4px 0 14px; color: rgba(255,255,255,0.92); }
+.sun-sentence strong { font-variant-numeric: tabular-nums; }
+.sun-sentence #sunNow { color: var(--lime); font-weight: 800; }
+.sun-money { display: flex; gap: 12px; align-items: flex-start; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 14px 16px; }
+.sun-money__icon { width: 30px; height: 30px; border-radius: 9px; background: rgba(197,239,120,0.16); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sun-money__icon svg { width: 16px; height: 16px; color: var(--lime); }
+.sun-money p { margin: 0; font-size: 13.5px; line-height: 1.55; color: rgba(255,255,255,0.85); }
+.sun-money #sunToday, .sun-money #sunLek { font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; }
+.sun-card__note { margin: 14px 0 0; font-size: 11.5px; line-height: 1.5; color: rgba(255,255,255,0.5); }
+
+.stats-bar { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-top: 46px; }
+@media (min-width: 720px) { .stats-bar { grid-template-columns: repeat(4, 1fr); } }
+.stat-cell { background: var(--surface); padding: 22px 18px; text-align: center; }
+.stat-cell__value { font-size: 26px; font-weight: 800; color: var(--blue); margin: 0 0 4px; letter-spacing: -0.01em; }
+.stat-cell__label { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.4; }
+
+.section { padding: 64px 0; }
+.section-head { max-width: 560px; margin: 0 0 34px; }
+.section-head--center { max-width: 640px; margin-left: auto; margin-right: auto; text-align: center; }
+.section-label { font-size: 12.5px; font-weight: 700; letter-spacing: 0.1em; color: var(--blue); text-transform: uppercase; margin: 0 0 8px; }
+.section-head h2 { font-size: clamp(24px, 3vw, 32px); margin: 0; letter-spacing: -0.01em; }
+.section-head p { color: var(--muted-2); font-size: 15px; line-height: 1.6; margin: 10px 0 0; }
+
+.trust-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.trust-item { background: var(--surface); border-radius: 18px; padding: 20px; box-shadow: var(--shadow-sm); display: flex; gap: 14px; align-items: flex-start; }
+.trust-item svg { width: 26px; height: 26px; color: var(--blue); flex-shrink: 0; }
+.trust-item h3 { font-size: 15px; margin: 0 0 4px; }
+.trust-item p { font-size: 13.5px; color: var(--muted-2); margin: 0; line-height: 1.5; }
+
+.facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
+.fact-card { background: var(--surface-alt); border-radius: 18px; padding: 22px; position: relative; }
+.fact-card__num { display: block; font-size: 13px; font-weight: 800; color: var(--lime-dark); margin-bottom: 10px; letter-spacing: 0.04em; }
+.fact-card p { font-size: 14.5px; line-height: 1.6; color: var(--ink); margin: 0; }
+
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; counter-reset: step; }
+.step-card { background: var(--surface); border-radius: 20px; padding: 26px 22px; box-shadow: var(--shadow-sm); position: relative; }
+.step-card__num { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 10px; background: var(--navy); color: var(--lime); font-weight: 800; font-size: 15px; margin-bottom: 16px; }
+.step-card h3 { font-size: 16px; margin: 0 0 8px; }
+.step-card p { font-size: 13.5px; color: var(--muted-2); line-height: 1.55; margin: 0; }
+
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+.service-card { background: var(--surface); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-sm); }
+.service-card__icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(20,41,194,0.08); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+.service-card__icon svg { width: 22px; height: 22px; color: var(--blue); }
+.service-card h3 { font-size: 17px; margin: 0 0 8px; }
+.service-card p { font-size: 14px; color: var(--muted-2); line-height: 1.55; margin: 0; }
+
+.product-tabs { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+.product-tab { border: 1px solid var(--border); background: var(--surface); color: var(--muted-2); border-radius: 999px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: var(--font); }
+.product-tab[aria-selected="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
+.product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; box-shadow: var(--shadow-sm); }
+.product-card__brand { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--blue); text-transform: uppercase; margin: 0; }
+.product-card__model { font-size: 14px; font-weight: 700; color: var(--ink); margin: 6px 0 10px; line-height: 1.3; }
+.product-card__power { display: inline-block; font-size: 12px; font-weight: 700; color: var(--ink); background: var(--surface-alt); border-radius: 999px; padding: 4px 12px; }
+
+.faq { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+.faq-item summary { list-style: none; cursor: pointer; padding: 18px 20px; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "+"; font-size: 20px; color: var(--blue); font-weight: 400; flex-shrink: 0; transition: transform 0.15s ease; }
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--muted-2); line-height: 1.6; }
+
+.calc-cta { background: linear-gradient(160deg, var(--navy) 0%, #16215c 55%, var(--blue) 130%); border-radius: 28px; padding: 40px; color: #fff; display: grid; gap: 24px; grid-template-columns: 1fr; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+@media (min-width: 800px) { .calc-cta { grid-template-columns: 1.2fr 0.8fr; align-items: center; padding: 48px 52px; } }
+.calc-cta::after { content: ""; position: absolute; bottom: -80px; left: -60px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(197,239,120,0.18), transparent 70%); pointer-events: none; }
+.calc-cta h2 { font-size: clamp(22px, 3vw, 30px); margin: 0 0 12px; letter-spacing: -0.01em; }
+.calc-cta p { font-size: 15px; color: rgba(255,255,255,0.72); line-height: 1.6; margin: 0; max-width: 46ch; }
+.calc-cta__actions { display: flex; flex-direction: column; gap: 12px; }
+
+.footer { padding: 46px 0 40px; border-top: 1px solid var(--border); }
+.footer__top { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 30px; margin-bottom: 32px; }
+@media (max-width: 700px) { .footer__top { grid-template-columns: 1fr; } }
+.footer__brand p { font-size: 13.5px; color: var(--muted-2); line-height: 1.6; margin: 12px 0 0; max-width: 34ch; }
+.footer__col h4 { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 14px; }
+.footer__col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.footer__col a { text-decoration: none; font-size: 14px; color: var(--muted-2); }
+.footer__col a:hover { color: var(--blue); }
+.footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--muted); }
+
+@media (max-width: 600px) {
+  .hero__actions { flex-direction: column; }
+  .hero__actions .btn { width: 100%; }
+  .calc-cta__actions .btn { width: 100%; }
+}
+</style>
+
+<div class="hero-bg">
+  <header class="topbar" id="topbar">
+    <div class="wrap topbar__inner">
+      <a class="logo-mark" href="#home">
+        <svg viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="24" fill="#1429c2"/><path d="M9 53h18L8 34l12-12 19 19V14h17v27l19-19 12 12-19 19h18v17H68L50 52 32 70H9V53Z" fill="#c5ef78"/><path d="m20 78 12 12 18-18 18 18 12-12-30-30-30 30Z" fill="#fff" opacity=".72"/></svg>
+        hiSol
+      </a>
+      <nav class="nav-center">
+        <a href="#sherbimet">Shërbimet</a>
+        <a href="#si-funksionon">Si funksionon</a>
+        <a href="#modelet">Modelet</a>
+        <a href="blog.html">Blog</a>
+        <a href="#pyetje">Pyetje</a>
+      </nav>
+      <div class="nav-links">
+        <a class="btn btn--outline btn--sm" href="kalkulatori/">Kalkulatori</a>
+        <a class="btn btn--lime btn--sm" href="https://wa.me/355684377766?text=Pershendetje%20hiSol%2C%20dua%20nje%20oferte%20per%20panele%20diellore.">Kontakt</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="wrap hero" id="home">
+    <div>
+      <p class="eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Energji diellore, Shqipëri
+      </p>
+      <h1>Ktheje diellin<br/>në <em>faturë më të lehtë</em>.</h1>
+      <p class="hero__lead">hiSol projekton dhe instalon sisteme fotovoltaike me panele dhe inverterë nga JA Solar, Jinko, Trina, LONGi, Deye dhe Solis — çmim i qartë që në minutën e parë, pa vizita të panevojshme.</p>
+      <div class="hero__actions">
+        <a class="btn btn--lime" href="kalkulatori/">Bëj llogaritjen falas →</a>
+        <a class="btn btn--outline" href="https://wa.me/355684377766?text=Pershendetje%20hiSol%2C%20dua%20nje%20oferte%20per%20panele%20diellore.">Kërko ofertë në WhatsApp</a>
+      </div>
+      <div class="hero__trust">
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>Garanci deri 30 vite</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>5 marka të certifikuara</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>Përgjigje brenda 24 orësh</span>
+      </div>
+    </div>
+
+    <div class="sun-card">
+      <div class="sun-card__head">
+        <span class="sun-card__label"><span class="sun-card__dot"></span>Dielli live</span>
+        <span class="sun-card__loc">Tiranë · 41.33°N</span>
+      </div>
+      <div class="sun-arc-wrap">
+        <svg viewBox="0 0 300 110" id="sunArc">
+          <path d="M 20 100 Q 150 -10 280 100" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2" stroke-dasharray="3 6"/>
+          <circle id="sunDot" cx="20" cy="100" r="7" fill="#c5ef78"/>
+        </svg>
+      </div>
+      <p class="sun-card__time" id="sunTime">--:--</p>
+      <p class="sun-card__timelabel" id="sunPhase">Duke ngarkuar…</p>
+      <p class="sun-sentence">Një shtëpi mesatare (sistem 10 kWp) <strong>tani po prodhon <span id="sunNow">— kW</span></strong> energji drejt e nga dielli.</p>
+      <div class="sun-money">
+        <div class="sun-money__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div>
+          <p class="sun-money__value">Sot ka prodhuar <span id="sunToday">— kWh</span> — sa <span id="sunLek">— lekë</span> kursim në faturë</p>
         </div>
       </div>
-    </header>
+      <p class="sun-card__note">Vlerësim orientues bazuar te pozicioni i diellit dhe randimenti mesatar i hiSol (1300 kWh/kWp/vit) — jo matje reale nga një sistem i instaluar.</p>
+    </div>
 
-    <main class="container">
-      <section class="hero">
-        <p class="eyebrow">
-          <svg class="eyebrow__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          KALKULATORI SOLAR HISOL
-        </p>
-        <h1>Nga fatura te sistemi i duhur.</h1>
-        <p class="hero__lead">
-          Merr një vlerësim të qartë për fuqinë, panelet, prodhimin dhe investimin. Oferta përfundimtare
-          konfirmohet pas kontrollit teknik.
-        </p>
-      </section>
+    <div class="stats-bar" style="grid-column: 1 / -1;">
+      <div class="stat-cell"><p class="stat-cell__value">3–480</p><p class="stat-cell__label">kWp të mbuluara nga kalkulatori</p></div>
+      <div class="stat-cell"><p class="stat-cell__value">30 vjet</p><p class="stat-cell__label">Garanci maksimale për fuqinë e panelit</p></div>
+      <div class="stat-cell"><p class="stat-cell__value">5 marka</p><p class="stat-cell__label">Panele e inverterë të certifikuar</p></div>
+      <div class="stat-cell"><p class="stat-cell__value">6 njësi</p><p class="stat-cell__label">Deri në kaq inverterë në paralel për sisteme të mëdha</p></div>
+    </div>
+  </section>
+</div>
 
-      <section class="calc-grid">
-        <!-- Form card -->
-        <form id="calcForm" class="card form-card" novalidate>
-          <div class="field-group">
-            <label class="field-label">Për kë po llogarisim?</label>
-            <div class="radio-row" data-name="customer">
-              <label class="radio-tile">
-                <input type="radio" name="customer" value="familjar" checked />
-                <svg class="radio-tile__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <span>Familje</span>
-              </label>
-              <label class="radio-tile">
-                <input type="radio" name="customer" value="biznes" />
-                <svg class="radio-tile__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="7" width="16" height="14" rx="1" stroke="currentColor" stroke-width="2"/><path d="M9 7V4h6v3" stroke="currentColor" stroke-width="2"/></svg>
-                <span>Biznes</span>
-              </label>
-            </div>
-          </div>
+<main>
+  <section class="wrap section">
+    <div class="trust-strip">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <div><h3>Pajisje të certifikuara</h3><p>Panele nga JA Solar, Jinko, Trina dhe LONGi; inverterë Deye dhe Solis, sipas fuqisë së sistemit.</p></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <div><h3>Çmim që në minutën e parë</h3><p>Kalkulatori ynë llogarit fuqinë, pajisjet dhe çmimin orientues direkt, pa pritur telefonatë.</p></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <div><h3>Ofertë e verifikuar</h3><p>Çmimi final konfirmohet pas verifikimit teknik të objektit — pa surpriza gjatë instalimit.</p></div>
+      </div>
+    </div>
+  </section>
 
-          <div class="field-group">
-            <label class="field-label">Si doni ta llogarisni?</label>
-            <div class="radio-row" data-name="method">
-              <label class="radio-tile">
-                <input type="radio" name="method" value="fatura" checked />
-                <svg class="radio-tile__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-                <span>Nga fatura</span>
-              </label>
-              <label class="radio-tile">
-                <input type="radio" name="method" value="fuqia" />
-                <svg class="radio-tile__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 9v6M12 9v6M17 9v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                <span>Nga fuqia</span>
-              </label>
-            </div>
-          </div>
+  <section class="wrap section" id="fakte">
+    <div class="section-head">
+      <p class="section-label">A e dini?</p>
+      <h2>Mëso për diellin, jo vetëm llogarit.</h2>
+      <p>Tre gjëra që shumica s'i din për energjinë diellore — pa terma teknikë.</p>
+    </div>
+    <div class="facts-grid">
+      <div class="fact-card">
+        <span class="fact-card__num">01</span>
+        <p>Paneli prodhon energji edhe kur qielli është i vranët — më pak se në diell të plotë, por nuk ndalon fare.</p>
+      </div>
+      <div class="fact-card">
+        <span class="fact-card__num">02</span>
+        <p>1 kilovat panele (aq sa mund të ndriçojë disa dhoma njëherësh) zë rreth 4–4.5 metra katrorë çati — sa një derë e shtrirë në tokë.</p>
+      </div>
+      <div class="fact-card">
+        <span class="fact-card__num">03</span>
+        <p>Bateria e telefonit tënd dhe bateria e një sistemi solar punojnë me të njëjtin parim — thjesht njëra sa dora, tjetra sa frigoriferi.</p>
+      </div>
+    </div>
+    <a class="btn btn--outline btn--sm" href="blog.html" style="margin-top: 22px;">Shiko më shumë fakte →</a>
+  </section>
 
-          <div class="field-group" id="billField">
-            <div class="field-label-row">
-              <label class="field-label" for="monthlyBill">Fatura mesatare mujore</label>
-              <span class="field-unit">lekë / muaj</span>
-            </div>
-            <div class="number-input">
-              <input type="number" id="monthlyBill" min="0" step="500" value="12000" inputmode="numeric" />
-              <span class="number-input__suffix">LEKË</span>
-            </div>
-            <input type="range" id="monthlyBillRange" min="1000" max="80000" step="500" value="12000" />
-            <p class="field-hint">Përdorni mesataren e 12 muajve dhe vetëm vlerën e energjisë, pa kamatëvonesa apo gjoba.</p>
-          </div>
+  <section class="wrap section" id="si-funksionon">
+    <div class="section-head section-head--center">
+      <p class="section-label">Procesi</p>
+      <h2>Nga llogaritja te instalimi, tre hapa.</h2>
+    </div>
+    <div class="steps">
+      <div class="step-card">
+        <span class="step-card__num">1</span>
+        <h3>Llogarit online</h3>
+        <p>Vendos faturën mesatare ose fuqinë e kërkuar — kalkulatori jep menjëherë sistemin, panelet, inverterin dhe çmimin orientues.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-card__num">2</span>
+        <h3>Verifikojmë objektin</h3>
+        <p>Kontrollojmë çatinë, lidhjen elektrike dhe strukturën, dhe fiksojmë ofertën përfundimtare bashkë me ty.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-card__num">3</span>
+        <h3>Instalojmë e monitorojmë</h3>
+        <p>Montimi, kabllimi dhe lidhja finale nga ekipi ynë, plus monitorim dhe garanci sipas datasheet-it të pajisjeve.</p>
+      </div>
+    </div>
+  </section>
 
-          <div class="field-group" id="kwpField" hidden>
-            <div class="field-label-row">
-              <label class="field-label" for="desiredKwp">Fuqia e kërkuar</label>
-              <span class="field-unit">kWp</span>
-            </div>
-            <div class="number-input">
-              <input type="number" id="desiredKwp" min="0" step="0.5" value="10" inputmode="decimal" />
-              <span class="number-input__suffix">kWp</span>
-            </div>
-            <input type="range" id="desiredKwpRange" min="1" max="100" step="0.5" value="10" />
-          </div>
+  <section class="wrap section" id="sherbimet">
+    <div class="section-head">
+      <p class="section-label">Çfarë ofrojmë</p>
+      <h2>Nga llogaritja te instalimi, në një vend.</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-card__icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>Instalim fotovoltaik</h3>
+        <p>Panele dhe inverterë të përzgjedhur sipas fuqisë reale të nevojshme — nga sisteme familjare deri te ato komerciale trefazore.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+        <h3>Vlerësim teknik falas</h3>
+        <p>Kontrollojmë objektin, lidhjen elektrike dhe strukturën para se të fiksojmë ofertën përfundimtare.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+        <h3>Mbështetje pas instalimit</h3>
+        <p>Monitorim dhe garanci sipas kushteve të prodhuesit dhe datasheet-it përkatës — deri në 30 vite për fuqinë e paneleve.</p>
+      </div>
+    </div>
+  </section>
 
-          <div class="field-group">
-            <label class="field-label" for="roof">Ku do të vendosen panelet?</label>
-            <select id="roof" class="select">
-              <option value="sandwich" selected>Çati panel sandwich</option>
-              <option value="terrace">Terracë e sheshtë</option>
-              <option value="tile">Çati me tjegulla</option>
-              <option value="ground">Në tokë</option>
-            </select>
-            <p class="field-hint">Lloji i strukturës ndikon te hapësira dhe oferta përfundimtare; këtu çmimi mbetet orientues.</p>
-          </div>
-        </form>
+  <section class="wrap section" id="modelet">
+    <div class="section-head">
+      <p class="section-label">Modelet tona</p>
+      <h2>Marka ndërkombëtare, jo eksperimente.</h2>
+      <p>Katalogu i plotë i panelit dhe inverterit të përdorur në ofertat tona — çdo model me datasheet-in përkatës.</p>
+    </div>
+    <div class="product-tabs" role="tablist">
+      <button class="product-tab" role="tab" aria-selected="true" data-filter="all">Të gjitha</button>
+      <button class="product-tab" role="tab" aria-selected="false" data-filter="panel">Panele</button>
+      <button class="product-tab" role="tab" aria-selected="false" data-filter="inverter">Inverterë</button>
+    </div>
+    <div class="product-grid" id="productGrid">
+      <div class="product-card" data-type="panel"><p class="product-card__brand">JA Solar</p><p class="product-card__model">JAM54D41 LB</p><span class="product-card__power">430–455 W</span></div>
+      <div class="product-card" data-type="panel"><p class="product-card__brand">Jinko Solar</p><p class="product-card__model">JKM710-735N-66HL5-BDV</p><span class="product-card__power">710–735 W</span></div>
+      <div class="product-card" data-type="panel"><p class="product-card__brand">Trina Solar</p><p class="product-card__model">TSM-NEG21C.20</p><span class="product-card__power">715–740 W</span></div>
+      <div class="product-card" data-type="panel"><p class="product-card__brand">LONGi</p><p class="product-card__model">Hi-MO X10 LR7-72HVDF</p><span class="product-card__power">640–670 W</span></div>
+      <div class="product-card" data-type="inverter"><p class="product-card__brand">Deye</p><p class="product-card__model">SUN-(3.6-6.2)K-G05P1</p><span class="product-card__power">3.6–6.2 kW</span></div>
+      <div class="product-card" data-type="inverter"><p class="product-card__brand">Solis</p><p class="product-card__model">S6-EH3P(5-18)K02-NV-YD-L</p><span class="product-card__power">5–18 kW</span></div>
+      <div class="product-card" data-type="inverter"><p class="product-card__brand">Solis</p><p class="product-card__model">S6-GC(50-75)K-LV</p><span class="product-card__power">50–75 kW</span></div>
+      <div class="product-card" data-type="inverter"><p class="product-card__brand">Solis</p><p class="product-card__model">S6-GC(80-125)K</p><span class="product-card__power">80–125 kW</span></div>
+    </div>
+  </section>
 
-        <!-- Results card -->
-        <section class="card results-card">
-          <div class="results-card__head">
-            <p class="results-card__label">REZULTATI ORIENTUES</p>
-            <span class="badge">ME TVSH</span>
-          </div>
-          <p class="results-card__price" id="resultPrice">—</p>
-          <p class="results-card__price-caption" id="resultPriceCaption">Çmim reference, i instaluar</p>
+  <section class="wrap section" id="pyetje">
+    <div class="section-head section-head--center">
+      <p class="section-label">Pyetje të shpeshta</p>
+      <h2>Çfarë duhet të dish para se të vendosësh.</h2>
+    </div>
+    <div class="faq">
+      <details class="faq-item" open>
+        <summary>A është çmimi i kalkulatorit final?</summary>
+        <p>Jo. Çmimi është orientues, bazuar në fuqinë e llogaritur. Çmimi final konfirmohet pas verifikimit teknik të objektit, strukturës dhe lidhjes elektrike.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Sa garanci kanë panelet?</summary>
+        <p>Deri në 30 vite garanci për ruajtjen e fuqisë, sipas kushteve të prodhuesit dhe datasheet-it përkatës të secilit model.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Çfarë përfshin instalimi standard?</summary>
+        <p>Panelet dhe inverterin, strukturën mbajtëse, kabllot DC/AC, mbrojtjet elektrike, tokëzimin, monitorimin dhe montimin. Bateria dhe punimet civile nuk përfshihen automatikisht.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Sa kohë duhet për një ofertë?</summary>
+        <p>Kalkulatori jep një vlerësim menjëherë. Pas kontaktit në WhatsApp, hiSol kthen përgjigje brenda 24 orësh për hapat vijues.</p>
+      </details>
+    </div>
+  </section>
 
-          <dl class="results-list">
-            <div class="results-list__row">
-              <div><dt>Fuqia totale e sistemit</dt><dd id="resSystem">—</dd></div>
-              <div><dt>Numri i paneleve</dt><dd id="resPanelCount">—</dd></div>
-            </div>
-            <div class="results-list__row">
-              <div><dt>Paneli</dt><dd id="resPanelModel">—</dd></div>
-              <div><dt>Fuqia e panelit</dt><dd id="resPanelWatts">—</dd></div>
-            </div>
-            <div class="results-list__row">
-              <div><dt>Inverteri</dt><dd id="resInverter">—</dd></div>
-              <div><dt>Faza e inverterit</dt><dd id="resInverterPhase">—</dd></div>
-            </div>
-            <div class="results-list__row">
-              <div><dt>Numri i inverterëve</dt><dd id="resInverterCount">—</dd></div>
-              <div><dt>Fuqia totale e inverterit</dt><dd id="resInverterTotalKw">—</dd></div>
-            </div>
-            <div class="results-list__row">
-              <div><dt>Hapësira e përafërt</dt><dd id="resArea">—</dd></div>
-              <div><dt>Prodhimi i pritshëm</dt><dd id="resProduction">—</dd></div>
-            </div>
-            <div class="results-list__row">
-              <div><dt>Intervali i prodhimit</dt><dd id="resProductionRange">—</dd></div>
-            </div>
-            <div class="results-list__row" id="savingsRow" hidden>
-              <div><dt>Kursimi i mundshëm</dt><dd class="accent" id="resSavings">—</dd></div>
-              <div><dt>Kthimi i investimit</dt><dd class="accent" id="resPayback">—</dd></div>
-            </div>
-          </dl>
+  <section class="wrap section" id="kalkulatori">
+    <div class="calc-cta">
+      <div>
+        <h2>Sa do të kushtojë sistemi yt?</h2>
+        <p>Vendos faturën mesatare ose fuqinë që kërkon, dhe kalkulatori jep menjëherë madhësinë e sistemit, panelet, inverterin dhe çmimin orientues — pa asnjë detyrim.</p>
+      </div>
+      <div class="calc-cta__actions">
+        <a class="btn btn--lime" href="kalkulatori/">Hap kalkulatorin →</a>
+        <a class="btn btn--white" href="https://wa.me/355684377766?text=Pershendetje%20hiSol%2C%20dua%20nje%20oferte%20per%20panele%20diellore.">Shkruaj në WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</main>
 
-          <p class="results-card__minimum" id="minimumNote" hidden>Rezultati është ngritur te minimumi tregtar prej 3 kWp.</p>
-
-          <div class="results-card__explain">
-            <p class="results-card__explain-title">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17v-6M12 7h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
-              Si është llogaritur kursimi?
-            </p>
-            <p>Skenari i ulët vlerëson vetëm energjinë e përdorur direkt. Skenari i lartë është tavani teorik. Kredia e energjisë së eksportuar nuk premtohet si kursim i garantuar.</p>
-          </div>
-
-          <div class="results-card__actions">
-            <button id="offerBtn" class="btn btn--lime" type="button">Kërko ofertë të saktë</button>
-            <button id="pdfBtn" class="btn btn--white" type="button">Shkarko ofertën PDF</button>
-            <button id="copySummaryBtn" class="btn btn--ghost" type="button">Kopjo</button>
-          </div>
-        </section>
-      </section>
-
-      <section class="lower-grid">
-        <section class="card chart-card">
-          <div class="chart-card__head">
-            <div>
-              <p class="section-label">PRODHIMI GJATË VITIT</p>
-              <h2>Muaj pas muaji</h2>
-            </div>
-          </div>
-          <div class="chart" id="monthlyChart" role="img" aria-label="Prodhimi mujor"></div>
-          <p class="chart-note">Prodhimi ndryshon sipas qytetit, orientimit, pjerrësisë, hijëzimit dhe temperaturës. Intervali përfundimtar përcaktohet në projekt.</p>
-        </section>
-
-        <section class="card package-card">
-          <p class="section-label">PAKETA STANDARDE</p>
-          <h2>Çfarë përfshihet</h2>
-          <ul class="checklist">
-            <li>Panelet dhe inverteri</li>
-            <li>Struktura mbajtëse standarde</li>
-            <li>Kabllot DC/AC dhe konektorët</li>
-            <li>Mbrojtjet elektrike DC/AC</li>
-            <li>Tokëzimi dhe monitorimi</li>
-            <li>Montimi dhe instalimi</li>
-            <li>Projektimi teknik standard</li>
-          </ul>
-
-          <div class="info-block">
-            <strong>Nuk përfshihet automatikisht</strong>
-            <p>Bateria, përforcimi strukturor, punimet civile, transformatori, rritja e fuqisë dhe ndërhyrjet e jashtëzakonshme në rrjet.</p>
-          </div>
-
-          <div class="info-row">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <p><strong>Pajisjet</strong> — Përdorim panele nga markat kryesore ndërkombëtare, si Jinko, Trina, JA Solar dhe LONGi, si dhe inverterë Deye për sistemet e vogla dhe Solis për sistemet e mëdha trefazore. Në kalkulator: JA Solar 455 W përdoret deri në 7 kWp (dhe gjithmonë në çati me tjegulla); mbi këtë fuqi, Jinko Solar.</p>
-          </div>
-          <div class="info-row">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-            <p><strong>Garancia</strong> — Panelet tona ofrohen me garanci deri në 30 vite për ruajtjen e fuqisë, sipas kushteve të prodhuesit dhe datasheet-it përkatës; garancia e plotë e produktit paraqitet veçmas në ofertë.</p>
-          </div>
-          <div class="info-row">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
-            <p><strong>Oferta përfundimtare</strong> — Fiksohet pas verifikimit të objektit, lidhjes elektrike dhe strukturës.</p>
-          </div>
-
-          <p class="disclaimer">
-            Llogaritjet janë orientuese, bazuar në tarifat 2026 dhe prodhim tipik për Shqipërinë. Sistemi on-grid
-            nuk furnizon objektin gjatë ndërprerjes së rrjetit pa zgjidhje hibride dhe bateri.
-          </p>
-        </section>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <p>© <span id="year"></span> hiSol Energy · contact@hisolenergy.com</p>
-    </footer>
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="logo-mark" href="#home">
+          <svg viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="24" fill="#1429c2"/><path d="M9 53h18L8 34l12-12 19 19V14h17v27l19-19 12 12-19 19h18v17H68L50 52 32 70H9V53Z" fill="#c5ef78"/><path d="m20 78 12 12 18-18 18 18 12-12-30-30-30 30Z" fill="#fff" opacity=".72"/></svg>
+          hiSol
+        </a>
+        <p>Sisteme fotovoltaike për shtëpi dhe biznese në Shqipëri — nga llogaritja te instalimi.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Faqja</h4>
+        <ul>
+          <li><a href="#sherbimet">Shërbimet</a></li>
+          <li><a href="#si-funksionon">Si funksionon</a></li>
+          <li><a href="#modelet">Modelet</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="#pyetje">Pyetje</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Kontakt</h4>
+        <ul>
+          <li><a href="https://wa.me/355684377766">WhatsApp: +355 684 377 766</a></li>
+          <li><a href="mailto:contact@hisolenergy.com">contact@hisolenergy.com</a></li>
+          <li><a href="kalkulatori/">Kalkulatori</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 hiSol Energy</p>
+      <p>Llogaritjet janë orientuese, bazuar në tarifat 2026 dhe prodhim tipik për Shqipërinë.</p>
+    </div>
   </div>
+</footer>
 
-  <!-- Install / PDF dialogs -->
-  <dialog id="installDialog" class="dialog">
-    <h3>Mbaje hiSol në ekranin tënd</h3>
-    <p>Hape kalkulatorin nga ikona në celular. Nevojitet internet.</p>
-    <button id="installNowBtn" class="btn btn--primary" type="button" hidden>Instalo hiSol</button>
-    <p><strong>iPhone:</strong> Hape linkun në Safari → Share / Ndaj → Add to Home Screen / Shto në ekranin kryesor.</p>
-    <p><strong>Android:</strong> Hape në Chrome → menuja ⋮ → Instalo aplikacionin ose Shto në ekranin kryesor.</p>
-    <p class="muted">Nëse e hape brenda WhatsApp ose Instagram, zgjidh fillimisht hapjen në shfletues.</p>
-    <button class="btn btn--outline" type="button" data-close-dialog>Mbyll</button>
-  </dialog>
+<script>
+function sunTimes(lat, dayOfYear) {
+  var rad = Math.PI / 180;
+  var decl = 23.44 * Math.sin(rad * (360 / 365) * (dayOfYear - 81));
+  var latRad = lat * rad, declRad = decl * rad;
+  var cosH = -Math.tan(latRad) * Math.tan(declRad);
+  cosH = Math.max(-1, Math.min(1, cosH));
+  var hourAngle = Math.acos(cosH) / rad;
+  var sunriseHour = 12 - hourAngle / 15;
+  var sunsetHour = 12 + hourAngle / 15;
+  return { sunrise: sunriseHour, sunset: sunsetHour };
+}
 
-  <dialog id="offerDialog" class="dialog">
-    <h3>Kërko ofertë të saktë</h3>
-    <p class="muted">Lini kontaktin tuaj — do t'ju hapet WhatsApp me një mesazh të gatshëm drejt hiSol, gati për ta dërguar.</p>
-    <label class="field-label" for="offerName">Emri e mbiemri</label>
-    <input type="text" id="offerName" class="text-input" placeholder="p.sh. Elton Hoxha" />
-    <label class="field-label" for="offerPhone">Numri i telefonit</label>
-    <input type="tel" id="offerPhone" class="text-input" placeholder="p.sh. 069 123 4567" inputmode="tel" />
-    <p class="pdf-error" id="offerError" role="alert" hidden></p>
-    <div class="dialog__actions">
-      <button class="btn btn--outline" type="button" data-close-dialog>Anulo</button>
-      <button id="offerSubmitBtn" class="btn btn--primary" type="button">Dërgo në WhatsApp</button>
-    </div>
-  </dialog>
+function updateSun() {
+  var now = new Date();
+  var start = new Date(now.getFullYear(), 0, 0);
+  var dayOfYear = Math.floor((now - start) / 86400000);
+  var t = sunTimes(41.33, dayOfYear);
+  var hourNow = now.getHours() + now.getMinutes() / 60;
 
-  <dialog id="pdfDialog" class="dialog">
-    <h3>Shkarko ofertën PDF</h3>
-    <p class="muted">Përfshin përmbledhjen e sistemit dhe fletët teknike të panelit e inverterit të zgjedhur.</p>
-    <label class="field-label" for="pdfClientName">Emri i klientit (opsionale)</label>
-    <input type="text" id="pdfClientName" class="text-input" placeholder="p.sh. Elton Hoxha" />
-    <label class="field-label" for="pdfClientLocation">Vendndodhja (opsionale)</label>
-    <input type="text" id="pdfClientLocation" class="text-input" placeholder="p.sh. Tiranë" />
-    <p class="pdf-error" id="pdfError" role="alert" hidden></p>
-    <div class="dialog__actions">
-      <button class="btn btn--outline" type="button" data-close-dialog>Anulo</button>
-      <button id="pdfGenerateBtn" class="btn btn--primary" type="button">Shkarko PDF-në e plotë</button>
-    </div>
-  </dialog>
+  document.getElementById("sunTime").textContent = now.toLocaleTimeString("sq-AL", { hour: "2-digit", minute: "2-digit" });
 
-  <dialog id="modelsDialog" class="dialog dialog--catalog">
-    <div class="catalog-head">
-      <h3>Modelet me të cilat punojmë</h3>
-      <p class="muted">Katalogu i plotë i paneleve dhe inverterëve. Çmimi dhe konfigurimi final konfirmohen pas verifikimit teknik.</p>
-    </div>
-    <div id="modelsContent" class="catalog-grid"></div>
-    <button class="btn btn--outline" type="button" data-close-dialog>Mbyll</button>
-  </dialog>
+  var frac = (hourNow - t.sunrise) / (t.sunset - t.sunrise);
+  var isDay = frac >= 0 && frac <= 1;
+  document.getElementById("sunPhase").textContent = isDay
+    ? (frac < 0.5 ? "Paradite" : "Pasdite")
+    : (hourNow < t.sunrise ? "Para lindjes së diellit" : "Pas perëndimit të diellit");
 
-  <div id="toast" class="toast" hidden></div>
+  var elevationFactor = isDay ? Math.sin(Math.PI * frac) : 0;
 
-  <script src="vendor/pdf-lib.min.js"></script>
-  <script type="module" src="js/app.js"></script>
-</body>
-</html>
+  var x = 20 + Math.max(0, Math.min(1, frac)) * 260;
+  var y = 100 - elevationFactor * 100;
+  var dot = document.getElementById("sunDot");
+  dot.setAttribute("cx", x.toFixed(1));
+  dot.setAttribute("cy", y.toFixed(1));
+  dot.setAttribute("fill", isDay ? "#c5ef78" : "#5a6499");
+
+  var referenceKwp = 10;
+  var peakKw = referenceKwp * 0.82;
+  var nowKw = elevationFactor * peakKw;
+  document.getElementById("sunNow").textContent = nowKw.toFixed(1) + " kW";
+
+  var dayLengthH = Math.max(0, t.sunset - t.sunrise);
+  var elapsedH = Math.max(0, Math.min(hourNow, t.sunset) - t.sunrise);
+  var expectedYield = 1300;
+  var dailyAvgKwh = (referenceKwp * expectedYield) / 365;
+  var todayKwh = dayLengthH > 0 ? dailyAvgKwh * (1 - Math.cos(Math.PI * Math.min(elapsedH, dayLengthH) / dayLengthH)) / 2 : 0;
+  todayKwh = Math.max(0, todayKwh);
+  document.getElementById("sunToday").textContent = todayKwh.toFixed(1) + " kWh";
+
+  var householdRateLekPerKwh = 10.2;
+  var todayLek = todayKwh * householdRateLekPerKwh;
+  document.getElementById("sunLek").textContent = new Intl.NumberFormat("sq-AL", { maximumFractionDigits: 0 }).format(todayLek) + " lekë";
+}
+updateSun();
+setInterval(updateSun, 30000);
+
+window.addEventListener("scroll", function () {
+  document.getElementById("topbar").classList.toggle("is-scrolled", window.scrollY > 8);
+});
+
+var tabs = document.querySelectorAll(".product-tab");
+var cards = document.querySelectorAll("#productGrid .product-card");
+tabs.forEach(function (tab) {
+  tab.addEventListener("click", function () {
+    tabs.forEach(function (t) { t.setAttribute("aria-selected", "false"); });
+    tab.setAttribute("aria-selected", "true");
+    var filter = tab.getAttribute("data-filter");
+    cards.forEach(function (card) {
+      card.style.display = (filter === "all" || card.getAttribute("data-type") === filter) ? "" : "none";
+    });
+  });
+});
+</script>
