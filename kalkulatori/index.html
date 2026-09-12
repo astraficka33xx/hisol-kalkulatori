@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="sq">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kalkulatori Solar | hiSol</title>
+  <meta name="description" content="Llogarit fuqinë, panelet, prodhimin dhe çmimin orientues të sistemit fotovoltaik hiSol." />
+
+  <link rel="icon" href="assets/favicon.svg" />
+  <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#1429c2" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="hiSol" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="topbar__inner">
+        <img class="logo" src="assets/hisol-logo-header.png" alt="hiSol" />
+        <div class="topbar__actions">
+          <button id="modelsBtn" class="btn btn--outline" type="button">Modelet tona</button>
+          <button id="installBtn" class="btn btn--outline" type="button" hidden>Shto hiSol në celular</button>
+          <button id="copyLinkBtn" class="btn btn--outline" type="button">Kopjo linkun për miqtë</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <p class="eyebrow">
+          <svg class="eyebrow__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          KALKULATORI SOLAR HISOL
+        </p>
+        <h1>Nga fatura te sistemi i duhur.</h1>
+        <p class="hero__lead">
+          Merr një vlerësim të qartë për fuqinë, panelet, prodhimin dhe investimin. Oferta përfundimtare
+          konfirmohet pas kontrollit teknik.
+        </p>
+      </section>
+
+      <section class="calc-grid">
+        <!-- Form card -->
+        <form id="calcForm" class="card form-card" novalidate>
+          <div class="field-group">
+            <label class="field-label">Për kë po llogarisim?</label>
+            <div class="radio-row" data-name="customer">
+              <label class="radio-tile">
+                <input type="radio" name="customer" value="familjar" checked />
+                <svg class="radio-tile__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>Familje</span>
+              </label>
+              <label class="radio-tile">
+                <input type="radio" name="customer" value="biznes" />
+                <svg class="radio-tile__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="7" width="16" height="14" rx="1" stroke="currentColor" stroke-width="2"/><path d="M9 7V4h6v3" stroke="currentColor" stroke-width="2"/></svg>
+                <span>Biznes</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Si doni ta llogarisni?</label>
+            <div class="radio-row" data-name="method">
+              <label class="radio-tile">
+                <input type="radio" name="method" value="fatura" checked />
+                <svg class="radio-tile__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                <span>Nga fatura</span>
+              </label>
+              <label class="radio-tile">
+                <input type="radio" name="method" value="fuqia" />
+                <svg class="radio-tile__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 9v6M12 9v6M17 9v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <span>Nga fuqia</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field-group" id="billField">
+            <div class="field-label-row">
+              <label class="field-label" for="monthlyBill">Fatura mesatare mujore</label>
+              <span class="field-unit">lekë / muaj</span>
+            </div>
+            <div class="number-input">
+              <input type="number" id="monthlyBill" min="0" step="500" value="12000" inputmode="numeric" />
+              <span class="number-input__suffix">LEKË</span>
+            </div>
+            <input type="range" id="monthlyBillRange" min="1000" max="80000" step="500" value="12000" />
+            <p class="field-hint">Përdorni mesataren e 12 muajve dhe vetëm vlerën e energjisë, pa kamatëvonesa apo gjoba.</p>
+          </div>
+
+          <div class="field-group" id="kwpField" hidden>
+            <div class="field-label-row">
+              <label class="field-label" for="desiredKwp">Fuqia e kërkuar</label>
+              <span class="field-unit">kWp</span>
+            </div>
+            <div class="number-input">
+              <input type="number" id="desiredKwp" min="0" step="0.5" value="10" inputmode="decimal" />
+              <span class="number-input__suffix">kWp</span>
+            </div>
+            <input type="range" id="desiredKwpRange" min="1" max="100" step="0.5" value="10" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="roof">Ku do të vendosen panelet?</label>
+            <select id="roof" class="select">
+              <option value="sandwich" selected>Çati panel sandwich</option>
+              <option value="terrace">Terracë e sheshtë</option>
+              <option value="tile">Çati me tjegulla</option>
+              <option value="ground">Në tokë</option>
+            </select>
+            <p class="field-hint">Lloji i strukturës ndikon te hapësira dhe oferta përfundimtare; këtu çmimi mbetet orientues.</p>
+          </div>
+        </form>
+
+        <!-- Results card -->
+        <section class="card results-card">
+          <div class="results-card__head">
+            <p class="results-card__label">REZULTATI ORIENTUES</p>
+            <span class="badge">ME TVSH</span>
+          </div>
+          <p class="results-card__price" id="resultPrice">—</p>
+          <p class="results-card__price-caption" id="resultPriceCaption">Çmim reference, i instaluar</p>
+
+          <dl class="results-list">
+            <div class="results-list__row">
+              <div><dt>Fuqia totale e sistemit</dt><dd id="resSystem">—</dd></div>
+              <div><dt>Numri i paneleve</dt><dd id="resPanelCount">—</dd></div>
+            </div>
+            <div class="results-list__row">
+              <div><dt>Paneli</dt><dd id="resPanelModel">—</dd></div>
+              <div><dt>Fuqia e panelit</dt><dd id="resPanelWatts">—</dd></div>
+            </div>
+            <div class="results-list__row">
+              <div><dt>Inverteri</dt><dd id="resInverter">—</dd></div>
+              <div><dt>Faza e inverterit</dt><dd id="resInverterPhase">—</dd></div>
+            </div>
+            <div class="results-list__row">
+              <div><dt>Numri i inverterëve</dt><dd id="resInverterCount">—</dd></div>
+              <div><dt>Fuqia totale e inverterit</dt><dd id="resInverterTotalKw">—</dd></div>
+            </div>
+            <div class="results-list__row">
+              <div><dt>Hapësira e përafërt</dt><dd id="resArea">—</dd></div>
+              <div><dt>Prodhimi i pritshëm</dt><dd id="resProduction">—</dd></div>
+            </div>
+            <div class="results-list__row">
+              <div><dt>Intervali i prodhimit</dt><dd id="resProductionRange">—</dd></div>
+            </div>
+            <div class="results-list__row" id="savingsRow" hidden>
+              <div><dt>Kursimi i mundshëm</dt><dd class="accent" id="resSavings">—</dd></div>
+              <div><dt>Kthimi i investimit</dt><dd class="accent" id="resPayback">—</dd></div>
+            </div>
+          </dl>
+
+          <p class="results-card__minimum" id="minimumNote" hidden>Rezultati është ngritur te minimumi tregtar prej 3 kWp.</p>
+
+          <div class="results-card__explain">
+            <p class="results-card__explain-title">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17v-6M12 7h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+              Si është llogaritur kursimi?
+            </p>
+            <p>Skenari i ulët vlerëson vetëm energjinë e përdorur direkt. Skenari i lartë është tavani teorik. Kredia e energjisë së eksportuar nuk premtohet si kursim i garantuar.</p>
+          </div>
+
+          <div class="results-card__actions">
+            <button id="offerBtn" class="btn btn--lime" type="button">Kërko ofertë të saktë</button>
+            <button id="pdfBtn" class="btn btn--white" type="button">Shkarko ofertën PDF</button>
+            <button id="copySummaryBtn" class="btn btn--ghost" type="button">Kopjo</button>
+          </div>
+        </section>
+      </section>
+
+      <section class="lower-grid">
+        <section class="card chart-card">
+          <div class="chart-card__head">
+            <div>
+              <p class="section-label">PRODHIMI GJATË VITIT</p>
+              <h2>Muaj pas muaji</h2>
+            </div>
+          </div>
+          <div class="chart" id="monthlyChart" role="img" aria-label="Prodhimi mujor"></div>
+          <p class="chart-note">Prodhimi ndryshon sipas qytetit, orientimit, pjerrësisë, hijëzimit dhe temperaturës. Intervali përfundimtar përcaktohet në projekt.</p>
+        </section>
+
+        <section class="card package-card">
+          <p class="section-label">PAKETA STANDARDE</p>
+          <h2>Çfarë përfshihet</h2>
+          <ul class="checklist">
+            <li>Panelet dhe inverteri</li>
+            <li>Struktura mbajtëse standarde</li>
+            <li>Kabllot DC/AC dhe konektorët</li>
+            <li>Mbrojtjet elektrike DC/AC</li>
+            <li>Tokëzimi dhe monitorimi</li>
+            <li>Montimi dhe instalimi</li>
+            <li>Projektimi teknik standard</li>
+          </ul>
+
+          <div class="info-block">
+            <strong>Nuk përfshihet automatikisht</strong>
+            <p>Bateria, përforcimi strukturor, punimet civile, transformatori, rritja e fuqisë dhe ndërhyrjet e jashtëzakonshme në rrjet.</p>
+          </div>
+
+          <div class="info-row">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <p><strong>Pajisjet</strong> — Përdorim panele nga markat kryesore ndërkombëtare, si Jinko, Trina, JA Solar dhe LONGi, si dhe inverterë Deye për sistemet e vogla dhe Solis për sistemet e mëdha trefazore. Në kalkulator: JA Solar 455 W përdoret deri në 7 kWp (dhe gjithmonë në çati me tjegulla); mbi këtë fuqi, Jinko Solar.</p>
+          </div>
+          <div class="info-row">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            <p><strong>Garancia</strong> — Panelet tona ofrohen me garanci deri në 30 vite për ruajtjen e fuqisë, sipas kushteve të prodhuesit dhe datasheet-it përkatës; garancia e plotë e produktit paraqitet veçmas në ofertë.</p>
+          </div>
+          <div class="info-row">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+            <p><strong>Oferta përfundimtare</strong> — Fiksohet pas verifikimit të objektit, lidhjes elektrike dhe strukturës.</p>
+          </div>
+
+          <p class="disclaimer">
+            Llogaritjet janë orientuese, bazuar në tarifat 2026 dhe prodhim tipik për Shqipërinë. Sistemi on-grid
+            nuk furnizon objektin gjatë ndërprerjes së rrjetit pa zgjidhje hibride dhe bateri.
+          </p>
+        </section>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© <span id="year"></span> hiSol Energy · contact@hisolenergy.com</p>
+    </footer>
+  </div>
+
+  <!-- Install / PDF dialogs -->
+  <dialog id="installDialog" class="dialog">
+    <h3>Mbaje hiSol në ekranin tënd</h3>
+    <p>Hape kalkulatorin nga ikona në celular. Nevojitet internet.</p>
+    <button id="installNowBtn" class="btn btn--primary" type="button" hidden>Instalo hiSol</button>
+    <p><strong>iPhone:</strong> Hape linkun në Safari → Share / Ndaj → Add to Home Screen / Shto në ekranin kryesor.</p>
+    <p><strong>Android:</strong> Hape në Chrome → menuja ⋮ → Instalo aplikacionin ose Shto në ekranin kryesor.</p>
+    <p class="muted">Nëse e hape brenda WhatsApp ose Instagram, zgjidh fillimisht hapjen në shfletues.</p>
+    <button class="btn btn--outline" type="button" data-close-dialog>Mbyll</button>
+  </dialog>
+
+  <dialog id="offerDialog" class="dialog">
+    <h3>Kërko ofertë të saktë</h3>
+    <p class="muted">Lini kontaktin tuaj — do t'ju hapet WhatsApp me një mesazh të gatshëm drejt hiSol, gati për ta dërguar.</p>
+    <label class="field-label" for="offerName">Emri e mbiemri</label>
+    <input type="text" id="offerName" class="text-input" placeholder="p.sh. Elton Hoxha" />
+    <label class="field-label" for="offerPhone">Numri i telefonit</label>
+    <input type="tel" id="offerPhone" class="text-input" placeholder="p.sh. 069 123 4567" inputmode="tel" />
+    <p class="pdf-error" id="offerError" role="alert" hidden></p>
+    <div class="dialog__actions">
+      <button class="btn btn--outline" type="button" data-close-dialog>Anulo</button>
+      <button id="offerSubmitBtn" class="btn btn--primary" type="button">Dërgo në WhatsApp</button>
+    </div>
+  </dialog>
+
+  <dialog id="pdfDialog" class="dialog">
+    <h3>Shkarko ofertën PDF</h3>
+    <p class="muted">Përfshin përmbledhjen e sistemit dhe fletët teknike të panelit e inverterit të zgjedhur.</p>
+    <label class="field-label" for="pdfClientName">Emri i klientit (opsionale)</label>
+    <input type="text" id="pdfClientName" class="text-input" placeholder="p.sh. Elton Hoxha" />
+    <label class="field-label" for="pdfClientLocation">Vendndodhja (opsionale)</label>
+    <input type="text" id="pdfClientLocation" class="text-input" placeholder="p.sh. Tiranë" />
+    <p class="pdf-error" id="pdfError" role="alert" hidden></p>
+    <div class="dialog__actions">
+      <button class="btn btn--outline" type="button" data-close-dialog>Anulo</button>
+      <button id="pdfGenerateBtn" class="btn btn--primary" type="button">Shkarko PDF-në e plotë</button>
+    </div>
+  </dialog>
+
+  <dialog id="modelsDialog" class="dialog dialog--catalog">
+    <div class="catalog-head">
+      <h3>Modelet me të cilat punojmë</h3>
+      <p class="muted">Katalogu i plotë i paneleve dhe inverterëve. Çmimi dhe konfigurimi final konfirmohen pas verifikimit teknik.</p>
+    </div>
+    <div id="modelsContent" class="catalog-grid"></div>
+    <button class="btn btn--outline" type="button" data-close-dialog>Mbyll</button>
+  </dialog>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="vendor/pdf-lib.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
