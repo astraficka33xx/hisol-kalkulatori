@@ -1,0 +1,141 @@
+<title>hiSol Mëso</title>
+<style>
+:root {
+  --blue: #1429c2; --blue-dark: #10229f; --navy: #0d1747;
+  --lime: #c5ef78; --lime-dark: #a7d94d;
+  --ink: #0d1747; --muted: #66708d; --muted-2: #4a5578;
+  --border: #dfe4f0; --page-bg: #f7f8fc; --surface: #ffffff; --surface-alt: #f6f7fb;
+  --shadow-sm: 0 8px 24px rgba(22, 32, 77, 0.06);
+  --font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #eef1fb; --muted: #9aa3c7; --muted-2: #b6bedd; --border: rgba(255,255,255,0.12);
+    --page-bg: #0d1538; --surface: #121a3e; --surface-alt: #0f1730;
+    --shadow-sm: 0 8px 24px rgba(0,0,0,0.3);
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #eef1fb; --muted: #9aa3c7; --muted-2: #b6bedd; --border: rgba(255,255,255,0.12);
+  --page-bg: #0d1538; --surface: #121a3e; --surface-alt: #0f1730;
+  --shadow-sm: 0 8px 24px rgba(0,0,0,0.3);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--page-bg); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+img, svg { max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+h1, h2 { text-wrap: balance; }
+
+.topbar { padding: 18px 0; border-bottom: 1px solid var(--border); }
+.topbar__inner { max-width: 880px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.logo-mark { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: var(--blue); }
+.logo-mark svg { width: 26px; height: 26px; }
+.btn { border-radius: 12px; font-weight: 700; font-size: 13.5px; padding: 10px 18px; height: 42px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); }
+.btn:hover { border-color: var(--blue); color: var(--blue); }
+
+.intro { padding: 48px 0 8px; }
+.eyebrow { font-size: 12.5px; font-weight: 700; letter-spacing: 0.1em; color: var(--blue); text-transform: uppercase; margin: 0 0 12px; }
+.intro h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.1; margin: 0 0 14px; letter-spacing: -0.015em; }
+.intro p { font-size: 16px; color: var(--muted-2); line-height: 1.65; max-width: 62ch; margin: 0; }
+
+.facts { padding: 40px 0 60px; display: flex; flex-direction: column; gap: 14px; }
+.fact { background: var(--surface); border-radius: 20px; padding: 26px 28px; box-shadow: var(--shadow-sm); display: flex; gap: 20px; }
+.fact__num { font-size: 13px; font-weight: 800; color: var(--lime-dark); flex-shrink: 0; padding-top: 3px; min-width: 26px; }
+.fact h2 { font-size: 17px; margin: 0 0 8px; }
+.fact p { font-size: 14.5px; line-height: 1.65; color: var(--muted-2); margin: 0; }
+.fact p + p { margin-top: 8px; }
+
+.cta-block { background: linear-gradient(160deg, var(--navy) 0%, #16215c 55%, var(--blue) 130%); border-radius: 24px; padding: 32px; color: #fff; text-align: center; margin: 10px 0 60px; }
+.cta-block h2 { font-size: 22px; margin: 0 0 10px; }
+.cta-block p { font-size: 14.5px; color: rgba(255,255,255,0.75); margin: 0 0 20px; }
+.cta-block .btn { background: var(--lime); color: #0c1a7a; border: none; height: 46px; padding: 0 22px; }
+
+.footer { padding: 30px 0 40px; border-top: 1px solid var(--border); text-align: center; font-size: 12.5px; color: var(--muted); }
+</style>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="logo-mark" href="./">
+      <svg viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="24" fill="#1429c2"/><path d="M9 53h18L8 34l12-12 19 19V14h17v27l19-19 12 12-19 19h18v17H68L50 52 32 70H9V53Z" fill="#c5ef78"/><path d="m20 78 12 12 18-18 18 18 12-12-30-30-30 30Z" fill="#fff" opacity=".72"/></svg>
+      hiSol
+    </a>
+    <a class="btn" href="./">← Kthehu te faqja</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <p class="eyebrow">hiSol mëso</p>
+    <h1>Energjia diellore, e shpjeguar thjeshtë.</h1>
+    <p>Pa terma inxhinierike, pa fjalë të gjata. Këtu janë gjërat më interesante rreth diellit dhe si funksionon një sistem fotovoltaik — të kuptueshme për këdo, jo vetëm për inxhinierë.</p>
+  </section>
+
+  <section class="facts">
+    <article class="fact">
+      <span class="fact__num">01</span>
+      <div>
+        <h2>Paneli punon edhe kur qielli është i vranët</h2>
+        <p>Prodhon më pak energji kur retë mbulojnë diellin, por nuk ndalon fare. Edhe në një ditë me re të dendura, paneli vazhdon të japë diçka — thjesht më pak se në një ditë me diell të plotë.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <span class="fact__num">02</span>
+      <div>
+        <h2>kWp dhe kWh nuk janë e njëjta gjë</h2>
+        <p><strong>kWp</strong> tregon sa "e fortë" është sistemi — sa energji mund të japë në momentin më të mirë, si fuqia e motorit të një makine.</p>
+        <p><strong>kWh</strong> tregon sa energji prodhove realisht gjatë një periudhe — si kilometrat që bën makina. Një sistem i vogël mund të prodhojë shumë kWh gjatë një viti të tërë me diell të mjaftueshëm.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <span class="fact__num">03</span>
+      <div>
+        <h2>1 kilovat panele zë sa një derë e shtrirë në tokë</h2>
+        <p>Rreth 4 deri 4.5 metra katrorë çati nevojiten për çdo kilovat (kWp) të instaluar. Një shtëpi me faturë mesatare rreth 12,000 lekë/muaj zakonisht ka nevojë për 18–22 metra katrorë çati të lirë.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <span class="fact__num">04</span>
+      <div>
+        <h2>Bateria e telefonit dhe bateria e sistemit solar janë "kushërinj"</h2>
+        <p>Të dyja ruajnë energji me parime shumë të ngjashme kimike — thjesht njëra mban energjinë sa të zgjasë një bisedë telefonike, tjetra mjafton për të ndriçuar një shtëpi të tërë gjatë natës.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <span class="fact__num">05</span>
+      <div>
+        <h2>Paneli nuk "vdes" pas pak vitesh</h2>
+        <p>Prodhuesit japin garanci deri në 30 vite për ruajtjen e fuqisë. Edhe pas 30 vitesh pune, një panel ende prodhon rreth 88–89% të fuqisë me të cilën filloi — humbja është shumë graduale, jo e papritur.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <span class="fact__num">06</span>
+      <div>
+        <h2>Sistemi ndalon vetë kur bie rryma</h2>
+        <p>Për siguri, një sistem standard (pa bateri) ndërpret automatikisht prodhimin kur rrjeti elektrik i qytetit bie — kështu që nuk rrezikon punëtorët që po riparojnë linjën jashtë.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <span class="fact__num">07</span>
+      <div>
+        <h2>Pse janë (thuajse) gjithmonë të zeza</h2>
+        <p>Ngjyra e errët nuk është vetëm estetikë — qelizat thithin dritë më mirë kur janë të zeza ose gri të errët. Modelet e vjetra ishin shpesh blu; teknologjia moderne favorizon të zezën.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <span class="fact__num">08</span>
+      <div>
+        <h2>Disa panele "shohin" dritë nga të dyja anët</h2>
+        <p>Modele moderne (bifaciale) kapin dritë të reflektuar edhe nga poshtë modulit, jo vetëm nga sipër — një prodhim shtesë pa zënë hapësirë shtesë çatie.</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="cta-block">
+    <h2>Kurioz sa do të kushtonte për ty?</h2>
+    <p>Kalkulatori jep përgjigje në më pak se një minutë, pa detyrim.</p>
+    <a class="btn" href="kalkulatori/">Bëj llogaritjen falas →</a>
+  </section>
+</main>
+
+<footer class="footer">© 2026 hiSol Energy</footer>
