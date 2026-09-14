@@ -46,6 +46,10 @@ h1, h2 { text-wrap: balance; }
 .intro p { font-size: 16px; color: var(--muted-2); line-height: 1.65; max-width: 62ch; margin: 0; }
 
 .facts { padding: 40px 0 60px; display: flex; flex-direction: column; gap: 14px; }
+.conclusion { padding: 0 0 50px; }
+.conclusion h2 { font-size: clamp(22px, 3vw, 26px); margin: 0 0 12px; }
+.conclusion p { font-size: 15px; color: var(--muted-2); line-height: 1.65; margin: 0 0 10px; max-width: 68ch; }
+.conclusion p:last-child { margin-bottom: 0; }
 .fact { background: var(--surface); border-radius: 20px; padding: 26px 28px; box-shadow: var(--shadow-sm); display: flex; gap: 20px; }
 .fact__num { font-size: 13px; font-weight: 800; color: var(--lime-dark); flex-shrink: 0; padding-top: 3px; min-width: 26px; }
 .fact h2 { font-size: 17px; margin: 0 0 8px; }
@@ -60,7 +64,7 @@ h1, h2 { text-wrap: balance; }
 .footer { padding: 30px 0 40px; border-top: 1px solid var(--border); text-align: center; font-size: 12.5px; color: var(--muted); }
 
 .brands-section { padding: 10px 0 50px; }
-.brands-section h2 { font-size: clamp(24px, 3vw, 30px); margin: 0 0 8px; text-align: center; }
+.brands-section h2 { font-size: clamp(24px, 3vw, 30px); margin: 0 0 28px; text-align: center; }
 .brands-section > p.lead { text-align: center; color: var(--muted-2); font-size: 15px; margin: 0 0 30px; }
 .brand-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
 .brand-card { background: var(--surface); border-radius: 18px; padding: 22px; box-shadow: var(--shadow-sm); }
@@ -94,88 +98,148 @@ h1, h2 { text-wrap: balance; }
 <main class="wrap">
   <section class="intro">
     <h1>Energjia diellore, e shpjeguar thjeshtë.</h1>
-    <p>Pa terma inxhinierike, pa fjalë të gjata. Këtu janë gjërat më interesante rreth diellit dhe si funksionon një sistem fotovoltaik, shpjeguar në mënyrë që e kupton kushdo, jo vetëm inxhinierët.</p>
+    <p>Panelet diellore janë bërë një zgjidhje gjithnjë e më e përdorur për familjet dhe bizneset që duan të ulin faturën e energjisë. Megjithatë, shumë njerëz ende kanë pyetje të thjeshta: A prodhojnë panelet kur ka re? Sa hapësirë duhet? Çfarë ndodh kur ikën energjia? A kanë nevojë për mirëmbajtje?</p>
+    <p>Më poshtë po shpjegojmë disa nga gjërat më të rëndësishme, me fjalë të thjeshta.</p>
   </section>
 
   <section class="facts">
     <article class="fact">
       <div>
-        <h2>Paneli punon edhe kur qielli është i vranët</h2>
-        <p>Prodhon më pak energji kur retë mbulojnë diellin, por nuk ndalon fare. Edhe në një ditë me re të dendura, paneli vazhdon të japë diçka, thjesht më pak se në një ditë me diell të plotë.</p>
+        <h2>Panelet prodhojnë edhe në ditët me re</h2>
+        <p>Edhe kur qielli është i vranët, panelet vazhdojnë të prodhojnë energji. Sasia është më e ulët se në një ditë me diell, por prodhimi nuk ndalon.</p>
+        <p>Retë e dendura e ulin ndjeshëm prodhimin, ndërsa një ditë me re të lehta mund të japë ende një sasi të kënaqshme energjie. Për këtë arsye, llogaritjet bëhen mbi prodhimin e pritshëm gjatë gjithë vitit dhe jo vetëm mbi ditët me diell të plotë.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <div>
+        <h2>Panelet nuk prodhojnë energji vetëm në mesditë</h2>
+        <p>Prodhimi fillon që në orët e para të mëngjesit, rritet gjatë ditës dhe ulet gradualisht pasdite. Në mesditë zakonisht arrihet prodhimi më i lartë, por sistemi punon për disa orë gjatë gjithë ditës.</p>
+        <p>Kjo është veçanërisht e dobishme për bizneset që përdorin energji gjatë orarit të punës.</p>
       </div>
     </article>
     <article class="fact">
       <div>
         <h2>kWp dhe kWh nuk janë e njëjta gjë</h2>
-        <p><strong>kWp</strong> tregon sa e fortë është sistemi, sa energji mund të japë në momentin më të mirë. Është si fuqia e motorit të një makine.</p>
-        <p><strong>kWh</strong> tregon sa energji prodhove realisht gjatë një periudhe, si kilometrat që bën makina. Një sistem i vogël mund të prodhojë shumë kWh gjatë një viti të tërë, nëse ka diell të mjaftueshëm.</p>
+        <p><strong>kWp</strong> tregon fuqinë e instaluar të sistemit. Për shembull, një sistem 6 kWp ka një fuqi të caktuar prodhimi në kushtet më të mira.</p>
+        <p><strong>kWh</strong> tregon sasinë e energjisë që sistemi prodhon gjatë një periudhe, si ditë, muaj ose vit.</p>
+        <p>Një mënyrë e thjeshtë për ta kuptuar është kjo: kWp është fuqia e motorit, ndërsa kWh është puna që motori ka bërë gjatë një periudhe.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Sa çati duhet realisht</h2>
-        <p>Rreth 4 deri 4.5 metra katrorë çati nevojiten për çdo kilovat panele të instaluar. Kjo do të thotë që një shtëpi me faturë mesatare zakonisht ka nevojë vetëm për 18 deri 22 metra katrorë çati të lirë, më pak se ç'mendohet zakonisht.</p>
+        <h2>Sa hapësirë kërkon një sistem?</h2>
+        <p>Në përgjithësi, për çdo 1 kWp duhen rreth 4–4.5 m² hapësirë të lirë në çati. Kjo shifër mund të ndryshojë sipas fuqisë dhe përmasave të panelit, si edhe sipas mënyrës së montimit.</p>
+        <p>Për një sistem familjar, zakonisht nevojiten disa dhjetëra metra katrorë çati të lirë. Para instalimit kontrollohen edhe pengesat, oxhakët, strukturat dhe hapësirat që mund të krijojnë hije.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Bateria e telefonit dhe bateria e sistemit solar</h2>
-        <p>Të dyja ruajnë energji me parime shumë të ngjashme kimike. Dallimi është vetëm në përmasa, njëra mban energjinë sa të zgjasë një bisedë telefonike, tjetra mjafton për të ndriçuar një shtëpi të tërë gjatë natës.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2>Paneli nuk ka pjesë lëvizëse</h2>
-        <p>Nuk ka motorë, nuk ka rrota, asgjë që lëviz brenda tij. Kjo do të thotë shumë pak gjëra që mund të prishen, dhe zakonisht mjafton vetëm një pastrim herë pas here për ta mbajtur në formë të mirë.</p>
+        <h2>Orientimi dhe hija ndikojnë shumë në prodhim</h2>
+        <p>Çatia me orientim të mirë ndaj diellit zakonisht prodhon më shumë energji. Po aq e rëndësishme është edhe shmangia e hijeve nga pemët, ndërtesat, oxhaqet ose objektet e tjera.</p>
+        <p>Edhe një hije e vogël mbi disa panele mund të ndikojë në prodhimin e gjithë vargut. Për këtë arsye, kontrolli i objektit është i nevojshëm para ofertës përfundimtare.</p>
       </div>
     </article>
     <article class="fact">
       <div>
         <h2>Vapa e madhe nuk i ndihmon panelet</h2>
-        <p>Në kundërshtim me atë që shumica mendojnë, panelet nuk e duan nxehtësinë ekstreme. Prodhojnë pak më mirë në një ditë me diell dhe ajër të freskët, sesa në një ditë të nxehtë vere.</p>
+        <p>Shumë njerëz mendojnë se sa më e nxehtë të jetë dita, aq më shumë prodhojnë panelet. Në të vërtetë, panelet kanë nevojë kryesisht për dritë.</p>
+        <p>Në një ditë me diell dhe temperaturë normale mund të punojnë më mirë sesa në një ditë shumë të nxehtë vere. Prandaj, ditët e ndritshme por jo tepër të nxehta janë shpesh shumë të mira për prodhim.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Paneli nuk "vdes" pas pak vitesh</h2>
-        <p>Prodhuesit japin garanci deri në 30 vite për ruajtjen e fuqisë. Edhe pas 30 vitesh pune, një panel ende prodhon rreth 88 deri 89 përqind të fuqisë me të cilën filloi. Humbja është shumë graduale, jo e papritur.</p>
+        <h2>Panelet nuk kanë pjesë lëvizëse</h2>
+        <p>Panelet nuk kanë motorë, rripa apo pjesë që rrotullohen. Kjo i bën të thjeshta për t'u mirëmbajtur dhe zakonisht nuk kërkojnë ndërhyrje të shpeshta.</p>
+        <p>Në shumicën e rasteve mjafton të kontrollohen herë pas here dhe të pastrohen kur grumbullohet pluhur ose papastërti.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Sistemi ndalon vetë kur bie rryma</h2>
-        <p>Për siguri, një sistem standard pa bateri ndërpret automatikisht prodhimin kur rrjeti elektrik i qytetit bie. Kështu nuk rrezikohen punëtorët që po riparojnë linjën jashtë.</p>
+        <h2>Panelet nuk ndalojnë së punuari pas pak vitesh</h2>
+        <p>Panelet nuk "skadojnë" pas disa vitesh. Prodhuesit japin garanci për ruajtjen e fuqisë, zakonisht deri në 25 ose 30 vite, sipas modelit dhe datasheet-it.</p>
+        <p>Me kalimin e kohës fuqia ulet gradualisht, jo menjëherë. Edhe pas shumë vitesh paneli vazhdon të prodhojë energji, por me një kapacitet pak më të ulët.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Pse janë thuajse gjithmonë të zeza</h2>
-        <p>Ngjyra e errët nuk është vetëm estetikë. Qelizat thithin dritë më mirë kur janë të zeza ose gri të errët. Modelet e vjetra ishin shpesh blu, por teknologjia moderne favorizon të zezën.</p>
+        <h2>Çfarë bën inverteri?</h2>
+        <p>Panelet prodhojnë energji në formën e rrymës së vazhduar. Inverteri e shndërron atë në energji që mund të përdoret nga pajisjet e shtëpisë ose të biznesit.</p>
+        <p>Ai gjithashtu monitoron sistemin dhe ndihmon që energjia të përdoret në mënyrë të sigurt e të kontrolluar. Prandaj inverteri është po aq i rëndësishëm sa vetë panelet.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Disa panele "shohin" dritë nga të dyja anët</h2>
-        <p>Modele moderne, të quajtura bifaciale, kapin dritë të reflektuar edhe nga poshtë modulit, jo vetëm nga sipër. Kjo jep një prodhim shtesë pa zënë asnjë hapësirë shtesë çatie.</p>
+        <h2>Çfarë ndodh kur ndërpritet energjia?</h2>
+        <p>Një sistem standard i lidhur me rrjetin ndalon përkohësisht kur rrjeti elektrik ndërpritet. Kjo bëhet për arsye sigurie, që energjia të mos rikthehet në linjë ndërsa ajo po riparohet.</p>
+        <p>Nëse dëshiron energji edhe gjatë ndërprerjeve, nevojitet një sistem hibrid me bateri dhe zakonisht përcaktohen pajisjet që do të mbahen aktive.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Çfarë do të thotë "kthimi i investimit"</h2>
-        <p>Është koha që duhet që kursimet nga fatura e energjisë të mbulojnë koston fillestare të sistemit. Zakonisht flitet për disa vite, ndryshe sipas konsumit dhe madhësisë së sistemit. Pas kësaj periudhe, energjia që prodhon sistemi është thuajse falas.</p>
+        <h2>Bateria diellore ruan energjinë për më vonë</h2>
+        <p>Panelet prodhojnë më shumë gjatë ditës, ndërsa një pjesë e konsumit mund të ndodhë në mbrëmje ose gjatë natës. Bateria ruan energjinë e prodhuar dhe e përdor atë kur panelet nuk po prodhojnë.</p>
+        <p>Kapaciteti i baterisë zgjidhet sipas pajisjeve që dëshiron të furnizosh dhe kohës për të cilën kërkon rezervë.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Shqipëria ka shumë ditë me diell</h2>
-        <p>Klima mesdhetare i jep Shqipërisë më shumë orë diell në vit sesa shumicës së vendeve të Evropës Veriore. Kjo e bën energjinë diellore veçanërisht të leverdisshme.</p>
+        <h2>Prodhimi ndryshon sipas stinës</h2>
+        <p>Gjatë verës zakonisht ka më shumë orë me diell, ndërsa në dimër ditët janë më të shkurtra dhe moti mund të jetë më i vranët. Kjo do të thotë se prodhimi nuk është i njëjtë çdo muaj.</p>
+        <p>Ajo që ka rëndësi është prodhimi i pritshëm gjatë gjithë vitit, jo vetëm rezultati i një dite ose një muaji.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <div>
+        <h2>Disa panele prodhojnë edhe nga ana e pasme</h2>
+        <p>Panelet bifaciale mund të marrin dritë edhe nga pjesa e pasme. Kjo mund të sjellë prodhim shtesë kur paneli vendoset në një sipërfaqe që reflekton dritën.</p>
+        <p>Përfitimi varet nga mënyra e montimit, ngjyra e sipërfaqes dhe hapësira rreth panelit. Prandaj nuk japin të njëjtin rezultat në çdo çati.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <div>
+        <h2>Pse shumë panele janë të zeza?</h2>
+        <p>Pamja e zezë vjen nga qelizat dhe shtresat mbrojtëse të panelit. Shumë njerëz i preferojnë sepse duken më moderne dhe përshtaten më mirë me çatitë.</p>
+        <p>Ngjyra, megjithatë, nuk është e vetmja gjë që përcakton cilësinë. Më të rëndësishme janë modeli, fuqia, performanca, garancia dhe datasheet-i i prodhuesit.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <div>
+        <h2>Çfarë do të thotë kthimi i investimit?</h2>
+        <p>Kthimi i investimit është koha që nevojitet që kursimi nga energjia diellore të mbulojë koston fillestare të sistemit.</p>
+        <p>Kjo periudhë varet nga konsumi i pritshëm, çmimi i energjisë, madhësia e sistemit, mënyra e përdorimit të energjisë dhe kushtet e rrjetit. Pas kësaj periudhe, sistemi vazhdon të ulë faturën për sa kohë që funksionon.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <div>
+        <h2>Sistemi duhet të përshtatet me konsumin</h2>
+        <p>Një sistem më i madh nuk është gjithmonë zgjidhja më e mirë. Madhësia duhet të përshtatet me energjinë që pritet të konsumosh, hapësirën në çati dhe mënyrën si përdoret energjia gjatë ditës.</p>
+        <p>Për një familje dhe për një biznes mund të nevojiten sisteme të ndryshme, edhe kur shuma e faturës mujore duket e njëjtë.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <div>
+        <h2>Shqipëria ka kushte shumë të mira për energjinë diellore</h2>
+        <p>Shqipëria ka shumë ditë me diell gjatë vitit dhe kushte të mira për prodhimin e energjisë diellore. Megjithatë, prodhimi përfundimtar varet edhe nga qyteti, orientimi, pjerrësia, hija dhe mirëmbajtja.</p>
+        <p>Pikërisht për këtë arsye, kalkulatori jep një vlerësim fillestar, ndërsa oferta përfundimtare përcaktohet pas kontrollit teknik.</p>
+      </div>
+    </article>
+    <article class="fact">
+      <div>
+        <h2>Pse është i rëndësishëm monitorimi?</h2>
+        <p>Me aplikacionin e monitorimit mund të shohësh sa energji po prodhon sistemi, sa po përdor dhe nëse ka ndonjë problem.</p>
+        <p>Kjo të ndihmon ta kuptosh më mirë sistemin dhe të dallosh më shpejt çdo ndryshim në prodhim.</p>
       </div>
     </article>
   </section>
 
+  <section class="conclusion">
+    <h2>Përfundim</h2>
+    <p>Energjia diellore nuk është aq e komplikuar sa duket. Me panelet e duhura, inverterin e përshtatshëm dhe një instalim të bërë mirë, një sistem fotovoltaik mund të ulë ndjeshëm faturën dhe të funksionojë për shumë vite.</p>
+    <p>Kalkulatori hiSol të jep një vlerësim të parë. Oferta përfundimtare konfirmohet pas kontrollit të objektit, çatisë dhe lidhjes elektrike.</p>
+  </section>
+
   <section class="brands-section">
     <h2>Markat me të cilat punojmë</h2>
-    <p class="lead">Pak fjalë për secilën, thjeshtë.</p>
     <div class="brand-grid">
       <div class="brand-card">
         <h3>JA Solar</h3>
