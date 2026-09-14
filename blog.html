@@ -58,6 +58,17 @@ h1, h2 { text-wrap: balance; }
 .cta-block .btn { background: var(--lime); color: #0c1a7a; border: none; height: 46px; padding: 0 22px; }
 
 .footer { padding: 30px 0 40px; border-top: 1px solid var(--border); text-align: center; font-size: 12.5px; color: var(--muted); }
+
+.faq-section { padding: 10px 0 56px; }
+.faq-section .eyebrow { text-align: center; display: block; }
+.faq-section h2 { font-size: clamp(24px, 3vw, 30px); margin: 0 0 30px; text-align: center; }
+.faq { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-sm); }
+.faq-item summary { list-style: none; cursor: pointer; padding: 18px 20px; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "+"; font-size: 20px; color: var(--blue); font-weight: 400; flex-shrink: 0; transition: transform 0.15s ease; }
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--muted-2); line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -162,9 +173,32 @@ h1, h2 { text-wrap: balance; }
       <span class="fact__num">12</span>
       <div>
         <h2>Shqipëria ka shumë ditë me diell</h2>
-        <p>Klima mesdhetare i jep Shqipërisë më shumë orë diell në vit sesa shumicës së vendeve të Evropës Veriore. Kjo e bën energjinë diellore veçanërisht të leverdisshme këtu.</p>
+        <p>Klima mesdhetare i jep Shqipërisë më shumë orë diell në vit sesa shumicës së vendeve të Evropës Veriore. Kjo e bën energjinë diellore veçanërisht të leverdisshme.</p>
       </div>
     </article>
+  </section>
+
+  <section class="faq-section">
+    <p class="eyebrow">Pyetje të shpeshta</p>
+    <h2>Çfarë duhet të dish para se të vendosësh.</h2>
+    <div class="faq">
+      <details class="faq-item" open>
+        <summary>A është çmimi i kalkulatorit final?</summary>
+        <p>Jo. Çmimi është orientues, bazuar në fuqinë e llogaritur. Çmimi final konfirmohet pas verifikimit teknik të objektit, strukturës dhe lidhjes elektrike.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Sa garanci kanë panelet?</summary>
+        <p>Deri në 30 vite garanci për ruajtjen e fuqisë, sipas kushteve të prodhuesit të secilit model.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Çfarë përfshin instalimi standard?</summary>
+        <p>Panelet dhe inverterin, strukturën mbajtëse, kabllot DC/AC, mbrojtjet elektrike, tokëzimin, monitorimin dhe montimin. Bateria, punimet civile, aplikimet dhe matësi dykahësh nuk përfshihen automatikisht.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Sa kohë duhet për një ofertë?</summary>
+        <p>Kalkulatori jep një vlerësim menjëherë. Pas kontaktit në WhatsApp, hiSol kthen përgjigje brenda 24 orësh për hapat vijues.</p>
+      </details>
+    </div>
   </section>
 
   <section class="cta-block">
