@@ -1,4 +1,4 @@
-const VERSION = "hisol-v3";
+const VERSION = "hisol-v4";
 const PRECACHE = `${VERSION}-precache`;
 const RUNTIME = `${VERSION}-runtime`;
 
