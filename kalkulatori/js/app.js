@@ -50,7 +50,7 @@ function buildSummaryText(result, name) {
     : "si projekt të personalizuar (kërkon çmim të veçantë)";
 
   const intro = name
-    ? `Jam ${name}. Bëra një llogaritje te kalkulatori juaj dhe doja më tepër informacion.`
+    ? `Përshëndetje, quhem ${name}. Bëra një llogaritje te kalkulatori juaj dhe doja më tepër informacion.`
     : "Përshëndetje hiSol! Bëra një llogaritje te kalkulatori juaj dhe doja më tepër informacion.";
 
   const lines = [
