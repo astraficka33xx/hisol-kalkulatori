@@ -15,17 +15,20 @@
   --border: #dfe4f0; --page-bg: #f7f8fc; --surface: #ffffff; --surface-alt: #f6f7fb;
   --shadow-sm: 0 8px 24px rgba(22, 32, 77, 0.06);
   --font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --logo-color: var(--blue);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --ink: #eef1fb; --muted: #9aa3c7; --muted-2: #b6bedd; --border: rgba(255,255,255,0.12);
     --page-bg: #0d1538; --surface: #121a3e; --surface-alt: #0f1730;
     --shadow-sm: 0 8px 24px rgba(0,0,0,0.3);
+    --logo-color: var(--lime);
   }
 }
 :root[data-theme="dark"] {
   --ink: #eef1fb; --muted: #9aa3c7; --muted-2: #b6bedd; --border: rgba(255,255,255,0.12);
   --page-bg: #0d1538; --surface: #121a3e; --surface-alt: #0f1730;
+  --logo-color: var(--lime);
   --shadow-sm: 0 8px 24px rgba(0,0,0,0.3);
 }
 * { box-sizing: border-box; }
@@ -38,7 +41,7 @@ h1, h2 { text-wrap: balance; }
 
 .topbar { padding: 18px 0; border-bottom: 1px solid var(--border); }
 .topbar__inner { max-width: 880px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.logo-mark { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: var(--blue); }
+.logo-mark { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: var(--logo-color); }
 .logo-mark svg { height: 24px; width: auto; }
 .btn { border-radius: 12px; font-weight: 700; font-size: 13.5px; padding: 10px 18px; height: 42px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); }
 .btn:hover { border-color: var(--blue); color: var(--blue); }
@@ -92,7 +95,7 @@ h1, h2 { text-wrap: balance; }
   <div class="topbar__inner">
     <a class="logo-mark" href="./">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="185.34 708.99 432.11 118.87" role="img" aria-label="hiSol">
-<g fill="#1429C2" fill-rule="nonzero">
+<g fill="currentColor" fill-rule="nonzero">
 <path d="M 298.238281 807.714844 L 284.066406 821.859375 L 259.808594 797.714844 L 249.804688 787.714844 L 239.804688 797.714844 L 239.804688 797.601562 L 215.542969 821.859375 L 201.398438 807.714844 L 225.660156 783.457031 L 225.574219 783.457031 L 249.804688 759.222656 L 274.035156 783.457031 L 273.953125 783.457031 Z M 298.238281 807.714844 "/>
 <path d="M 308.269531 763.453125 L 308.269531 783.457031 L 282.09375 783.457031 L 253.835938 755.195312 L 249.804688 751.136719 L 245.777344 755.195312 L 217.515625 783.457031 L 191.34375 783.457031 L 191.34375 763.453125 L 225.660156 763.453125 L 201.398438 739.195312 L 215.542969 725.050781 L 239.804688 749.308594 L 239.804688 714.992188 L 259.808594 714.992188 L 259.808594 749.28125 L 284.09375 725.050781 L 298.238281 739.195312 L 273.980469 763.453125 Z M 308.269531 763.453125 "/>
 <g transform="translate(320.1288,818.1987)"><path d="M 48.03125 -74.328125 C 56.414062 -74.328125 63.015625 -71.78125 67.828125 -66.6875 C 72.640625 -61.59375 75.046875 -53.660156 75.046875 -42.890625 L 75.046875 0 L 62.1875 0 L 62.1875 -42.171875 C 62.1875 -49.128906 60.660156 -54.320312 57.609375 -57.75 C 54.554688 -61.1875 50.21875 -62.90625 44.59375 -62.90625 C 40.3125 -62.90625 36.523438 -61.878906 33.234375 -59.828125 C 29.953125 -57.773438 27.40625 -55.03125 25.59375 -51.59375 C 23.78125 -48.164062 22.875 -44.3125 22.875 -40.03125 L 22.875 0 L 10 0 L 10 -100.0625 L 22.875 -100.0625 L 22.875 -77.484375 L 22.296875 -60.75 L 23.875 -60.75 C 26.539062 -65.226562 29.992188 -68.609375 34.234375 -70.890625 C 38.472656 -73.179688 43.070312 -74.328125 48.03125 -74.328125 Z M 48.03125 -74.328125 "/></g>
