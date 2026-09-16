@@ -429,4 +429,6 @@ input[type="range"] {
   .checklist { grid-template-columns: 1fr; }
   .results-card__actions { flex-direction: column; }
   .results-card__actions .btn { width: 100%; }
+  .container { padding-left: 24px; padding-right: 24px; }
+  .topbar__inner { padding-left: 24px; padding-right: 24px; }
 }
