@@ -281,7 +281,7 @@ h1, h2, h3 { text-wrap: balance; }
       <p class="sun-card__time" id="sunTime">--:--</p>
       <p class="sun-card__timelabel" id="sunPhase">Duke ngarkuar…</p>
       <p class="sun-sentence">1 kWp diell prodhon <strong id="sunPerKwp">— kWh</strong> sot.</p>
-      <p class="sun-card__note">Vlerësim, jo matje reale.</p>
+      <p class="sun-card__note" id="sunNote">Vlerësim, jo matje reale.</p>
     </div>
   </section>
 </div>
@@ -463,6 +463,63 @@ function sunTimes(lat, dayOfYear) {
   return { sunrise: sunriseHour, sunset: sunsetHour };
 }
 
+// Astronomical fallback (clear-sky model): spreads the annual average yield
+// (1300 kWh/kWp/year, same assumption as calculator.js) across today's daylight
+// hours as a cosine curve. Used until/unless real weather data is available.
+function estimateFromAstronomy(hourNow, t) {
+  var dayLengthH = Math.max(0, t.sunset - t.sunrise);
+  var elapsedH = Math.max(0, Math.min(hourNow, t.sunset) - t.sunrise);
+  var expectedYield = 1300;
+  var dailyAvgKwhPer1Kwp = expectedYield / 365;
+  var kwh = dayLengthH > 0
+    ? dailyAvgKwhPer1Kwp * (1 - Math.cos(Math.PI * Math.min(elapsedH, dayLengthH) / dayLengthH)) / 2
+    : 0;
+  return Math.max(0, kwh);
+}
+
+// Real weather data (Open-Meteo, free, no API key): today's hourly solar
+// irradiance for Tirana, fetched once and refreshed periodically.
+var realSunData = null;
+
+function fetchRealSunData() {
+  var url = "https://api.open-meteo.com/v1/forecast?latitude=41.33&longitude=19.82&hourly=shortwave_radiation&timezone=Europe%2FTirane&forecast_days=1";
+  fetch(url)
+    .then(function (res) { if (!res.ok) throw new Error("bad response"); return res.json(); })
+    .then(function (data) {
+      if (!data || !data.hourly || !Array.isArray(data.hourly.shortwave_radiation)) throw new Error("bad shape");
+      realSunData = {
+        radiation: data.hourly.shortwave_radiation, // W/m² per hour, local day
+        utcOffsetSeconds: data.utc_offset_seconds || 3600,
+      };
+      updateSun();
+    })
+    .catch(function () {
+      // Offline, blocked, or API unavailable — the astronomical estimate below
+      // keeps the widget working, just without real cloud cover.
+    });
+}
+
+// Converts today's irradiance-so-far into kWh/kWp using a typical real-world
+// performance ratio (inverter/temperature/soiling losses). Returns null until
+// fetchRealSunData() has succeeded at least once today.
+function estimateFromRealWeather() {
+  if (!realSunData) return null;
+  var radiation = realSunData.radiation;
+  if (!radiation || !radiation.length) return null;
+
+  var localNow = new Date(Date.now() + realSunData.utcOffsetSeconds * 1000);
+  var hourIndex = localNow.getUTCHours();
+  var minuteFraction = localNow.getUTCMinutes() / 60;
+  if (hourIndex >= radiation.length) return null;
+
+  var whPerM2 = 0;
+  for (var i = 0; i < hourIndex; i++) whPerM2 += radiation[i] || 0;
+  whPerM2 += (radiation[hourIndex] || 0) * minuteFraction;
+
+  var performanceRatio = 0.8;
+  return Math.max(0, (whPerM2 / 1000) * performanceRatio);
+}
+
 function updateSun() {
   var now = new Date();
   var start = new Date(now.getFullYear(), 0, 0);
@@ -486,16 +543,19 @@ function updateSun() {
   dot.setAttribute("cy", y.toFixed(1));
   dot.setAttribute("fill", isDay ? "#c5ef78" : "#5a6499");
 
-  var dayLengthH = Math.max(0, t.sunset - t.sunrise);
-  var elapsedH = Math.max(0, Math.min(hourNow, t.sunset) - t.sunrise);
-  var expectedYield = 1300;
-  var dailyAvgKwhPer1Kwp = expectedYield / 365;
-  var todayKwhPer1Kwp = dayLengthH > 0 ? dailyAvgKwhPer1Kwp * (1 - Math.cos(Math.PI * Math.min(elapsedH, dayLengthH) / dayLengthH)) / 2 : 0;
-  todayKwhPer1Kwp = Math.max(0, todayKwhPer1Kwp);
+  var realKwh = estimateFromRealWeather();
+  var usingReal = realKwh !== null;
+  var todayKwhPer1Kwp = usingReal ? realKwh : estimateFromAstronomy(hourNow, t);
+
   document.getElementById("sunPerKwp").textContent = todayKwhPer1Kwp.toFixed(1) + " kWh";
+  document.getElementById("sunNote").textContent = usingReal
+    ? "Vlerësim nga rrezatimi real i sotëm."
+    : "Vlerësim, jo matje reale.";
 }
 updateSun();
 setInterval(updateSun, 30000);
+fetchRealSunData();
+setInterval(fetchRealSunData, 15 * 60 * 1000);
 
 window.addEventListener("scroll", function () {
   document.getElementById("topbar").classList.toggle("is-scrolled", window.scrollY > 8);
