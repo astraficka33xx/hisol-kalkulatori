@@ -1,0 +1,128 @@
+# hiSol — kalkulatori fotovoltaik & faqja hisolenergy.com
+
+Faqe statike (HTML/CSS/JS vanilla, pa build-step, pa framework, pa `package.json`) për
+`hisolenergy.com`. Remote i git-ut: `github.com/astraficka33xx/hisol-kalkulatori`, branch `main`.
+
+## Struktura e projektit
+
+```
+index.html          Faqja kryesore (hero, shërbimet, "si funksionon", modelet, OG/Twitter meta tags)
+blog.html            Blogu
+CNAME                Domain-i custom i GitHub Pages: hisolenergy.com
+kalkulatori/
+  index.html          Aplikacioni i kalkulatorit (UI, dialogët: ofertë WhatsApp, PDF, modele, instalim)
+  css/styles.css       Stilet e kalkulatorit (dark mode via media query, lime si theme-color aksent)
+  js/
+    app.js             Lidh UI-në me calculator.js: state, render(), dialogët, WhatsApp, PDF, install prompt
+    calculator.js       Motori i llogaritjeve: çmimi, panelet, inverterët (shih poshtë)
+    catalog.js          Katalogu i sheshtë i produkteve (dialogu "Modelet tona") — display-only,
+                         NUK ndikon në logjikën e calculator.js
+    pdf.js              Ndërton PDF-në e ofertës me pdf-lib (shih poshtë)
+    format.js           Formatim numrash/datash sipas locale "sq-AL"
+  vendor/pdf-lib.min.js  Libraria pdf-lib (embed lokal, jo CDN)
+  datasheets/            PDF-të origjinale të prodhuesve (panele + inverterë), bashkëngjiten te oferta
+  assets/                Logo, ikona app (favicon, apple-touch-icon, app-icon 180/192/512), OG image
+  manifest.webmanifest    PWA manifest (emri "hiSol – Kalkulatori Solar", standalone, tema #1429c2)
+  sw.js                   Service worker (cache-i i app-it, shih poshtë)
+```
+
+## Kalkulatori (`kalkulatori/js/calculator.js`)
+
+Funksioni kryesor `calculateSystem({ customer, method, roof, monthlyBill, desiredKwp })`.
+Komenti në krye të skedarit thotë shprehimisht: **mos i ndrysho formulat/numrat pa e
+konfirmuar me hiSol** — janë tarifat/çmimet e vitit 2026 dhe supozimet e prodhimit.
+
+**Hyrjet:**
+- `customer`: `"familjar"` | `"biznes"`
+- `method`: `"fatura"` (nga fatura mujore) | `"fuqia"` (fuqi e kërkuar direkt në kWp)
+- `roof`: `"sandwich"` | `"terrace"` | `"tile"` | `"ground"` — përdoret vetëm për faktorin e hapësirës (m²)
+
+**Përzgjedhja e panelit** (`CONFIG.panels`):
+- Instalime deri **7 kWp referencë** (ose çdo çati `tile`, pavarësisht madhësisë) → paneli
+  rezidencial JA Solar JAM54D41-455/LB, 455 W
+- Mbi 7 kWp (jo-tile) → paneli komercial Jinko Solar JKM730N-66HL5-BDV, 730 W
+
+**Çmimi** (`calculatePriceWithVat`, me TVSH 20%, tiers sipas `requestedKwp`):
+| Kufiri (kWp kërkuar) | Lek/kWp |
+|---|---|
+| ≤ 50 | 37,000 |
+| 51–99 | 35,000 |
+| 100–299 | 32,000 |
+| ≥ 300 | 30,000 |
+
+Ka një "floor" (`boundaryPrice`) që siguron çmimi të mos bjerë vetëm sepse sistemi kaloi
+në një tier më të lirë pak mbi kufirin — çmimi minimal është ai i kufirit të mëparshëm.
+Mbi `maximumPricedKwp` (480 kWp) çmimi kthehet `null` → "sipas projektit".
+
+**Përzgjedhja e inverterit** (`INVERTER_TIERS`, `selectInverter`): fuqia DC pjesëtohet me
+1.12 (derating) për të marrë kW AC, pastaj përputhet me tier-in përkatës:
+| Tier | Marka/modeli | Fazë | Range AC kW | Hapat |
+|---|---|---|---|---|
+| deye-monofazor | Deye SUN-{kw}K-G05P1-EU-AM2 | monofazor | 0–6.2 | 3.6, 4, 4.2, 4.6, 5, 5.2, 6, 6.2 |
+| solis-eh3p | Solis S6-EH3P{kw}K02-NV-YD-L | trefazor | 6.2–50 | 5,6,8,10,12,15,18 (mbi një njësi: kombinim deri 6× të 15/18 kW) |
+| solis-trefazor-50-75 | Solis S6-GC{kw}K-LV | trefazor | 50–75 | 50, 60, 75 |
+| solis-trefazor-80-125 | Solis S6-GC{kw}K | trefazor | 75–125 | 80, 100, 110, 125 |
+
+Rregull eksplicit në kod: **asnjë Deye trefazor** në kalkulator — çdo nevojë trefazore mbi
+tavanin e Deye monofazor (6.2 kW AC) kalon te Solis EH3P. Mbi 125 kW AC → `isCustom: true`
+(s'ka model të supozuar, thjesht "përcaktohet në projekt").
+
+**Kursimet/payback**: llogariten vetëm kur `method === "fatura"` dhe ka çmim (jo custom).
+Tarifa e energjisë: biznes fiks 16.8 lek/kWh; familjar 10.2 ose 11.4 lek/kWh sipas nivelit
+të faturës (pragu 700 lekë ekuivalent). Auto-konsumi: 45% familjar, 72% biznes.
+
+## Katalogu i produkteve (`catalog.js`)
+
+Listë e sheshtë, vetëm për shfaqje në dialogun "Modelet tona" — **nuk ndikon** te
+llogaritjet. Çdo entry duhet të ketë datasheet-in përkatës nën `kalkulatori/datasheets/`.
+
+## Gjenerimi i PDF-ve (`kalkulatori/js/pdf.js`)
+
+`downloadQuotePdf({ clientName, clientLocation, customer, roof, result })` ndërton me
+**pdf-lib** (vendor lokal, jo CDN):
+1. Faqe A4 njëshe me: header me logo + datë, të dhënat e klientit (opsionale), sistemi i
+   sugjeruar + investimi, tabela e konfigurimit, kursimi/payback (nëse llogaritet), paketa
+   standarde e përfshirë, çfarë nuk përfshihet, kushtet/kontaktet.
+2. Bashkëngjit datasheet-in e panelit (gjithmonë) dhe të inverterit (vetëm nëse modeli nuk
+   është "custom") duke kopjuar faqet e PDF-ve origjinale nga `datasheets/`.
+3. Shkarkimi: krijon blob URL, klikon `<a download>` me emrin
+   `hiSol-Oferte[-<klienti-slug>]-<kWp>kWp.pdf`.
+
+Trigger-i në UI: butoni "Shkarko ofertën PDF" → dialog për emër/vendndodhje opsionale →
+"Shkarko PDF-në e plotë" (`app.js`, `pdfGenerateBtn`). **U testua manualisht dhe funksionon.**
+
+## PWA / Service worker (`kalkulatori/sw.js`)
+
+- Versionohet me konstanten `VERSION` (aktualisht `"hisol-v5"`) — **duhet rritur çdo herë
+  që ndryshon një asset i precache-uar** (lista `PRECACHE_URLS`: HTML/CSS/JS/vendor/manifest/
+  ikonat), përndryshe klientët mbeten me cache të vjetër. Historiku i git-ut e konfirmon këtë
+  praktikë (commits "Bump service worker version" pas ndryshimeve të tjera).
+- Navigimet: network-first me fallback te `index.html` nga cache kur offline.
+- Gjithçka tjetër (assets, datasheets, vendor): cache-first, popullohet runtime cache.
+- Instalimi si app: `app.js` dëgjon `beforeinstallprompt`/`appinstalled` dhe menaxhon
+  dialogun "Shto hiSol në celular".
+
+## Publikimi (deploy)
+
+S'ka workflow CI/CD (`.github/workflows` nuk ekziston) dhe s'ka build-step apo bundler.
+Prania e `CNAME` (domain custom `hisolenergy.com`) tregon se faqja publikohet me
+**GitHub Pages**; historiku i git-ut tregon commits direkt në `main` që reflektohen si
+publikime (p.sh. "Bump service worker version" pas ndryshimeve në cache). D.m.th. deploy =
+`git push` në `main` — s'ka hap ndërmjetës të verifikuar në repo. *(Konfirmo në GitHub repo
+settings → Pages nëse do siguri të plotë mbi branch-in burimor.)*
+
+**MOS bëj push në `main` pa konfirmim eksplicit të përdoruesit** — çdo push publikon direkt
+faqen live.
+
+## Stili i commit-eve (nga `git log`)
+
+Titull i shkurtër, mënyra urdhërore, në anglisht, pa prefiks tipi (jo Conventional
+Commits), pa referenca ticket-esh. Shembuj nga historiku: "Update default WhatsApp message
+text", "Bump service worker version", "Fix Albanian diacritics (e with breve) in OG image
+text", "Add Open Graph and Twitter Card meta tags".
+
+## Gjuha dhe lokalizimi
+
+I gjithë UI-ja dhe teksti janë në shqip (`sq-AL` locale për formatim numrash/datash te
+`format.js`). Mesazhi i WhatsApp-it (`buildSummaryText` te `app.js`) hiqet qëllimisht nga
+diakritikat (`ë`→`e`, `Ë`→`E`) para se të dërgohet, ndërsa pjesa tjetër e UI-së i ruan.
