@@ -114,6 +114,36 @@ settings → Pages nëse do siguri të plotë mbi branch-in burimor.)*
 **MOS bëj push në `main` pa konfirmim eksplicit të përdoruesit** — çdo push publikon direkt
 faqen live.
 
+## Mënyra e punës me Claude Code (workflow për sesionet e ardhshme)
+
+Përdoruesi punon vetëm nga biseda te Claude (Claude Code Cloud), pa komanda teknike, njësoj
+si nga kompjuteri i zyrës. Për **çdo kërkesë ndryshimi** në faqe ose kalkulator, Claude duhet
+të ndjekë këtë procedurë, pa e kërkuar përdoruesi ta përsërisë:
+
+1. **Sinkronizim**: `git fetch origin main` dhe konfirmo se branch-i i punës është i azhurnuar
+   me `origin/main` (ose bazohu mbi versionin më të fundit të tij) përpara se të fillosh.
+2. **Ndryshim i fokusuar**: bëj vetëm atë që kërkohet, pa prekur pjesë të tjera të kodit/UI-së
+   që nuk lidhen me kërkesën.
+3. **Testim**: verifiko manualisht (p.sh. me server lokal/browser për UI, ose kontroll logjik
+   për `calculator.js`/`pdf.js`) që ndryshimi funksionon dhe që funksionalitetet ekzistuese
+   (kalkulimi, PDF, WhatsApp, instalimi PWA, etj.) nuk janë prishur.
+4. **Raportim i shkurtër**: pas çdo ndryshimi, trego shkurtimisht çfarë u ndryshua (skedarët/
+   pjesët prekura), pa detaje teknike të panevojshme.
+
+**Publikimi (kur përdoruesi e kërkon shprehimisht):**
+- Bëj commit të ndryshimeve në branch-in e punës dhe hape (ose përditëso) një Pull Request
+  drejt `main`.
+- Nëse ke leje mjaftueshme në repo (`astraficka33xx/hisol-kalkulatori`), bashkoje (merge) PR-në
+  vetë drejt `main` — kjo publikon faqen live nëpërmjet GitHub Pages.
+- Nëse merge-i dështon për shkak lejesh/konfliktesh që s'i zgjidh dot vetë, mos e lër të
+  papërfunduar në heshtje: trego saktësisht te GitHub ku duhet të klikojë përdoruesi (linku i
+  PR-së dhe butoni "Merge pull request").
+- Puna s'konsiderohet e mbyllur derisa të verifikohet që ndryshimi është shfaqur realisht në
+  `hisolenergy.com` (p.sh. duke kontrolluar commit-in e fundit të publikuar në GitHub Pages
+  ose vetë faqen live).
+- Rregulli ekzistues mbetet në fuqi: **asnjë push/merge në `main` pa konfirmim eksplicit** —
+  kërkesa e përdoruesit "publikoje" në atë moment shërben si konfirmim.
+
 ## Stili i commit-eve (nga `git log`)
 
 Titull i shkurtër, mënyra urdhërore, në anglisht, pa prefiks tipi (jo Conventional
