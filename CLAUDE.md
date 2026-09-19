@@ -55,17 +55,21 @@ në një tier më të lirë pak mbi kufirin — çmimi minimal është ai i kufi
 Mbi `maximumPricedKwp` (480 kWp) çmimi kthehet `null` → "sipas projektit".
 
 **Përzgjedhja e inverterit** (`INVERTER_TIERS`, `selectInverter`): fuqia DC pjesëtohet me
-1.12 (derating) për të marrë kW AC, pastaj përputhet me tier-in përkatës:
+1.12 (derating) për të marrë kW AC, pastaj përputhet me tier-in përkatës — **gjithmonë 1
+inverter i vetëm** (s'ka më paralelizim/kombinim njësish, hequr kur u shtua Growatt):
 | Tier | Marka/modeli | Fazë | Range AC kW | Hapat |
 |---|---|---|---|---|
 | deye-monofazor | Deye SUN-{kw}K-G05P1-EU-AM2 | monofazor | 0–6.2 | 3.6, 4, 4.2, 4.6, 5, 5.2, 6, 6.2 |
-| solis-eh3p | Solis S6-EH3P{kw}K02-NV-YD-L | trefazor | 6.2–50 | 5,6,8,10,12,15,18 (mbi një njësi: kombinim deri 6× të 15/18 kW) |
-| solis-trefazor-50-75 | Solis S6-GC{kw}K-LV | trefazor | 50–75 | 50, 60, 75 |
+| solis-eh3p | Solis S6-EH3P{kw}K02-NV-YD-L | trefazor | 6.2–18 | 5, 6, 8, 10, 12, 15, 18 |
+| growatt-mod-17-33 | Growatt MOD {kw}KTL3-X3 | trefazor | 18–33 | 20, 25, 30, 33 |
+| growatt-mid-36-60 | Growatt MID {kw}KTL3-X3 | trefazor | 33–60 | 36, 40, 50, 60 |
+| solis-trefazor-50-75 | Solis S6-GC{kw}K-LV | trefazor | 60–75 | 75 |
 | solis-trefazor-80-125 | Solis S6-GC{kw}K | trefazor | 75–125 | 80, 100, 110, 125 |
 
 Rregull eksplicit në kod: **asnjë Deye trefazor** në kalkulator — çdo nevojë trefazore mbi
-tavanin e Deye monofazor (6.2 kW AC) kalon te Solis EH3P. Mbi 125 kW AC → `isCustom: true`
-(s'ka model të supozuar, thjesht "përcaktohet në projekt").
+tavanin e Deye monofazor (6.2 kW AC) kalon te Solis EH3P, e mbi 18 kW AC te Growatt (zgjedhje
+e konfirmuar nga hiSol, shtator 2026, për të shmangur paralelizimin e disa Solis EH3P).
+Mbi 125 kW AC → `isCustom: true` (s'ka model të supozuar, thjesht "përcaktohet në projekt").
 
 **Kursimet/payback**: llogariten vetëm kur `method === "fatura"` dhe ka çmim (jo custom).
 Tarifa e energjisë: biznes fiks 16.8 lek/kWh; familjar 10.2 ose 11.4 lek/kWh sipas nivelit
