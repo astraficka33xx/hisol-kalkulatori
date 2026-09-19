@@ -106,6 +106,22 @@ Trigger-i në UI: butoni "Shkarko ofertën PDF" → dialog për emër/vendndodhj
 - Instalimi si app: `app.js` dëgjon `beforeinstallprompt`/`appinstalled` dhe menaxhon
   dialogun "Shto hiSol në celular".
 
+## Widget "Dielli live" (`index.html`)
+
+Kartë në faqen kryesore që shfaq pozicionin e diellit (lindje/perëndim, llogaritur
+astronomikisht nga gjerësia gjeografike e Tiranës) dhe një vlerësim të kWh/kWp të prodhuar
+"sot". Që nga shtatori 2026, kjo është **varësia e parë e jashtme (API)** e faqes — më parë
+gjithçka ishte plotësisht statike:
+- Në `load` dhe çdo 15 min, bën `fetch` te **Open-Meteo** (falas, pa çelës, CORS i hapur) për
+  rrezatimin diellor orë-për-orë të Tiranës (`shortwave_radiation`), dhe e shndërron në
+  kWh/kWp me një faktor performance (`0.8`).
+- **Fallback i domosdoshëm**: nëse `fetch`-i dështon (offline, API poshtë, bllokuar nga
+  rrjeti) kthehet automatikisht te modeli astronomik i vjetër (mesatarja vjetore 1300
+  kWh/kWp/vit e shpërndarë si kurbë kosinusi gjatë ditës) — widget-i s'thyhet kurrë, thjesht
+  humbet saktësinë e motit real. Teksti i notës (`#sunNote`) ndryshon sipas burimit aktual.
+- Pozicioni i diellit në hark (SVG) dhe ora rifreskohen çdo 30s pavarësisht nga API-ja (nuk
+  varen prej saj).
+
 ## Publikimi (deploy)
 
 S'ka workflow CI/CD (`.github/workflows` nuk ekziston) dhe s'ka build-step apo bundler.
