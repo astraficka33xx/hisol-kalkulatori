@@ -16,6 +16,8 @@ export const PRODUCT_CATALOG = [
   { brand: "Deye", model: "SUN-(3.6-6.2)K-G05P1-EU-AM2", power: "3.6–6.2 kW", datasheet: "datasheets/deye-mono-3.6-6.2kw.pdf" },
   { brand: "Solis", model: "S6-EH1P(3-10)K-L-PLUS", power: "3–10 kW", datasheet: "datasheets/solis-eh1p-3-10kw.pdf" },
   { brand: "Solis", model: "S6-EH3P(5-18)K02-NV-YD-L", power: "5–18 kW", datasheet: "datasheets/solis-eh3p-15-18kw-parallel.pdf" },
+  { brand: "Growatt", model: "MOD(17-33)KTL3-X3", power: "17–33 kW", datasheet: "datasheets/growatt-mod-17-33kw.pdf" },
+  { brand: "Growatt", model: "MID(36-60)KTL3-X3", power: "36–60 kW", datasheet: "datasheets/growatt-mid-36-60kw.pdf" },
   { brand: "Solis", model: "S6-GC(50-75)K-LV", power: "50–75 kW", datasheet: "datasheets/solis-trefazor-50-75kw.pdf" },
   { brand: "Solis", model: "S6-GC(80-125)K", power: "80–125 kW", datasheet: "datasheets/solis-trefazor-80-125kw.pdf" },
 ];
