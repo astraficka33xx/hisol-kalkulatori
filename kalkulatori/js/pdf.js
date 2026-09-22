@@ -17,12 +17,8 @@ function hex(color) {
   return rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
 }
 
-function slugify(text) {
-  return text
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-zA-Z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+function sanitizeFilenamePart(text) {
+  return text.replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, " ").trim();
 }
 
 function truncate(text, max) {
@@ -180,7 +176,8 @@ export async function downloadQuotePdf({ clientName = "", clientLocation = "", c
   doc.setCreator("hiSol Solar Calculator");
 
   const bytes = await doc.save({ useObjectStreams: false });
-  const filename = `hiSol-Oferte${clientName.trim() ? `-${slugify(clientName.trim())}` : ""}-${formatDecimal(result.installedKwp).replace(",", ".")}kWp.pdf`;
+  const cleanName = sanitizeFilenamePart(clientName.trim());
+  const filename = `hiSol Oferte${cleanName ? ` ${cleanName}` : ""} ${formatDecimal(result.installedKwp).replace(",", ".")}kWp.pdf`;
 
   // On phones, a blob: URL doesn't actually download — the browser just opens it
   // as a page, and sharing that page from there drags along the raw blob: link
