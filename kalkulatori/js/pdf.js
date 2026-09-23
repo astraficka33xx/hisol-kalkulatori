@@ -183,8 +183,12 @@ export async function downloadQuotePdf({ clientName = "", clientLocation = "", c
   // as a page, and sharing that page from there drags along the raw blob: link
   // as text. Sharing the real File through the native share sheet avoids both:
   // one tap gets a clean PDF attachment (Save to Files, WhatsApp, AirDrop, ...).
+  // Desktop Safari/Chrome also implement navigator.share (e.g. for AirDrop), but
+  // there a direct download is what people expect, so this is gated to touch
+  // devices (maxTouchPoints also flags iPadOS, which reports as "Macintosh").
+  const isTouchDevice = navigator.maxTouchPoints > 1 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   const file = new File([bytes], filename, { type: "application/pdf" });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+  if (isTouchDevice && navigator.canShare && navigator.canShare({ files: [file] })) {
     try {
       await navigator.share({ files: [file] });
       return;
