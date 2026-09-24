@@ -40,7 +40,8 @@ konfirmuar me hiSol** — janë tarifat/çmimet e vitit 2026 dhe supozimet e pro
 
 **Përzgjedhja e panelit** (`CONFIG.panels`):
 - Instalime deri **7 kWp referencë** (ose çdo çati `tile`, pavarësisht madhësisë) → paneli
-  rezidencial JA Solar JAM54D41-455/LB, 455 W
+  rezidencial JA Solar JAM54D40-455/LB, 455 W (ndryshuar nga JAM54D41 në shtator 2026, po
+  ai model 455 W/1.998 m², thjesht revizion i ri i JA Solar)
 - Mbi 7 kWp (jo-tile) → paneli komercial Jinko Solar JKM730N-66HL5-BDV, 730 W
 
 **Çmimi** (`calculatePriceWithVat`, me TVSH 20%, tiers sipas `requestedKwp`):
@@ -74,8 +75,8 @@ intervalin e ngushtë 16.8–20 kWp, që kufiri i plotë prej 20 kWp instaluar t
 saktësisht (konfirmuar shprehimisht nga hiSol). Modelet Solis monofazor/trefazor më të vegjël
 që bien plotësisht brenda zonës Deye (S6-GR1P(8-10)K, S5-GR3P poshtë 20 kWp instaluar) **s'i
 përdor kalkulatori** — mbeten vetëm si referencë te katalogu (`catalog.js`), jo në
-`INVERTER_TIERS`. Growatt (MOD 17-33, MID 36-60) mbetet ende në `catalog.js`/faqen kryesore si
-referencë, por **s'përdoret më nga kalkulatori** që nga ky ndryshim.
+`INVERTER_TIERS`. **Growatt (MOD 17-33, MID 36-60) u hoq krejtësisht** (kalkulator, katalog,
+faqja kryesore, datasheet-et) në shtator 2026 — jo më as referencë.
 Mbi 125 kW AC → `isCustom: true` (s'ka model të supozuar, thjesht "përcaktohet në projekt").
 
 **Kursimet/payback**: llogariten vetëm kur `method === "fatura"` dhe ka çmim (jo custom).

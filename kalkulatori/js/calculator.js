@@ -20,10 +20,10 @@ export const CONFIG = {
       watts: 455,
       areaM2: 1.998,
       brand: "JA Solar",
-      model: "JAM54D41-455/LB",
+      model: "JAM54D40-455/LB",
       series: "DEEP BLUE 4.0 Pro",
       name: "JA Solar 455 W",
-      datasheet: "datasheets/ja-solar-455w.pdf",
+      datasheet: "datasheets/ja-solar-jam54d40-460w.pdf",
     },
     commercial: {
       watts: 730,
