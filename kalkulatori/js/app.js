@@ -9,6 +9,31 @@ const ROOF_LABELS = {
   ground: "Në tokë",
 };
 
+const EN_MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// Thin i18n helpers — Albanian text always stays the source/default (calculator.js
+// and this file's own literals are never changed), English is an optional overlay
+// provided by ../i18n.js when it's present and the visitor has switched to EN.
+function isEn() {
+  return Boolean(window.HiSolI18n && window.HiSolI18n.getLang() === "en");
+}
+function t(key, fallback) {
+  const value = window.HiSolI18n && window.HiSolI18n.t(key);
+  return value != null ? value : fallback;
+}
+function numLocale() {
+  return isEn() ? "en-GB" : "sq-AL";
+}
+function fmtNumber(value) {
+  return formatNumber(value, 0, numLocale());
+}
+function fmtDecimal(value) {
+  return formatDecimal(value, numLocale());
+}
+function fmtYears(value) {
+  return formatYears(value, numLocale());
+}
+
 const state = {
   customer: "familjar",
   method: "fatura",
@@ -38,15 +63,51 @@ function currentResult() {
   });
 }
 
+function placementText() {
+  if (isEn()) {
+    const key = { sandwich: "calc.roofSandwich", terrace: "calc.roofTerrace", tile: "calc.roofTile", ground: "calc.roofGround" }[state.roof];
+    return t(key, ROOF_LABELS[state.roof]).toLowerCase();
+  }
+  return ROOF_LABELS[state.roof].toLowerCase();
+}
+
 function buildSummaryText(result, name) {
+  const placement = placementText();
+
+  if (isEn()) {
+    const forWhom = state.customer === "familjar" ? t("calc.whatsappForWhomHome", "my home") : t("calc.whatsappForWhomBusiness", "my business");
+    const sizingClause = state.method === "fatura"
+      ? t("calc.whatsappBillClause", "with an average bill of about {bill} lekë/month and {placement}").replace("{bill}", fmtNumber(state.monthlyBill)).replace("{placement}", placement)
+      : t("calc.whatsappPowerClause", "with {placement} and a requested power of about {kwp} kWp").replace("{placement}", placement).replace("{kwp}", fmtDecimal(state.desiredKwp));
+    const equipmentClause = result.inverterIsCustom
+      ? t("calc.whatsappEquipment", "{count} {brand} panels").replace("{count}", result.panelCount).replace("{brand}", result.panelBrand)
+      : t("calc.whatsappEquipmentWithInverter", "{count} {brand} panels + {invBrand} inverter").replace("{count}", result.panelCount).replace("{brand}", result.panelBrand).replace("{invBrand}", result.inverterBrand);
+    const priceClause = result.priceWithVat
+      ? t("calc.whatsappPriceWithVat", "with an indicative price of about {price} lekë including VAT").replace("{price}", fmtNumber(result.priceWithVat))
+      : t("calc.whatsappPriceCustom", "as a custom project (requires a separate quote)");
+
+    const intro = name
+      ? t("calc.whatsappGreetingNamed", "Hello, my name is {name}. I ran a calculation on your calculator and would like more information.").replace("{name}", name)
+      : t("calc.whatsappGreetingAnon", "Hello hiSol! I ran a calculation on your calculator and would like more information.");
+
+    const body = t("calc.whatsappBody", "For {forWhom}, {sizingClause}, I got a system of about {installed} kWp ({equipment}), {priceClause}.")
+      .replace("{forWhom}", forWhom)
+      .replace("{sizingClause}", sizingClause)
+      .replace("{installed}", fmtDecimal(result.installedKwp))
+      .replace("{equipment}", equipmentClause)
+      .replace("{priceClause}", priceClause);
+
+    const lines = [intro, "", body, "", t("calc.whatsappClosing", "Could you help me with a technical check and an exact quote? Thank you!")];
+    return lines.join("\n");
+  }
+
   const forWhom = state.customer === "familjar" ? "shtëpinë time" : "biznesin tim";
-  const placement = ROOF_LABELS[state.roof].toLowerCase();
   const sizingClause = state.method === "fatura"
-    ? `me faturë mesatare rreth ${formatNumber(state.monthlyBill)} lekë/muaj dhe ${placement}`
-    : `me ${placement} dhe fuqi të kërkuar rreth ${formatDecimal(state.desiredKwp)} kWp`;
+    ? `me faturë mesatare rreth ${fmtNumber(state.monthlyBill)} lekë/muaj dhe ${placement}`
+    : `me ${placement} dhe fuqi të kërkuar rreth ${fmtDecimal(state.desiredKwp)} kWp`;
   const equipmentClause = `${result.panelCount} panele ${result.panelBrand}${result.inverterIsCustom ? "" : ` + inverter ${result.inverterBrand}`}`;
   const priceClause = result.priceWithVat
-    ? `me çmim orientues rreth ${formatNumber(result.priceWithVat)} lekë me TVSH`
+    ? `me çmim orientues rreth ${fmtNumber(result.priceWithVat)} lekë me TVSH`
     : "si projekt të personalizuar (kërkon çmim të veçantë)";
 
   const intro = name
@@ -56,7 +117,7 @@ function buildSummaryText(result, name) {
   const lines = [
     intro,
     "",
-    `Për ${forWhom}, ${sizingClause}, më doli një sistem rreth ${formatDecimal(result.installedKwp)} kWp (${equipmentClause}), ${priceClause}.`,
+    `Për ${forWhom}, ${sizingClause}, më doli një sistem rreth ${fmtDecimal(result.installedKwp)} kWp (${equipmentClause}), ${priceClause}.`,
     "",
     "A mund të më ndihmoni me një verifikim teknik dhe ofertë të saktë? Faleminderit!",
   ];
@@ -66,6 +127,7 @@ function buildSummaryText(result, name) {
 function renderChart(result) {
   const chart = el("monthlyChart");
   const max = Math.max(...result.monthlyProduction, 1);
+  const months = isEn() ? EN_MONTH_NAMES : MONTH_NAMES;
   chart.innerHTML = "";
   result.monthlyProduction.forEach((value, i) => {
     const col = document.createElement("div");
@@ -73,10 +135,10 @@ function renderChart(result) {
     const bar = document.createElement("div");
     bar.className = "chart__bar";
     bar.style.height = `${Math.max((value / max) * 100, 2)}%`;
-    bar.title = `${MONTH_NAMES[i]}: ${formatNumber(value)} kWh`;
+    bar.title = `${months[i]}: ${fmtNumber(value)} kWh`;
     const label = document.createElement("span");
     label.className = "chart__label";
-    label.textContent = MONTH_NAMES[i];
+    label.textContent = months[i];
     col.appendChild(bar);
     col.appendChild(label);
     chart.appendChild(col);
@@ -85,35 +147,42 @@ function renderChart(result) {
 
 function render() {
   const result = currentResult();
+  const en = isEn();
 
   el("resultPrice").textContent = result.priceWithVat
-    ? `${formatNumber(result.priceWithVat)} lekë`
-    : "Sipas projektit";
+    ? `${fmtNumber(result.priceWithVat)} lekë`
+    : t("calc.priceCustom", "Sipas projektit");
   el("resultPriceCaption").textContent = result.priceWithVat
-    ? "Çmim reference, i instaluar"
-    : "Kërkon llogaritje teknike të dedikuar";
+    ? t("calc.resultPriceCaption", "Çmim reference, i instaluar")
+    : t("calc.resultPriceCaptionCustom", "Kërkon llogaritje teknike të dedikuar");
 
-  el("resSystem").textContent = `${formatDecimal(result.installedKwp)} kWp`;
-  el("resPanelCount").textContent = `${result.panelCount} panele`;
+  el("resSystem").textContent = `${fmtDecimal(result.installedKwp)} kWp`;
+  el("resPanelCount").textContent = en ? `${result.panelCount} panels` : `${result.panelCount} panele`;
   el("resPanelModel").textContent = `${result.panelBrand} ${result.panelModel}`;
   el("resPanelWatts").textContent = `${result.panelWatts} W`;
   el("resInverter").textContent = result.inverterIsCustom
-    ? "Sipas projektit"
+    ? t("calc.inverterCustom", "Sipas projektit")
     : `${result.inverterBrand} ${result.inverterModel}`;
   el("resInverterPhase").textContent = result.inverterIsCustom
-    ? "Ende pa u konfirmuar"
-    : result.inverterPhase === "monofazor" ? "Monofazor" : "Trefazor";
+    ? t("calc.phaseUnconfirmed", "Ende pa u konfirmuar")
+    : result.inverterPhase === "monofazor" ? t("calc.phaseSingle", "Monofazor") : t("calc.phaseThree", "Trefazor");
   el("resInverterCount").textContent = result.inverterIsCustom ? "—" : `${result.inverterUnitCount}`;
-  el("resInverterTotalKw").textContent = result.inverterIsCustom ? "—" : `~${formatDecimal(result.estimatedAcKw)} kW AC`;
-  el("resArea").textContent = `~${formatNumber(result.areaM2)} m²`;
-  el("resProduction").textContent = `~${formatNumber(result.annualProduction)} kWh/vit`;
-  el("resProductionRange").textContent = `${formatNumber(result.productionLow)}–${formatNumber(result.productionHigh)} kWh/vit`;
+  el("resInverterTotalKw").textContent = result.inverterIsCustom ? "—" : `~${fmtDecimal(result.estimatedAcKw)} kW AC`;
+  el("resArea").textContent = `~${fmtNumber(result.areaM2)} m²`;
+  el("resProduction").textContent = en ? `~${fmtNumber(result.annualProduction)} kWh/year` : `~${fmtNumber(result.annualProduction)} kWh/vit`;
+  el("resProductionRange").textContent = en
+    ? `${fmtNumber(result.productionLow)}–${fmtNumber(result.productionHigh)} kWh/year`
+    : `${fmtNumber(result.productionLow)}–${fmtNumber(result.productionHigh)} kWh/vit`;
 
   const savingsRow = el("savingsRow");
   if (result.savingsLow && result.savingsHigh) {
     savingsRow.hidden = false;
-    el("resSavings").textContent = `${formatNumber(result.savingsLow)}–${formatNumber(result.savingsHigh)} lekë/vit`;
-    el("resPayback").textContent = `${formatYears(result.paybackFast)}–${formatYears(result.paybackSlow)} vjet`;
+    el("resSavings").textContent = en
+      ? `${fmtNumber(result.savingsLow)}–${fmtNumber(result.savingsHigh)} lekë/year`
+      : `${fmtNumber(result.savingsLow)}–${fmtNumber(result.savingsHigh)} lekë/vit`;
+    el("resPayback").textContent = en
+      ? `${fmtYears(result.paybackFast)}–${fmtYears(result.paybackSlow)} years`
+      : `${fmtYears(result.paybackFast)}–${fmtYears(result.paybackSlow)} vjet`;
   } else {
     savingsRow.hidden = true;
   }
@@ -161,17 +230,23 @@ syncPair(desiredKwpInput, desiredKwpRange, "desiredKwp");
 
 // --- Copy summary ------------------------------------------------------
 
+function resetActionButtonLabels() {
+  el("copySummaryBtn").textContent = t("calc.copyBtn", "Kopjo");
+  el("copyLinkBtn").textContent = t("calc.copyLinkBtn", "Kopjo linkun për miqtë");
+  if (!pdfGenerateBtn.disabled) pdfGenerateBtn.textContent = t("calc.pdfGenerateBtn", "Shkarko PDF-në e plotë");
+}
+
 el("copySummaryBtn").addEventListener("click", async () => {
   const { summary } = render();
   const btn = el("copySummaryBtn");
   try {
     await navigator.clipboard.writeText(summary);
-    btn.textContent = "U kopjua";
+    btn.textContent = t("calc.copyBtnCopied", "U kopjua");
   } catch {
-    btn.textContent = "S'u kopjua";
+    btn.textContent = t("calc.copyBtnFailed", "S'u kopjua");
   }
   window.setTimeout(() => {
-    btn.textContent = "Kopjo";
+    btn.textContent = t("calc.copyBtn", "Kopjo");
   }, 2200);
 });
 
@@ -179,12 +254,12 @@ el("copyLinkBtn").addEventListener("click", async () => {
   const btn = el("copyLinkBtn");
   try {
     await navigator.clipboard.writeText(window.location.origin);
-    btn.textContent = "Linku u kopjua ✓";
+    btn.textContent = t("calc.copyLinkCopied", "Linku u kopjua ✓");
   } catch {
-    btn.textContent = "S'u kopjua linku";
+    btn.textContent = t("calc.copyLinkFailed", "S'u kopjua linku");
   }
   window.setTimeout(() => {
-    btn.textContent = "Kopjo linkun për miqtë";
+    btn.textContent = t("calc.copyLinkBtn", "Kopjo linkun për miqtë");
   }, 2200);
 });
 
@@ -208,7 +283,7 @@ offerSubmitBtn.addEventListener("click", () => {
   const name = offerNameInput.value.trim();
   const phone = offerPhoneInput.value.trim();
   if (!name || !phone) {
-    offerError.textContent = "Ju lutem plotësoni emrin dhe numrin e telefonit.";
+    offerError.textContent = t("calc.offerError", "Ju lutem plotësoni emrin dhe numrin e telefonit.");
     offerError.hidden = false;
     return;
   }
@@ -238,7 +313,7 @@ pdfBtn.addEventListener("click", () => {
 pdfGenerateBtn.addEventListener("click", async () => {
   pdfError.hidden = true;
   pdfGenerateBtn.disabled = true;
-  pdfGenerateBtn.textContent = "Po përgatitet PDF-ja...";
+  pdfGenerateBtn.textContent = t("calc.pdfGenerating", "Po përgatitet PDF-ja...");
   try {
     const { downloadQuotePdf } = await import("./pdf.js");
     const { result } = render();
@@ -248,14 +323,15 @@ pdfGenerateBtn.addEventListener("click", async () => {
       customer: state.customer,
       roof: state.roof,
       result,
+      lang: isEn() ? "en" : "sq",
     });
     pdfDialog.close();
   } catch (err) {
-    pdfError.textContent = err instanceof Error ? err.message : "PDF-ja nuk u përgatit. Ju lutem provoni përsëri.";
+    pdfError.textContent = err instanceof Error ? err.message : t("calc.pdfError", "PDF-ja nuk u përgatit. Ju lutem provoni përsëri.");
     pdfError.hidden = false;
   } finally {
     pdfGenerateBtn.disabled = false;
-    pdfGenerateBtn.textContent = "Shkarko PDF-në e plotë";
+    pdfGenerateBtn.textContent = t("calc.pdfGenerateBtn", "Shkarko PDF-në e plotë");
   }
 });
 
@@ -328,7 +404,7 @@ function catalogCard({ brand, model, power, datasheet }) {
   link.href = datasheet;
   link.target = "_blank";
   link.rel = "noopener";
-  link.textContent = "Shkarko datasheet-in";
+  link.textContent = t("calc.datasheetLink", "Shkarko datasheet-in");
   card.appendChild(link);
 
   return card;
@@ -351,6 +427,12 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(() => {});
   });
 }
+
+window.addEventListener("hisol:langchange", () => {
+  resetActionButtonLabels();
+  render();
+  if (modelsDialog.open) renderModelsCatalog();
+});
 
 // --- Init ------------------------------------------------------------------
 

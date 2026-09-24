@@ -8,6 +8,7 @@ Faqe statike (HTML/CSS/JS vanilla, pa build-step, pa framework, pa `package.json
 ```
 index.html          Faqja kryesore (hero, shërbimet, "si funksionon", modelet, OG/Twitter meta tags)
 blog.html            Blogu
+i18n.js              Motori i përkthimit SQ/EN i përbashkët (shih poshtë)
 CNAME                Domain-i custom i GitHub Pages: hisolenergy.com
 kalkulatori/
   index.html          Aplikacioni i kalkulatorit (UI, dialogët: ofertë WhatsApp, PDF, modele, instalim)
@@ -173,6 +174,63 @@ text", "Add Open Graph and Twitter Card meta tags".
 
 ## Gjuha dhe lokalizimi
 
-I gjithë UI-ja dhe teksti janë në shqip (`sq-AL` locale për formatim numrash/datash te
-`format.js`). Mesazhi i WhatsApp-it (`buildSummaryText` te `app.js`) hiqet qëllimisht nga
-diakritikat (`ë`→`e`, `Ë`→`E`) para se të dërgohet, ndërsa pjesa tjetër e UI-së i ruan.
+**Shqipja mbetet gjithmonë burimi i vërtetë (source of truth)** — çdo tekst statik në HTML
+është shqip, i shkruar direkt në markup; anglishtja është vetëm një "overlay" i shtuar nga
+`i18n.js` sipër tij. Mesazhi i WhatsApp-it (`buildSummaryText` te `app.js`) hiqet qëllimisht
+nga diakritikat (`ë`→`e`, `Ë`→`E`) **vetëm kur gjuha aktuale është shqip**; për anglisht
+diakritika s'ka kuptim, kështu që hiqet ai hap.
+
+### Toggle SQ/EN (`i18n.js`, shtator 2026)
+
+Buton "EN"/"SQ" (`data-lang-toggle`) në krye të `index.html`, `blog.html` dhe
+`kalkulatori/index.html`. Zgjedhja ruhet në `localStorage` (`hisol-lang`) dhe vlen për të
+tria faqet (i njëjti origin). **`calculator.js` s'është prekur fare** — vetëm teksti/etiketat
+ndryshojnë, jo formulat/numrat.
+
+**Si funksionon** (`i18n.js`, skript i sheshtë — jo modul — i ngarkuar nga të tria faqet,
+`../i18n.js` nga brenda `kalkulatori/`):
+- Çdo element me `data-i18n="kyçi"` përkthehet: `i18n.js` **cache-on tekstin origjinal shqip**
+  (`el.dataset.i18nOriginal`) herën e parë që e prek, pastaj kur gjuha është `en` vendos
+  vlerën përkatëse nga fjalori i brendshëm `en`; kur gjuha kthehet `sq`, thjesht **rikthen**
+  tekstin e cache-uar — s'ka fjalor të veçantë shqip për ta mbajtur në sinkron.
+- `data-i18n-html` mbi të njëjtin element: përdor `innerHTML` në vend të `textContent` (për
+  tekst me `<strong>`/`<em>`/`<br>` brenda). **Kujdes**: mos vendos `data-i18n` (as html as
+  jo) mbi një element që ka BRENDA vetes një tjetër element me `data-i18n` — i pari
+  (prindi) e fshin të dytin kur bën `innerHTML =`. Nëse duhet `<strong>` brenda një fjalie
+  të përkthyer, përfshije `<strong>...</strong>` direkt te vlera EN e fjalisë, jo si element
+  i veçantë me `data-i18n` të vetin.
+- `data-i18n-placeholder` / `data-i18n-aria-label`: njësoj, por për atributin `placeholder`
+  a `aria-label` në vend të tekstit të dukshëm.
+- Tekst i përzier me ikona SVG brenda së njëjtës fjali (p.sh. hero lead me një `<svg>` diell
+  në mes): **ndaje në `<span data-i18n>` të veçantë** për çdo pjesë tekst-only, lëre SVG-në
+  jashtë çdo span-i të përkthyer.
+- `window.HiSolI18n` global: `getLang()`, `setLang(lang)`, `t(key)` (kthen `null` kur gjuha
+  është `sq` — përdoret nga `app.js`/`pdf.js` për tekst që gjenerohet nga JS, jo nga HTML
+  statik), `dictionary` (objekti i plotë `en`, lexohet direkt nga `pdf.js`).
+- Ngjarja `hisol:langchange` hidhet në `window` sa herë ndërrohet gjuha — `app.js` e dëgjon
+  për të rikthirë `render()` (rezultatet, grafiku, mesazhi WhatsApp) dhe etiketat e butonave.
+
+**Tekst i gjeneruar nga JS** (jo në HTML, s'e prek `i18n.js` automatikisht):
+- `kalkulatori/js/app.js`: `render()`, `buildSummaryText()` (mesazhi WhatsApp — version i
+  plotë i veçantë anglisht, jo thjesht fjalë-për-fjalë), gjendjet e butonave (Kopjo/Copied),
+  emrat e muajve në grafik (`EN_MONTH_NAMES`, pasi `MONTH_NAMES` nga `calculator.js` mbetet
+  shqip pa u prekur). Përdor helper-in lokal `t(key, fallback)`.
+- `kalkulatori/js/pdf.js`: PDF-ja pranon `lang` (`"sq"` default | `"en"`, kalon nga `app.js`
+  sipas `HiSolI18n.getLang()`), lexon `window.HiSolI18n.dictionary.pdf.*` direkt (jo DOM,
+  pasi PDF-ja nuk ka HTML). Data e PDF-së formatohet `en-GB` (DD/MM/YYYY) në anglisht, `sq-AL`
+  në shqip.
+- `kalkulatori/js/format.js`: `formatNumber`/`formatDecimal`/`formatYears` pranojnë tani një
+  parametër opsional `locale` (default `"sq-AL"`, i pandryshuar) — `app.js`/`pdf.js` kalojnë
+  `"en-GB"` kur gjuha është anglisht, që numrat të shfaqen si "12,000" jo "12.000".
+- `index.html` (widget-i "Dielli live", skripti inline): `sunPhase`/`sunNote` kontrollojnë
+  `window.HiSolI18n.getLang()` direkt (jo `t()`, s'importon module) dhe dëgjojnë
+  `hisol:langchange` për rifreskim të menjëhershëm.
+
+**Kur shton tekst të ri statik**: shto `data-i18n="namespace.kyçiRiNjohshëm"` te elementi
+HTML (shqip mbetet vlera default e elementit), pastaj shto çelësin+vlerën anglisht te
+`i18n.js` → `en.<namespace>.<kyçi>`. Namespaces ekzistuese: `nav`, `home` (faqja kryesore),
+`sun`, `blog`, `calc` (kalkulatori), `pdf`.
+
+**Testim i domosdoshëm pas çdo ndryshimi këtu**: hap faqen, shtyp toggle-in EN→SQ→EN disa
+herë, dhe kontrollo (a) teksti anglisht del saktë, (b) kthimi në shqip **rikthen ekzaktësisht**
+tekstin origjinal (asnjë humbje/prishje HTML-je), (c) asnjë gabim konsole.
