@@ -50,6 +50,13 @@ export const MONTH_NAMES = ["Jan", "Shk", "Mar", "Pri", "Maj", "Qer", "Kor", "Gs
 
 // Confirmed hiSol inverter product scheme (brand/model/AC-power steps taken directly
 // from manufacturer datasheets). Ordered by AC power range, low to high.
+// hiSol rule (September 2026): Deye covers every installation up to 20 kWp installed
+// (DC) — monofazor up to its own ceiling, trefazor above that; Solis takes over past
+// 20 kWp installed. The 20 kWp (DC) cutoff is expressed here in AC terms via the same
+// 1.12 derating used everywhere else, so it lines up with `derated` below.
+const DEYE_TO_SOLIS_INSTALLED_KWP_CUTOFF = 20;
+const DEYE_TO_SOLIS_AC_CUTOFF = DEYE_TO_SOLIS_INSTALLED_KWP_CUTOFF / 1.12;
+
 export const INVERTER_TIERS = [
   {
     id: "deye-monofazor",
@@ -63,61 +70,60 @@ export const INVERTER_TIERS = [
     datasheet: "datasheets/deye-mono-3.6-6.2kw.pdf",
   },
   {
-    // Every trefazor need above the Deye monofazor ceiling (6.2 kW AC) uses Solis
-    // EH3P, per hiSol's explicit rule: no Deye trefazor in the calculator. A single
-    // unit covers the full 6.2–18 kW AC range (confirmed steps below).
-    id: "solis-eh3p",
-    brand: "Solis",
-    modelFamily: "S6-EH3P(5-18)K02-NV-YD-L",
-    modelTemplate: "S6-EH3P{kw}K02-NV-YD-L",
+    // Fills the rest of the Deye zone (up to 20 kWp installed) with the trefazor
+    // line, since its integer steps (7-15) cover the gap above the monofazor
+    // ceiling with no missing sizes. The last step (15K) is also used, slightly
+    // undersized, for the narrow 16.8-20 kWp band per hiSol's flat 20 kWp cutoff.
+    id: "deye-trefazor",
+    brand: "Deye",
+    modelFamily: "SUN-xK-G06P3-EU-BM2-P1",
+    modelTemplate: "SUN-{kw}K-G06P3-EU-BM2-P1",
     phase: "trefazor",
     minAcKw: 6.2,
-    maxAcKw: 18,
-    steps: [5, 6, 8, 10, 12, 15, 18],
-    datasheet: "datasheets/solis-eh3p-15-18kw-parallel.pdf",
+    maxAcKw: DEYE_TO_SOLIS_AC_CUTOFF,
+    steps: [7, 8, 9, 10, 12, 15],
+    datasheet: "datasheets/deye-trefazor-3-15kw.pdf",
   },
   {
-    // Confirmed hiSol choice: above the Solis EH3P single-unit ceiling (18 kW AC),
-    // use single Growatt units instead of paralleling multiple Solis EH3P.
-    id: "growatt-mod-17-33",
-    brand: "Growatt",
-    modelFamily: "MOD(17-33)KTL3-X3",
-    modelTemplate: "MOD {kw}KTL3-X3",
-    phase: "trefazor",
-    minAcKw: 18,
-    maxAcKw: 33,
-    steps: [20, 25, 30, 33],
-    datasheet: "datasheets/growatt-mod-17-33kw.pdf",
-  },
-  {
-    id: "growatt-mid-36-60",
-    brand: "Growatt",
-    modelFamily: "MID(36-60)KTL3-X3",
-    modelTemplate: "MID {kw}KTL3-X3",
-    phase: "trefazor",
-    minAcKw: 33,
-    maxAcKw: 60,
-    steps: [36, 40, 50, 60],
-    datasheet: "datasheets/growatt-mid-36-60kw.pdf",
-  },
-  {
-    id: "solis-trefazor-50-75",
+    id: "solis-gr3p",
     brand: "Solis",
-    modelFamily: "S6-GC(50-75)K-LV",
-    modelTemplate: "S6-GC{kw}K-LV",
+    modelFamily: "S5-GR3P(12-25)K(21A)",
+    modelTemplate: "S5-GR3P{kw}K(21A)",
     phase: "trefazor",
-    minAcKw: 60,
-    maxAcKw: 75,
-    steps: [75],
-    datasheet: "datasheets/solis-trefazor-50-75kw.pdf",
+    minAcKw: DEYE_TO_SOLIS_AC_CUTOFF,
+    maxAcKw: 25,
+    steps: [20, 25],
+    datasheet: "datasheets/solis-gr3p-12-25kw.pdf",
   },
   {
-    id: "solis-trefazor-80-125",
+    id: "solis-gc3p-25-40",
+    brand: "Solis",
+    modelFamily: "S6-GC3P(25-40)K03-ND",
+    modelTemplate: "S6-GC3P{kw}K03-ND",
+    phase: "trefazor",
+    minAcKw: 25,
+    maxAcKw: 40,
+    steps: [25, 30, 33, 36, 40],
+    datasheet: "datasheets/solis-gc3p-25-40kw.pdf",
+  },
+  {
+    id: "solis-gc3p-40-60",
+    brand: "Solis",
+    modelFamily: "S6-GC3P(40-60)K-ND",
+    modelTemplate: "S6-GC3P{kw}K-ND",
+    phase: "trefazor",
+    minAcKw: 40,
+    maxAcKw: 60,
+    steps: [50, 60],
+    datasheet: "datasheets/solis-gc3p-40-60kw.pdf",
+  },
+  {
+    id: "solis-gc-80-125",
     brand: "Solis",
     modelFamily: "S6-GC(80-125)K",
     modelTemplate: "S6-GC{kw}K",
     phase: "trefazor",
-    minAcKw: 75,
+    minAcKw: 60,
     maxAcKw: 125,
     steps: [80, 100, 110, 125],
     datasheet: "datasheets/solis-trefazor-80-125kw.pdf",

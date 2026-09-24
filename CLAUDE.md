@@ -57,19 +57,25 @@ Mbi `maximumPricedKwp` (480 kWp) çmimi kthehet `null` → "sipas projektit".
 
 **Përzgjedhja e inverterit** (`INVERTER_TIERS`, `selectInverter`): fuqia DC pjesëtohet me
 1.12 (derating) për të marrë kW AC, pastaj përputhet me tier-in përkatës — **gjithmonë 1
-inverter i vetëm** (s'ka më paralelizim/kombinim njësish, hequr kur u shtua Growatt):
+inverter i vetëm** (s'ka paralelizim/kombinim njësish). Rregulli i hiSol (shtator 2026,
+zëvendëson skemën e mëparshme me Growatt): **Deye deri në 20 kWp instaluar, Solis mbi 20
+kWp** — kufiri `DEYE_TO_SOLIS_INSTALLED_KWP_CUTOFF = 20` (shprehur në AC si `20 / 1.12`):
 | Tier | Marka/modeli | Fazë | Range AC kW | Hapat |
 |---|---|---|---|---|
 | deye-monofazor | Deye SUN-{kw}K-G05P1-EU-AM2 | monofazor | 0–6.2 | 3.6, 4, 4.2, 4.6, 5, 5.2, 6, 6.2 |
-| solis-eh3p | Solis S6-EH3P{kw}K02-NV-YD-L | trefazor | 6.2–18 | 5, 6, 8, 10, 12, 15, 18 |
-| growatt-mod-17-33 | Growatt MOD {kw}KTL3-X3 | trefazor | 18–33 | 20, 25, 30, 33 |
-| growatt-mid-36-60 | Growatt MID {kw}KTL3-X3 | trefazor | 33–60 | 36, 40, 50, 60 |
-| solis-trefazor-50-75 | Solis S6-GC{kw}K-LV | trefazor | 60–75 | 75 |
-| solis-trefazor-80-125 | Solis S6-GC{kw}K | trefazor | 75–125 | 80, 100, 110, 125 |
+| deye-trefazor | Deye SUN-{kw}K-G06P3-EU-BM2-P1 | trefazor | 6.2–17.86 (20 kWp) | 7, 8, 9, 10, 12, 15 |
+| solis-gr3p | Solis S5-GR3P{kw}K(21A) | trefazor | 17.86–25 | 20, 25 |
+| solis-gc3p-25-40 | Solis S6-GC3P{kw}K03-ND | trefazor | 25–40 | 25, 30, 33, 36, 40 |
+| solis-gc3p-40-60 | Solis S6-GC3P{kw}K-ND | trefazor | 40–60 | 50, 60 |
+| solis-gc-80-125 | Solis S6-GC{kw}K | trefazor | 60–125 | 80, 100, 110, 125 |
 
-Rregull eksplicit në kod: **asnjë Deye trefazor** në kalkulator — çdo nevojë trefazore mbi
-tavanin e Deye monofazor (6.2 kW AC) kalon te Solis EH3P, e mbi 18 kW AC te Growatt (zgjedhje
-e konfirmuar nga hiSol, shtator 2026, për të shmangur paralelizimin e disa Solis EH3P).
+Modeli më i madh Deye trefazor (15K AC ≈ 16.8 kWp instaluar) përdoret **pak nën fuqi** për
+intervalin e ngushtë 16.8–20 kWp, që kufiri i plotë prej 20 kWp instaluar të respektohet
+saktësisht (konfirmuar shprehimisht nga hiSol). Modelet Solis monofazor/trefazor më të vegjël
+që bien plotësisht brenda zonës Deye (S6-GR1P(8-10)K, S5-GR3P poshtë 20 kWp instaluar) **s'i
+përdor kalkulatori** — mbeten vetëm si referencë te katalogu (`catalog.js`), jo në
+`INVERTER_TIERS`. Growatt (MOD 17-33, MID 36-60) mbetet ende në `catalog.js`/faqen kryesore si
+referencë, por **s'përdoret më nga kalkulatori** që nga ky ndryshim.
 Mbi 125 kW AC → `isCustom: true` (s'ka model të supozuar, thjesht "përcaktohet në projekt").
 
 **Kursimet/payback**: llogariten vetëm kur `method === "fatura"` dhe ka çmim (jo custom).
