@@ -1,4 +1,4 @@
-const VERSION = "hisol-v13";
+const VERSION = "hisol-v14";
 const PRECACHE = `${VERSION}-precache`;
 const RUNTIME = `${VERSION}-runtime`;
 
@@ -8,6 +8,7 @@ const PRECACHE_URLS = [
   "./",
   "index.html",
   "css/styles.css",
+  "../i18n.js",
   "js/app.js",
   "js/calculator.js",
   "js/format.js",

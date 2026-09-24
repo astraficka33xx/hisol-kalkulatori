@@ -80,6 +80,13 @@ h1, h2 { text-wrap: balance; }
 .cta-block .btn { background: var(--lime); color: #0c1a7a; border: none; height: 46px; padding: 0 22px; }
 
 .footer { padding: 30px 0 40px; border-top: 1px solid var(--border); text-align: center; font-size: 12.5px; color: var(--muted); }
+.footer__inner { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.lang-toggle { appearance: none; border: 1px solid var(--border); background: transparent; color: var(--ink); cursor: pointer; }
+.lang-toggle svg { width: 16px; height: 16px; }
+.lang-toggle--icon { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; }
+@media (max-width: 859px) { .lang-toggle--icon { display: none; } }
+.lang-toggle--footer { display: none; align-items: center; gap: 5px; border: none; padding: 0; font-size: 12.5px; font-weight: 700; color: var(--muted); }
+@media (max-width: 859px) { .lang-toggle--footer { display: inline-flex; } }
 
 .brands-section { padding: 10px 0 50px; }
 .brands-section h2 { font-size: clamp(24px, 3vw, 30px); margin: 0 0 28px; text-align: center; }
@@ -117,217 +124,226 @@ h1, h2 { text-wrap: balance; }
 <g transform="translate(588.5770,818.1987)"><path d="M 22.875 0 L 10 0 L 10 -100.0625 L 22.875 -100.0625 Z M 22.875 0 "/></g>
 </g>
 </svg></a>
-    <a class="btn" href="./">← Kthehu te faqja</a>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <a class="btn" href="./" data-i18n="blog.backHome">← Kthehu te faqja</a>
+      <button type="button" class="lang-toggle lang-toggle--icon" data-lang-toggle aria-label="Switch to English"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9Z"/></svg></button>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
   <section class="intro">
-    <h1>Energjia diellore.</h1>
+    <h1 data-i18n="blog.title">Energjia diellore.</h1>
   </section>
 
   <section class="facts">
     <article class="fact">
       <div>
-        <h2>Panelet prodhojnë edhe në ditët me re</h2>
-        <p>Edhe kur qielli është i vranët, panelet vazhdojnë të prodhojnë energji. Sasia është më e ulët se në një ditë me diell, por prodhimi nuk ndalon.</p>
-        <p>Retë e dendura e ulin ndjeshëm prodhimin, ndërsa një ditë me re të lehta mund të japë ende një sasi të kënaqshme energjie. Për këtë arsye, llogaritjet bëhen mbi prodhimin e pritshëm gjatë gjithë vitit dhe jo vetëm mbi ditët me diell të plotë.</p>
+        <h2 data-i18n="blog.facts.0.h">Panelet prodhojnë edhe në ditët me re</h2>
+        <p data-i18n="blog.facts.0.p1">Edhe kur qielli është i vranët, panelet vazhdojnë të prodhojnë energji. Sasia është më e ulët se në një ditë me diell, por prodhimi nuk ndalon.</p>
+        <p data-i18n="blog.facts.0.p2">Retë e dendura e ulin ndjeshëm prodhimin, ndërsa një ditë me re të lehta mund të japë ende një sasi të kënaqshme energjie. Për këtë arsye, llogaritjet bëhen mbi prodhimin e pritshëm gjatë gjithë vitit dhe jo vetëm mbi ditët me diell të plotë.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Panelet nuk prodhojnë energji vetëm në mesditë</h2>
-        <p>Prodhimi fillon që në orët e para të mëngjesit, rritet gjatë ditës dhe ulet gradualisht pasdite. Në mesditë zakonisht arrihet prodhimi më i lartë, por sistemi punon për disa orë gjatë gjithë ditës.</p>
-        <p>Kjo është veçanërisht e dobishme për bizneset që përdorin energji gjatë orarit të punës.</p>
+        <h2 data-i18n="blog.facts.1.h">Panelet nuk prodhojnë energji vetëm në mesditë</h2>
+        <p data-i18n="blog.facts.1.p1">Prodhimi fillon që në orët e para të mëngjesit, rritet gjatë ditës dhe ulet gradualisht pasdite. Në mesditë zakonisht arrihet prodhimi më i lartë, por sistemi punon për disa orë gjatë gjithë ditës.</p>
+        <p data-i18n="blog.facts.1.p2">Kjo është veçanërisht e dobishme për bizneset që përdorin energji gjatë orarit të punës.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>kWp dhe kWh nuk janë e njëjta gjë</h2>
-        <p><strong>kWp</strong> tregon fuqinë e instaluar të sistemit. Për shembull, një sistem 6 kWp ka një fuqi të caktuar prodhimi në kushtet më të mira.</p>
-        <p><strong>kWh</strong> tregon sasinë e energjisë që sistemi prodhon gjatë një periudhe, si ditë, muaj ose vit.</p>
-        <p>Një mënyrë e thjeshtë për ta kuptuar është kjo: kWp është fuqia e motorit, ndërsa kWh është puna që motori ka bërë gjatë një periudhe.</p>
+        <h2 data-i18n="blog.facts.2.h">kWp dhe kWh nuk janë e njëjta gjë</h2>
+        <p data-i18n="blog.facts.2.p1" data-i18n-html><strong>kWp</strong> tregon fuqinë e instaluar të sistemit. Për shembull, një sistem 6 kWp ka një fuqi të caktuar prodhimi në kushtet më të mira.</p>
+        <p data-i18n="blog.facts.2.p2" data-i18n-html><strong>kWh</strong> tregon sasinë e energjisë që sistemi prodhon gjatë një periudhe, si ditë, muaj ose vit.</p>
+        <p data-i18n="blog.facts.2.p3">Një mënyrë e thjeshtë për ta kuptuar është kjo: kWp është fuqia e motorit, ndërsa kWh është puna që motori ka bërë gjatë një periudhe.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Sa hapësirë kërkon një sistem?</h2>
-        <p>Në përgjithësi, për çdo 1 kWp duhen rreth 4–4.5 m² hapësirë të lirë në çati. Kjo shifër mund të ndryshojë sipas fuqisë dhe përmasave të panelit, si edhe sipas mënyrës së montimit.</p>
-        <p>Për një sistem familjar, zakonisht nevojiten disa dhjetëra metra katrorë çati të lirë. Para instalimit kontrollohen edhe pengesat, oxhakët, strukturat dhe hapësirat që mund të krijojnë hije.</p>
+        <h2 data-i18n="blog.facts.3.h">Sa hapësirë kërkon një sistem?</h2>
+        <p data-i18n="blog.facts.3.p1">Në përgjithësi, për çdo 1 kWp duhen rreth 4–4.5 m² hapësirë të lirë në çati. Kjo shifër mund të ndryshojë sipas fuqisë dhe përmasave të panelit, si edhe sipas mënyrës së montimit.</p>
+        <p data-i18n="blog.facts.3.p2">Për një sistem familjar, zakonisht nevojiten disa dhjetëra metra katrorë çati të lirë. Para instalimit kontrollohen edhe pengesat, oxhakët, strukturat dhe hapësirat që mund të krijojnë hije.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Orientimi dhe hija ndikojnë shumë në prodhim</h2>
-        <p>Çatia me orientim të mirë ndaj diellit zakonisht prodhon më shumë energji. Po aq e rëndësishme është edhe shmangia e hijeve nga pemët, ndërtesat, oxhaqet ose objektet e tjera.</p>
-        <p>Edhe një hije e vogël mbi disa panele mund të ndikojë në prodhimin e gjithë vargut. Për këtë arsye, kontrolli i objektit është i nevojshëm para ofertës përfundimtare.</p>
+        <h2 data-i18n="blog.facts.4.h">Orientimi dhe hija ndikojnë shumë në prodhim</h2>
+        <p data-i18n="blog.facts.4.p1">Çatia me orientim të mirë ndaj diellit zakonisht prodhon më shumë energji. Po aq e rëndësishme është edhe shmangia e hijeve nga pemët, ndërtesat, oxhaqet ose objektet e tjera.</p>
+        <p data-i18n="blog.facts.4.p2">Edhe një hije e vogël mbi disa panele mund të ndikojë në prodhimin e gjithë vargut. Për këtë arsye, kontrolli i objektit është i nevojshëm para ofertës përfundimtare.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Vapa e madhe nuk i ndihmon panelet</h2>
-        <p>Shumë njerëz mendojnë se sa më e nxehtë të jetë dita, aq më shumë prodhojnë panelet. Në të vërtetë, panelet kanë nevojë kryesisht për dritë.</p>
-        <p>Në një ditë me diell dhe temperaturë normale mund të punojnë më mirë sesa në një ditë shumë të nxehtë vere. Prandaj, ditët e ndritshme por jo tepër të nxehta janë shpesh shumë të mira për prodhim.</p>
+        <h2 data-i18n="blog.facts.5.h">Vapa e madhe nuk i ndihmon panelet</h2>
+        <p data-i18n="blog.facts.5.p1">Shumë njerëz mendojnë se sa më e nxehtë të jetë dita, aq më shumë prodhojnë panelet. Në të vërtetë, panelet kanë nevojë kryesisht për dritë.</p>
+        <p data-i18n="blog.facts.5.p2">Në një ditë me diell dhe temperaturë normale mund të punojnë më mirë sesa në një ditë shumë të nxehtë vere. Prandaj, ditët e ndritshme por jo tepër të nxehta janë shpesh shumë të mira për prodhim.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Panelet nuk kanë pjesë lëvizëse</h2>
-        <p>Panelet nuk kanë motorë, rripa apo pjesë që rrotullohen. Kjo i bën të thjeshta për t'u mirëmbajtur dhe zakonisht nuk kërkojnë ndërhyrje të shpeshta.</p>
-        <p>Në shumicën e rasteve mjafton të kontrollohen herë pas here dhe të pastrohen kur grumbullohet pluhur ose papastërti.</p>
+        <h2 data-i18n="blog.facts.6.h">Panelet nuk kanë pjesë lëvizëse</h2>
+        <p data-i18n="blog.facts.6.p1">Panelet nuk kanë motorë, rripa apo pjesë që rrotullohen. Kjo i bën të thjeshta për t'u mirëmbajtur dhe zakonisht nuk kërkojnë ndërhyrje të shpeshta.</p>
+        <p data-i18n="blog.facts.6.p2">Në shumicën e rasteve mjafton të kontrollohen herë pas here dhe të pastrohen kur grumbullohet pluhur ose papastërti.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Panelet nuk ndalojnë së punuari pas pak vitesh</h2>
-        <p>Panelet nuk "skadojnë" pas disa vitesh. Prodhuesit japin garanci për ruajtjen e fuqisë, zakonisht deri në 25 ose 30 vite, sipas modelit dhe datasheet-it.</p>
-        <p>Me kalimin e kohës fuqia ulet gradualisht, jo menjëherë. Edhe pas shumë vitesh paneli vazhdon të prodhojë energji, por me një kapacitet pak më të ulët.</p>
+        <h2 data-i18n="blog.facts.7.h">Panelet nuk ndalojnë së punuari pas pak vitesh</h2>
+        <p data-i18n="blog.facts.7.p1">Panelet nuk "skadojnë" pas disa vitesh. Prodhuesit japin garanci për ruajtjen e fuqisë, zakonisht deri në 25 ose 30 vite, sipas modelit dhe datasheet-it.</p>
+        <p data-i18n="blog.facts.7.p2">Me kalimin e kohës fuqia ulet gradualisht, jo menjëherë. Edhe pas shumë vitesh paneli vazhdon të prodhojë energji, por me një kapacitet pak më të ulët.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Çfarë bën inverteri?</h2>
-        <p>Panelet prodhojnë energji në formën e rrymës së vazhduar. Inverteri e shndërron atë në energji që mund të përdoret nga pajisjet e shtëpisë ose të biznesit.</p>
-        <p>Ai gjithashtu monitoron sistemin dhe ndihmon që energjia të përdoret në mënyrë të sigurt e të kontrolluar. Prandaj inverteri është po aq i rëndësishëm sa vetë panelet.</p>
+        <h2 data-i18n="blog.facts.8.h">Çfarë bën inverteri?</h2>
+        <p data-i18n="blog.facts.8.p1">Panelet prodhojnë energji në formën e rrymës së vazhduar. Inverteri e shndërron atë në energji që mund të përdoret nga pajisjet e shtëpisë ose të biznesit.</p>
+        <p data-i18n="blog.facts.8.p2">Ai gjithashtu monitoron sistemin dhe ndihmon që energjia të përdoret në mënyrë të sigurt e të kontrolluar. Prandaj inverteri është po aq i rëndësishëm sa vetë panelet.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Çfarë ndodh kur ndërpritet energjia?</h2>
-        <p>Një sistem standard i lidhur me rrjetin ndalon përkohësisht kur rrjeti elektrik ndërpritet. Kjo bëhet për arsye sigurie, që energjia të mos rikthehet në linjë ndërsa ajo po riparohet.</p>
-        <p>Nëse dëshiron energji edhe gjatë ndërprerjeve, nevojitet një sistem hibrid me bateri dhe zakonisht përcaktohen pajisjet që do të mbahen aktive.</p>
+        <h2 data-i18n="blog.facts.9.h">Çfarë ndodh kur ndërpritet energjia?</h2>
+        <p data-i18n="blog.facts.9.p1">Një sistem standard i lidhur me rrjetin ndalon përkohësisht kur rrjeti elektrik ndërpritet. Kjo bëhet për arsye sigurie, që energjia të mos rikthehet në linjë ndërsa ajo po riparohet.</p>
+        <p data-i18n="blog.facts.9.p2">Nëse dëshiron energji edhe gjatë ndërprerjeve, nevojitet një sistem hibrid me bateri dhe zakonisht përcaktohen pajisjet që do të mbahen aktive.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Bateria diellore ruan energjinë për më vonë</h2>
-        <p>Panelet prodhojnë më shumë gjatë ditës, ndërsa një pjesë e konsumit mund të ndodhë në mbrëmje ose gjatë natës. Bateria ruan energjinë e prodhuar dhe e përdor atë kur panelet nuk po prodhojnë.</p>
-        <p>Kapaciteti i baterisë zgjidhet sipas pajisjeve që dëshiron të furnizosh dhe kohës për të cilën kërkon rezervë.</p>
+        <h2 data-i18n="blog.facts.10.h">Bateria diellore ruan energjinë për më vonë</h2>
+        <p data-i18n="blog.facts.10.p1">Panelet prodhojnë më shumë gjatë ditës, ndërsa një pjesë e konsumit mund të ndodhë në mbrëmje ose gjatë natës. Bateria ruan energjinë e prodhuar dhe e përdor atë kur panelet nuk po prodhojnë.</p>
+        <p data-i18n="blog.facts.10.p2">Kapaciteti i baterisë zgjidhet sipas pajisjeve që dëshiron të furnizosh dhe kohës për të cilën kërkon rezervë.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Prodhimi ndryshon sipas stinës</h2>
-        <p>Gjatë verës zakonisht ka më shumë orë me diell, ndërsa në dimër ditët janë më të shkurtra dhe moti mund të jetë më i vranët. Kjo do të thotë se prodhimi nuk është i njëjtë çdo muaj.</p>
-        <p>Ajo që ka rëndësi është prodhimi i pritshëm gjatë gjithë vitit, jo vetëm rezultati i një dite ose një muaji.</p>
+        <h2 data-i18n="blog.facts.11.h">Prodhimi ndryshon sipas stinës</h2>
+        <p data-i18n="blog.facts.11.p1">Gjatë verës zakonisht ka më shumë orë me diell, ndërsa në dimër ditët janë më të shkurtra dhe moti mund të jetë më i vranët. Kjo do të thotë se prodhimi nuk është i njëjtë çdo muaj.</p>
+        <p data-i18n="blog.facts.11.p2">Ajo që ka rëndësi është prodhimi i pritshëm gjatë gjithë vitit, jo vetëm rezultati i një dite ose një muaji.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Disa panele prodhojnë edhe nga ana e pasme</h2>
-        <p>Panelet bifaciale mund të marrin dritë edhe nga pjesa e pasme. Kjo mund të sjellë prodhim shtesë kur paneli vendoset në një sipërfaqe që reflekton dritën.</p>
-        <p>Përfitimi varet nga mënyra e montimit, ngjyra e sipërfaqes dhe hapësira rreth panelit. Prandaj nuk japin të njëjtin rezultat në çdo çati.</p>
+        <h2 data-i18n="blog.facts.12.h">Disa panele prodhojnë edhe nga ana e pasme</h2>
+        <p data-i18n="blog.facts.12.p1">Panelet bifaciale mund të marrin dritë edhe nga pjesa e pasme. Kjo mund të sjellë prodhim shtesë kur paneli vendoset në një sipërfaqe që reflekton dritën.</p>
+        <p data-i18n="blog.facts.12.p2">Përfitimi varet nga mënyra e montimit, ngjyra e sipërfaqes dhe hapësira rreth panelit. Prandaj nuk japin të njëjtin rezultat në çdo çati.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Pse shumë panele janë të zeza?</h2>
-        <p>Pamja e zezë vjen nga qelizat dhe shtresat mbrojtëse të panelit. Shumë njerëz i preferojnë sepse duken më moderne dhe përshtaten më mirë me çatitë.</p>
-        <p>Ngjyra, megjithatë, nuk është e vetmja gjë që përcakton cilësinë. Më të rëndësishme janë modeli, fuqia, performanca, garancia dhe datasheet-i i prodhuesit.</p>
+        <h2 data-i18n="blog.facts.13.h">Pse shumë panele janë të zeza?</h2>
+        <p data-i18n="blog.facts.13.p1">Pamja e zezë vjen nga qelizat dhe shtresat mbrojtëse të panelit. Shumë njerëz i preferojnë sepse duken më moderne dhe përshtaten më mirë me çatitë.</p>
+        <p data-i18n="blog.facts.13.p2">Ngjyra, megjithatë, nuk është e vetmja gjë që përcakton cilësinë. Më të rëndësishme janë modeli, fuqia, performanca, garancia dhe datasheet-i i prodhuesit.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Çfarë do të thotë kthimi i investimit?</h2>
-        <p>Kthimi i investimit është koha që nevojitet që kursimi nga energjia diellore të mbulojë koston fillestare të sistemit.</p>
-        <p>Kjo periudhë varet nga konsumi i pritshëm, çmimi i energjisë, madhësia e sistemit, mënyra e përdorimit të energjisë dhe kushtet e rrjetit. Pas kësaj periudhe, sistemi vazhdon të ulë faturën për sa kohë që funksionon.</p>
+        <h2 data-i18n="blog.facts.14.h">Çfarë do të thotë kthimi i investimit?</h2>
+        <p data-i18n="blog.facts.14.p1">Kthimi i investimit është koha që nevojitet që kursimi nga energjia diellore të mbulojë koston fillestare të sistemit.</p>
+        <p data-i18n="blog.facts.14.p2">Kjo periudhë varet nga konsumi i pritshëm, çmimi i energjisë, madhësia e sistemit, mënyra e përdorimit të energjisë dhe kushtet e rrjetit. Pas kësaj periudhe, sistemi vazhdon të ulë faturën për sa kohë që funksionon.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Sistemi duhet të përshtatet me konsumin</h2>
-        <p>Një sistem më i madh nuk është gjithmonë zgjidhja më e mirë. Madhësia duhet të përshtatet me energjinë që pritet të konsumosh, hapësirën në çati dhe mënyrën si përdoret energjia gjatë ditës.</p>
-        <p>Për një familje dhe për një biznes mund të nevojiten sisteme të ndryshme, edhe kur shuma e faturës mujore duket e njëjtë.</p>
+        <h2 data-i18n="blog.facts.15.h">Sistemi duhet të përshtatet me konsumin</h2>
+        <p data-i18n="blog.facts.15.p1">Një sistem më i madh nuk është gjithmonë zgjidhja më e mirë. Madhësia duhet të përshtatet me energjinë që pritet të konsumosh, hapësirën në çati dhe mënyrën si përdoret energjia gjatë ditës.</p>
+        <p data-i18n="blog.facts.15.p2">Për një familje dhe për një biznes mund të nevojiten sisteme të ndryshme, edhe kur shuma e faturës mujore duket e njëjtë.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Shqipëria ka kushte shumë të mira për energjinë diellore</h2>
-        <p>Shqipëria ka shumë ditë me diell gjatë vitit dhe kushte të mira për prodhimin e energjisë diellore. Megjithatë, prodhimi përfundimtar varet edhe nga qyteti, orientimi, pjerrësia, hija dhe mirëmbajtja.</p>
-        <p>Pikërisht për këtë arsye, kalkulatori jep një vlerësim fillestar, ndërsa oferta përfundimtare përcaktohet pas kontrollit teknik.</p>
+        <h2 data-i18n="blog.facts.16.h">Shqipëria ka kushte shumë të mira për energjinë diellore</h2>
+        <p data-i18n="blog.facts.16.p1">Shqipëria ka shumë ditë me diell gjatë vitit dhe kushte të mira për prodhimin e energjisë diellore. Megjithatë, prodhimi përfundimtar varet edhe nga qyteti, orientimi, pjerrësia, hija dhe mirëmbajtja.</p>
+        <p data-i18n="blog.facts.16.p2">Pikërisht për këtë arsye, kalkulatori jep një vlerësim fillestar, ndërsa oferta përfundimtare përcaktohet pas kontrollit teknik.</p>
       </div>
     </article>
     <article class="fact">
       <div>
-        <h2>Pse është i rëndësishëm monitorimi?</h2>
-        <p>Me aplikacionin e monitorimit mund të shohësh sa energji po prodhon sistemi, sa po përdor dhe nëse ka ndonjë problem.</p>
-        <p>Kjo të ndihmon ta kuptosh më mirë sistemin dhe të dallosh më shpejt çdo ndryshim në prodhim.</p>
+        <h2 data-i18n="blog.facts.17.h">Pse është i rëndësishëm monitorimi?</h2>
+        <p data-i18n="blog.facts.17.p1">Me aplikacionin e monitorimit mund të shohësh sa energji po prodhon sistemi, sa po përdor dhe nëse ka ndonjë problem.</p>
+        <p data-i18n="blog.facts.17.p2">Kjo të ndihmon ta kuptosh më mirë sistemin dhe të dallosh më shpejt çdo ndryshim në prodhim.</p>
       </div>
     </article>
   </section>
 
   <section class="conclusion">
-    <h2>Përfundim</h2>
-    <p>Energjia diellore nuk është aq e komplikuar sa duket. Me panelet e duhura, inverterin e përshtatshëm dhe një instalim të bërë mirë, një sistem fotovoltaik mund të ulë ndjeshëm faturën dhe të funksionojë për shumë vite.</p>
-    <p>Kalkulatori hiSol të jep një vlerësim të parë. Oferta përfundimtare konfirmohet pas kontrollit të objektit, çatisë dhe lidhjes elektrike.</p>
+    <h2 data-i18n="blog.conclusionTitle">Përfundim</h2>
+    <p data-i18n="blog.conclusionP1">Energjia diellore nuk është aq e komplikuar sa duket. Me panelet e duhura, inverterin e përshtatshëm dhe një instalim të bërë mirë, një sistem fotovoltaik mund të ulë ndjeshëm faturën dhe të funksionojë për shumë vite.</p>
+    <p data-i18n="blog.conclusionP2">Kalkulatori hiSol të jep një vlerësim të parë. Oferta përfundimtare konfirmohet pas kontrollit të objektit, çatisë dhe lidhjes elektrike.</p>
   </section>
 
   <section class="brands-section">
-    <h2>Markat me të cilat punojmë</h2>
+    <h2 data-i18n="blog.brandsTitle">Markat me të cilat punojmë</h2>
     <div class="brand-grid">
       <div class="brand-card">
         <h3>JA Solar</h3>
-        <p>JA Solar është një nga prodhuesit më të mëdhenj dhe me përvojën më të gjatë në industrinë e paneleve diellore, me module të instaluara në shumë vende të botës. Seria DEEP BLUE përdor teknologji moderne prodhimi që rrit prodhimin e energjisë dhe zvogëlon humbjet, me një histori të gjatë besueshmërie.</p>
+        <p data-i18n="blog.brands.0.p1">JA Solar është një nga prodhuesit më të mëdhenj dhe me përvojën më të gjatë në industrinë e paneleve diellore, me module të instaluara në shumë vende të botës. Seria DEEP BLUE përdor teknologji moderne prodhimi që rrit prodhimin e energjisë dhe zvogëlon humbjet, me një histori të gjatë besueshmërie.</p>
       </div>
       <div class="brand-card">
         <h3>Jinko Solar</h3>
-        <p>Jinko Solar është një nga prodhuesit më të njohur të paneleve fotovoltaike në botë dhe një nga markat kryesore që përdorim në projektet hiSol. Panelet e serisë Tiger Neo përdorin teknologjinë moderne N-type TOPCon, e cila ndihmon në rritjen e prodhimit dhe në ruajtjen e performancës edhe në temperatura të larta.</p>
-        <p>Ato janë të përshtatshme për sisteme familjare dhe biznesi, veçanërisht për instalime me fuqi më të madhe. Jinko Solar ofron rendiment të mirë, cilësi të qëndrueshme dhe garanci sipas modelit përkatës.</p>
+        <p data-i18n="blog.brands.1.p1">Jinko Solar është një nga prodhuesit më të njohur të paneleve fotovoltaike në botë dhe një nga markat kryesore që përdorim në projektet hiSol. Panelet e serisë Tiger Neo përdorin teknologjinë moderne N-type TOPCon, e cila ndihmon në rritjen e prodhimit dhe në ruajtjen e performancës edhe në temperatura të larta.</p>
+        <p data-i18n="blog.brands.1.p2">Ato janë të përshtatshme për sisteme familjare dhe biznesi, veçanërisht për instalime me fuqi më të madhe. Jinko Solar ofron rendiment të mirë, cilësi të qëndrueshme dhe garanci sipas modelit përkatës.</p>
       </div>
       <div class="brand-card">
         <h3>Trina Solar</h3>
-        <p>Një nga pionierët e industrisë diellore, me module të fuqishme të serisë Vertex dhe emër të njohur në treg.</p>
-        <p>Është një zgjedhje e përshtatshme për projekte ku kërkohet teknologji moderne dhe jetëgjatësi.</p>
-        <p>Trina Solar është një nga markat më të njohura në industrinë fotovoltaike.</p>
+        <p data-i18n="blog.brands.2.p1">Një nga pionierët e industrisë diellore, me module të fuqishme të serisë Vertex dhe emër të njohur në treg.</p>
+        <p data-i18n="blog.brands.2.p2">Është një zgjedhje e përshtatshme për projekte ku kërkohet teknologji moderne dhe jetëgjatësi.</p>
+        <p data-i18n="blog.brands.2.p3">Trina Solar është një nga markat më të njohura në industrinë fotovoltaike.</p>
       </div>
       <div class="brand-card">
         <h3>LONGi</h3>
-        <p>Prodhuesi më i madh në botë i valëve monokristaline. Seria Hi-MO X përdor qeliza me kontakt të pasmë, që japin efiçiencë më të lartë dhe pamje më të pastër.</p>
+        <p data-i18n="blog.brands.3.p1">Prodhuesi më i madh në botë i valëve monokristaline. Seria Hi-MO X përdor qeliza me kontakt të pasmë, që japin efiçiencë më të lartë dhe pamje më të pastër.</p>
       </div>
       <div class="brand-card">
         <h3>Deye</h3>
-        <p>Markë e njohur për inverterë, veçanërisht të popullarizuar për sisteme shtëpiake hibride e me lidhje në rrjet, me raport shumë të mirë çmim-performancë.</p>
+        <p data-i18n="blog.brands.4.p1">Markë e njohur për inverterë, veçanërisht të popullarizuar për sisteme shtëpiake hibride e me lidhje në rrjet, me raport shumë të mirë çmim-performancë.</p>
       </div>
       <div class="brand-card">
         <h3>Solis</h3>
-        <p>Një nga markat më të shitura të inverterëve në botë, me gamë që mbulon nga sistemet shtëpiake deri te ato komerciale trefazore dhe industriale.</p>
+        <p data-i18n="blog.brands.5.p1">Një nga markat më të shitura të inverterëve në botë, me gamë që mbulon nga sistemet shtëpiake deri te ato komerciale trefazore dhe industriale.</p>
       </div>
     </div>
   </section>
 
   <section class="faq-section">
-    <p class="eyebrow">Pyetje të shpeshta</p>
-    <h2>Çfarë duhet të dish para se të vendosësh.</h2>
+    <p class="eyebrow" data-i18n="blog.faqLabel">Pyetje të shpeshta</p>
+    <h2 data-i18n="blog.faqTitle">Çfarë duhet të dish para se të vendosësh.</h2>
     <div class="faq">
       <details class="faq-item" open>
-        <summary>A është çmimi i kalkulatorit final?</summary>
-        <p>Jo. Çmimi është orientues, bazuar në fuqinë e llogaritur. Çmimi final konfirmohet pas verifikimit teknik të objektit, strukturës dhe lidhjes elektrike.</p>
+        <summary data-i18n="blog.faq.0.q">A është çmimi i kalkulatorit final?</summary>
+        <p data-i18n="blog.faq.0.a">Jo. Çmimi është orientues, bazuar në fuqinë e llogaritur. Çmimi final konfirmohet pas verifikimit teknik të objektit, strukturës dhe lidhjes elektrike.</p>
       </details>
       <details class="faq-item">
-        <summary>Sa garanci kanë panelet?</summary>
-        <p>Deri në 30 vite garanci për ruajtjen e fuqisë, sipas kushteve të prodhuesit të secilit model.</p>
+        <summary data-i18n="blog.faq.1.q">Sa garanci kanë panelet?</summary>
+        <p data-i18n="blog.faq.1.a">Deri në 30 vite garanci për ruajtjen e fuqisë, sipas kushteve të prodhuesit të secilit model.</p>
       </details>
       <details class="faq-item">
-        <summary>Çfarë përfshin instalimi standard?</summary>
-        <p>Panelet dhe inverterin, strukturën mbajtëse, kabllot DC/AC, mbrojtjet elektrike, tokëzimin, monitorimin dhe montimin. Bateria, aplikimet dhe matësi dykahësh nuk përfshihen automatikisht.</p>
+        <summary data-i18n="blog.faq.2.q">Çfarë përfshin instalimi standard?</summary>
+        <p data-i18n="blog.faq.2.a">Panelet dhe inverterin, strukturën mbajtëse, kabllot DC/AC, mbrojtjet elektrike, tokëzimin, monitorimin dhe montimin. Bateria, aplikimet dhe matësi dykahësh nuk përfshihen automatikisht.</p>
       </details>
       <details class="faq-item">
-        <summary>Sa kohë duhet për një ofertë?</summary>
-        <p>Kalkulatori jep një vlerësim menjëherë. Pas kontaktit në WhatsApp, hiSol kthen përgjigje brenda 24 orësh për hapat vijues.</p>
+        <summary data-i18n="blog.faq.3.q">Sa kohë duhet për një ofertë?</summary>
+        <p data-i18n="blog.faq.3.a">Kalkulatori jep një vlerësim menjëherë. Pas kontaktit në WhatsApp, hiSol kthen përgjigje brenda 24 orësh për hapat vijues.</p>
       </details>
       <details class="faq-item">
-        <summary>Pse sugjerojmë Jinko dhe JA Solar?</summary>
-        <p>Jinko Solar dhe JA Solar janë dy nga prodhuesit më të mëdhenj dhe më të avancuar teknologjikisht në botë, me miliona module të instaluara në mbarë globin. Të dyja investojnë vazhdimisht në teknologjinë më të fundit të qelizave diellore, çka përkthehet në prodhim më të lartë, performancë të fortë edhe në vapën e verës shqiptare, dhe cilësi të qëndrueshme ndër vite. Për këtë kombinim cilësie dhe teknologjie, hiSol i ka zgjedhur si markat kryesore për instalimet e saj.</p>
+        <summary data-i18n="blog.faq.4.q">Pse sugjerojmë Jinko dhe JA Solar?</summary>
+        <p data-i18n="blog.faq.4.a">Jinko Solar dhe JA Solar janë dy nga prodhuesit më të mëdhenj dhe më të avancuar teknologjikisht në botë, me miliona module të instaluara në mbarë globin. Të dyja investojnë vazhdimisht në teknologjinë më të fundit të qelizave diellore, çka përkthehet në prodhim më të lartë, performancë të fortë edhe në vapën e verës shqiptare, dhe cilësi të qëndrueshme ndër vite. Për këtë kombinim cilësie dhe teknologjie, hiSol i ka zgjedhur si markat kryesore për instalimet e saj.</p>
       </details>
     </div>
   </section>
 
   <section class="cta-block">
-    <h2>Sa do të kushtonte për ty?</h2>
-    <p>Kalkulatori jep përgjigje në më pak se një minutë, pa detyrim.</p>
-    <a class="btn" href="kalkulatori/">Bëj llogaritjen falas →</a>
+    <h2 data-i18n="blog.ctaTitle">Sa do të kushtonte për ty?</h2>
+    <p data-i18n="blog.ctaBody">Kalkulatori jep përgjigje në më pak se një minutë, pa detyrim.</p>
+    <a class="btn" href="kalkulatori/" data-i18n="blog.ctaButton">Bëj llogaritjen falas →</a>
   </section>
 </main>
 
-<footer class="footer">© 2026 hiSol Energy</footer>
+<footer class="footer">
+  <div class="footer__inner">
+    <span data-i18n="blog.copyright">© 2026 hiSol Energy</span>
+    <button type="button" class="lang-toggle lang-toggle--footer" data-lang-toggle aria-label="Switch to English"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9Z"/></svg><span data-lang-toggle-text>EN</span></button>
+  </div>
+</footer>
+<script src="i18n.js"></script>
 </body></html>

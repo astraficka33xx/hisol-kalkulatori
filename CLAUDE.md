@@ -8,6 +8,7 @@ Faqe statike (HTML/CSS/JS vanilla, pa build-step, pa framework, pa `package.json
 ```
 index.html          Faqja kryesore (hero, shërbimet, "si funksionon", modelet, OG/Twitter meta tags)
 blog.html            Blogu
+i18n.js              Motori i përkthimit SQ/EN i përbashkët (shih poshtë)
 CNAME                Domain-i custom i GitHub Pages: hisolenergy.com
 kalkulatori/
   index.html          Aplikacioni i kalkulatorit (UI, dialogët: ofertë WhatsApp, PDF, modele, instalim)
@@ -39,16 +40,18 @@ konfirmuar me hiSol** — janë tarifat/çmimet e vitit 2026 dhe supozimet e pro
 
 **Përzgjedhja e panelit** (`CONFIG.panels`):
 - Instalime deri **7 kWp referencë** (ose çdo çati `tile`, pavarësisht madhësisë) → paneli
-  rezidencial JA Solar JAM54D41-455/LB, 455 W
+  rezidencial JA Solar JAM54D40-455/LB, 455 W (ndryshuar nga JAM54D41 në shtator 2026, po
+  ai model 455 W/1.998 m², thjesht revizion i ri i JA Solar)
 - Mbi 7 kWp (jo-tile) → paneli komercial Jinko Solar JKM730N-66HL5-BDV, 730 W
 
 **Çmimi** (`calculatePriceWithVat`, me TVSH 20%, tiers sipas `requestedKwp`):
 | Kufiri (kWp kërkuar) | Lek/kWp |
 |---|---|
-| ≤ 50 | 37,000 |
-| 51–99 | 35,000 |
-| 100–299 | 32,000 |
-| ≥ 300 | 30,000 |
+| ≤ 20 | 39,000 |
+| 21–50 | 38,000 |
+| 51–99 | 36,000 |
+| 100–299 | 33,000 |
+| ≥ 300 | 31,000 |
 
 Ka një "floor" (`boundaryPrice`) që siguron çmimi të mos bjerë vetëm sepse sistemi kaloi
 në një tier më të lirë pak mbi kufirin — çmimi minimal është ai i kufirit të mëparshëm.
@@ -56,19 +59,25 @@ Mbi `maximumPricedKwp` (480 kWp) çmimi kthehet `null` → "sipas projektit".
 
 **Përzgjedhja e inverterit** (`INVERTER_TIERS`, `selectInverter`): fuqia DC pjesëtohet me
 1.12 (derating) për të marrë kW AC, pastaj përputhet me tier-in përkatës — **gjithmonë 1
-inverter i vetëm** (s'ka më paralelizim/kombinim njësish, hequr kur u shtua Growatt):
+inverter i vetëm** (s'ka paralelizim/kombinim njësish). Rregulli i hiSol (shtator 2026,
+zëvendëson skemën e mëparshme me Growatt): **Deye deri në 20 kWp instaluar, Solis mbi 20
+kWp** — kufiri `DEYE_TO_SOLIS_INSTALLED_KWP_CUTOFF = 20` (shprehur në AC si `20 / 1.12`):
 | Tier | Marka/modeli | Fazë | Range AC kW | Hapat |
 |---|---|---|---|---|
 | deye-monofazor | Deye SUN-{kw}K-G05P1-EU-AM2 | monofazor | 0–6.2 | 3.6, 4, 4.2, 4.6, 5, 5.2, 6, 6.2 |
-| solis-eh3p | Solis S6-EH3P{kw}K02-NV-YD-L | trefazor | 6.2–18 | 5, 6, 8, 10, 12, 15, 18 |
-| growatt-mod-17-33 | Growatt MOD {kw}KTL3-X3 | trefazor | 18–33 | 20, 25, 30, 33 |
-| growatt-mid-36-60 | Growatt MID {kw}KTL3-X3 | trefazor | 33–60 | 36, 40, 50, 60 |
-| solis-trefazor-50-75 | Solis S6-GC{kw}K-LV | trefazor | 60–75 | 75 |
-| solis-trefazor-80-125 | Solis S6-GC{kw}K | trefazor | 75–125 | 80, 100, 110, 125 |
+| deye-trefazor | Deye SUN-{kw}K-G06P3-EU-BM2-P1 | trefazor | 6.2–17.86 (20 kWp) | 7, 8, 9, 10, 12, 15 |
+| solis-gr3p | Solis S5-GR3P{kw}K(21A) | trefazor | 17.86–25 | 20, 25 |
+| solis-gc3p-25-40 | Solis S6-GC3P{kw}K03-ND | trefazor | 25–40 | 25, 30, 33, 36, 40 |
+| solis-gc3p-40-60 | Solis S6-GC3P{kw}K-ND | trefazor | 40–60 | 50, 60 |
+| solis-gc-80-125 | Solis S6-GC{kw}K | trefazor | 60–125 | 80, 100, 110, 125 |
 
-Rregull eksplicit në kod: **asnjë Deye trefazor** në kalkulator — çdo nevojë trefazore mbi
-tavanin e Deye monofazor (6.2 kW AC) kalon te Solis EH3P, e mbi 18 kW AC te Growatt (zgjedhje
-e konfirmuar nga hiSol, shtator 2026, për të shmangur paralelizimin e disa Solis EH3P).
+Modeli më i madh Deye trefazor (15K AC ≈ 16.8 kWp instaluar) përdoret **pak nën fuqi** për
+intervalin e ngushtë 16.8–20 kWp, që kufiri i plotë prej 20 kWp instaluar të respektohet
+saktësisht (konfirmuar shprehimisht nga hiSol). Modelet Solis monofazor/trefazor më të vegjël
+që bien plotësisht brenda zonës Deye (S6-GR1P(8-10)K, S5-GR3P poshtë 20 kWp instaluar) **s'i
+përdor kalkulatori** — mbeten vetëm si referencë te katalogu (`catalog.js`), jo në
+`INVERTER_TIERS`. **Growatt (MOD 17-33, MID 36-60) u hoq krejtësisht** (kalkulator, katalog,
+faqja kryesore, datasheet-et) në shtator 2026 — jo më as referencë.
 Mbi 125 kW AC → `isCustom: true` (s'ka model të supozuar, thjesht "përcaktohet në projekt").
 
 **Kursimet/payback**: llogariten vetëm kur `method === "fatura"` dhe ka çmim (jo custom).
@@ -173,6 +182,80 @@ text", "Add Open Graph and Twitter Card meta tags".
 
 ## Gjuha dhe lokalizimi
 
-I gjithë UI-ja dhe teksti janë në shqip (`sq-AL` locale për formatim numrash/datash te
-`format.js`). Mesazhi i WhatsApp-it (`buildSummaryText` te `app.js`) hiqet qëllimisht nga
-diakritikat (`ë`→`e`, `Ë`→`E`) para se të dërgohet, ndërsa pjesa tjetër e UI-së i ruan.
+**Shqipja mbetet gjithmonë burimi i vërtetë (source of truth)** — çdo tekst statik në HTML
+është shqip, i shkruar direkt në markup; anglishtja është vetëm një "overlay" i shtuar nga
+`i18n.js` sipër tij. Mesazhi i WhatsApp-it (`buildSummaryText` te `app.js`) hiqet qëllimisht
+nga diakritikat (`ë`→`e`, `Ë`→`E`) **vetëm kur gjuha aktuale është shqip**; për anglisht
+diakritika s'ka kuptim, kështu që hiqet ai hap.
+
+### Motori SQ/EN (`i18n.js`, shtator 2026) — buton i dyfishtë sipas gjerësisë së ekranit
+
+I gjithë motori i përkthimit (fjalori anglisht i plotë, hook-ët te `app.js`/`pdf.js`,
+`format.js` me `locale` parametër) **funksionon plotësisht**. Dizajni i butonit u vendos pas
+disa iterimesh (u refuzuan: buton pill "EN"/"SQ", ikonë globi vetëm te header-i në çdo
+gjerësi) — versioni final ka **2 elementë të ndarë**, secili me `data-lang-toggle`, që
+shfaqen/fshihen me media query sipas gjerësisë (**kufiri: 859/860px**, i njëjtë në të tria
+faqet, jo domosdoshmërisht i lidhur me breakpoint-e të tjera ekzistuese të faqes):
+- **`.lang-toggle--icon`** (≥860px, "PC/laptop"): buton rrethor, vetëm ikonë globi, pa
+  tekst — te `index.html`/`blog.html` në `nav`/`topbar` pranë "Kalkulatori"/"Kthehu te
+  faqja"; te `kalkulatori/index.html` te `.topbar__actions`, para "Modelet tona".
+- **`.lang-toggle--footer`** (<860px, celular): ikonë globi + tekst "EN"/"SQ" (span
+  `data-lang-toggle-text`, i ngjyrës neutrale `var(--muted)`, jo lime), gjithmonë pranë "©
+  2026 hiSol Energy" te footer-i i çdo faqeje.
+- `i18n.js` përditëson `aria-label` te **të gjithë** elementët `[data-lang-toggle]`
+  njëkohësisht dhe tekstin "EN"/"SQ" te **të gjithë** `[data-lang-toggle-text]` — kështu të
+  dy instancat (desktop+mobile) mbeten gjithmonë në sinkron, edhe pse vetëm një shfaqet në
+  një moment. **Mos vendos tekst direkt te `textContent` i vetë butonit `data-lang-toggle`**
+  (do të fshinte SVG-në e globit) — përdor `<span data-lang-toggle-text>` brenda.
+
+Zgjedhja ruhet në `localStorage` (`hisol-lang`) dhe vlen për të tria faqet (i njëjti origin).
+**`calculator.js` s'është prekur fare** — vetëm teksti/etiketat ndryshojnë, jo
+formulat/numrat.
+
+**Si funksionon** (`i18n.js`, skript i sheshtë — jo modul — i ngarkuar nga të tria faqet,
+`../i18n.js` nga brenda `kalkulatori/`):
+- Çdo element me `data-i18n="kyçi"` përkthehet: `i18n.js` **cache-on tekstin origjinal shqip**
+  (`el.dataset.i18nOriginal`) herën e parë që e prek, pastaj kur gjuha është `en` vendos
+  vlerën përkatëse nga fjalori i brendshëm `en`; kur gjuha kthehet `sq`, thjesht **rikthen**
+  tekstin e cache-uar — s'ka fjalor të veçantë shqip për ta mbajtur në sinkron.
+- `data-i18n-html` mbi të njëjtin element: përdor `innerHTML` në vend të `textContent` (për
+  tekst me `<strong>`/`<em>`/`<br>` brenda). **Kujdes**: mos vendos `data-i18n` (as html as
+  jo) mbi një element që ka BRENDA vetes një tjetër element me `data-i18n` — i pari
+  (prindi) e fshin të dytin kur bën `innerHTML =`. Nëse duhet `<strong>` brenda një fjalie
+  të përkthyer, përfshije `<strong>...</strong>` direkt te vlera EN e fjalisë, jo si element
+  i veçantë me `data-i18n` të vetin.
+- `data-i18n-placeholder` / `data-i18n-aria-label`: njësoj, por për atributin `placeholder`
+  a `aria-label` në vend të tekstit të dukshëm.
+- Tekst i përzier me ikona SVG brenda së njëjtës fjali (p.sh. hero lead me një `<svg>` diell
+  në mes): **ndaje në `<span data-i18n>` të veçantë** për çdo pjesë tekst-only, lëre SVG-në
+  jashtë çdo span-i të përkthyer.
+- `window.HiSolI18n` global: `getLang()`, `setLang(lang)`, `t(key)` (kthen `null` kur gjuha
+  është `sq` — përdoret nga `app.js`/`pdf.js` për tekst që gjenerohet nga JS, jo nga HTML
+  statik), `dictionary` (objekti i plotë `en`, lexohet direkt nga `pdf.js`).
+- Ngjarja `hisol:langchange` hidhet në `window` sa herë ndërrohet gjuha — `app.js` e dëgjon
+  për të rikthirë `render()` (rezultatet, grafiku, mesazhi WhatsApp) dhe etiketat e butonave.
+
+**Tekst i gjeneruar nga JS** (jo në HTML, s'e prek `i18n.js` automatikisht):
+- `kalkulatori/js/app.js`: `render()`, `buildSummaryText()` (mesazhi WhatsApp — version i
+  plotë i veçantë anglisht, jo thjesht fjalë-për-fjalë), gjendjet e butonave (Kopjo/Copied),
+  emrat e muajve në grafik (`EN_MONTH_NAMES`, pasi `MONTH_NAMES` nga `calculator.js` mbetet
+  shqip pa u prekur). Përdor helper-in lokal `t(key, fallback)`.
+- `kalkulatori/js/pdf.js`: PDF-ja pranon `lang` (`"sq"` default | `"en"`, kalon nga `app.js`
+  sipas `HiSolI18n.getLang()`), lexon `window.HiSolI18n.dictionary.pdf.*` direkt (jo DOM,
+  pasi PDF-ja nuk ka HTML). Data e PDF-së formatohet `en-GB` (DD/MM/YYYY) në anglisht, `sq-AL`
+  në shqip.
+- `kalkulatori/js/format.js`: `formatNumber`/`formatDecimal`/`formatYears` pranojnë tani një
+  parametër opsional `locale` (default `"sq-AL"`, i pandryshuar) — `app.js`/`pdf.js` kalojnë
+  `"en-GB"` kur gjuha është anglisht, që numrat të shfaqen si "12,000" jo "12.000".
+- `index.html` (widget-i "Dielli live", skripti inline): `sunPhase`/`sunNote` kontrollojnë
+  `window.HiSolI18n.getLang()` direkt (jo `t()`, s'importon module) dhe dëgjojnë
+  `hisol:langchange` për rifreskim të menjëhershëm.
+
+**Kur shton tekst të ri statik**: shto `data-i18n="namespace.kyçiRiNjohshëm"` te elementi
+HTML (shqip mbetet vlera default e elementit), pastaj shto çelësin+vlerën anglisht te
+`i18n.js` → `en.<namespace>.<kyçi>`. Namespaces ekzistuese: `nav`, `home` (faqja kryesore),
+`sun`, `blog`, `calc` (kalkulatori), `pdf`.
+
+**Testim i domosdoshëm pas çdo ndryshimi këtu**: hap faqen, shtyp toggle-in EN→SQ→EN disa
+herë, dhe kontrollo (a) teksti anglisht del saktë, (b) kthimi në shqip **rikthen ekzaktësisht**
+tekstin origjinal (asnjë humbje/prishje HTML-je), (c) asnjë gabim konsole.

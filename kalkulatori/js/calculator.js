@@ -20,10 +20,10 @@ export const CONFIG = {
       watts: 455,
       areaM2: 1.998,
       brand: "JA Solar",
-      model: "JAM54D41-455/LB",
+      model: "JAM54D40-455/LB",
       series: "DEEP BLUE 4.0 Pro",
       name: "JA Solar 455 W",
-      datasheet: "datasheets/ja-solar-455w.pdf",
+      datasheet: "datasheets/ja-solar-jam54d40-460w.pdf",
     },
     commercial: {
       watts: 730,
@@ -50,6 +50,13 @@ export const MONTH_NAMES = ["Jan", "Shk", "Mar", "Pri", "Maj", "Qer", "Kor", "Gs
 
 // Confirmed hiSol inverter product scheme (brand/model/AC-power steps taken directly
 // from manufacturer datasheets). Ordered by AC power range, low to high.
+// hiSol rule (September 2026): Deye covers every installation up to 20 kWp installed
+// (DC) — monofazor up to its own ceiling, trefazor above that; Solis takes over past
+// 20 kWp installed. The 20 kWp (DC) cutoff is expressed here in AC terms via the same
+// 1.12 derating used everywhere else, so it lines up with `derated` below.
+const DEYE_TO_SOLIS_INSTALLED_KWP_CUTOFF = 20;
+const DEYE_TO_SOLIS_AC_CUTOFF = DEYE_TO_SOLIS_INSTALLED_KWP_CUTOFF / 1.12;
+
 export const INVERTER_TIERS = [
   {
     id: "deye-monofazor",
@@ -63,43 +70,60 @@ export const INVERTER_TIERS = [
     datasheet: "datasheets/deye-mono-3.6-6.2kw.pdf",
   },
   {
-    // Every trefazor need above the Deye monofazor ceiling (6.2 kW AC) uses Solis
-    // EH3P, per hiSol's explicit rule: no Deye trefazor in the calculator. A single
-    // unit covers 6.2–18 kW AC (confirmed steps below); above 18 kW, units are
-    // paralleled — the datasheet confirms "Support max 6 units in parallel" —
-    // using only the 15K/18K models, per hiSol's choice, up to the 50 kW handoff
-    // to Solis GC.
-    id: "solis-eh3p",
-    brand: "Solis",
-    modelFamily: "S6-EH3P(5-18)K02-NV-YD-L",
-    modelTemplate: "S6-EH3P{kw}K02-NV-YD-L",
+    // Fills the rest of the Deye zone (up to 20 kWp installed) with the trefazor
+    // line, since its integer steps (7-15) cover the gap above the monofazor
+    // ceiling with no missing sizes. The last step (15K) is also used, slightly
+    // undersized, for the narrow 16.8-20 kWp band per hiSol's flat 20 kWp cutoff.
+    id: "deye-trefazor",
+    brand: "Deye",
+    modelFamily: "SUN-xK-G06P3-EU-BM2-P1",
+    modelTemplate: "SUN-{kw}K-G06P3-EU-BM2-P1",
     phase: "trefazor",
     minAcKw: 6.2,
-    maxAcKw: 50,
-    steps: [5, 6, 8, 10, 12, 15, 18],
-    combo: true,
-    comboUnitKw: [15, 18],
-    comboMaxUnits: 6,
-    datasheet: "datasheets/solis-eh3p-15-18kw-parallel.pdf",
+    maxAcKw: DEYE_TO_SOLIS_AC_CUTOFF,
+    steps: [7, 8, 9, 10, 12, 15],
+    datasheet: "datasheets/deye-trefazor-3-15kw.pdf",
   },
   {
-    id: "solis-trefazor-50-75",
+    id: "solis-gr3p",
     brand: "Solis",
-    modelFamily: "S6-GC(50-75)K-LV",
-    modelTemplate: "S6-GC{kw}K-LV",
+    modelFamily: "S5-GR3P(12-25)K(21A)",
+    modelTemplate: "S5-GR3P{kw}K(21A)",
     phase: "trefazor",
-    minAcKw: 50,
-    maxAcKw: 75,
-    steps: [50, 60, 75],
-    datasheet: "datasheets/solis-trefazor-50-75kw.pdf",
+    minAcKw: DEYE_TO_SOLIS_AC_CUTOFF,
+    maxAcKw: 25,
+    steps: [20, 25],
+    datasheet: "datasheets/solis-gr3p-12-25kw.pdf",
   },
   {
-    id: "solis-trefazor-80-125",
+    id: "solis-gc3p-25-40",
+    brand: "Solis",
+    modelFamily: "S6-GC3P(25-40)K03-ND",
+    modelTemplate: "S6-GC3P{kw}K03-ND",
+    phase: "trefazor",
+    minAcKw: 25,
+    maxAcKw: 40,
+    steps: [25, 30, 33, 36, 40],
+    datasheet: "datasheets/solis-gc3p-25-40kw.pdf",
+  },
+  {
+    id: "solis-gc3p-40-60",
+    brand: "Solis",
+    modelFamily: "S6-GC3P(40-60)K-ND",
+    modelTemplate: "S6-GC3P{kw}K-ND",
+    phase: "trefazor",
+    minAcKw: 40,
+    maxAcKw: 60,
+    steps: [50, 60],
+    datasheet: "datasheets/solis-gc3p-40-60kw.pdf",
+  },
+  {
+    id: "solis-gc-80-125",
     brand: "Solis",
     modelFamily: "S6-GC(80-125)K",
     modelTemplate: "S6-GC{kw}K",
     phase: "trefazor",
-    minAcKw: 75,
+    minAcKw: 60,
     maxAcKw: 125,
     steps: [80, 100, 110, 125],
     datasheet: "datasheets/solis-trefazor-80-125kw.pdf",
@@ -157,33 +181,6 @@ function calculatePriceWithVat(requestedKwp, installedKwp) {
   return Math.round(Math.max(installedKwp * pricePerKwp, floorPrice) / 1000) * 1000;
 }
 
-// Find the smallest total AC power (kW) achievable by combining up to `maxUnits`
-// inverters drawn from `unitKwOptions`, that still covers `targetKw`. Ties on total
-// power are broken by fewer units. Used for the confirmed "6 units in parallel"
-// Solis EH3P tier — exhaustive since the search space is tiny (<= a few dozen combos).
-function bestParallelCombo(unitKwOptions, maxUnits, targetKw) {
-  let best = null;
-  for (let unitCount = 1; unitCount <= maxUnits; unitCount++) {
-    // Distribute unitCount inverters across the available kW options (2 options: 15/18).
-    for (let countA = 0; countA <= unitCount; countA++) {
-      const countB = unitCount - countA;
-      const totalKw = countA * unitKwOptions[0] + countB * unitKwOptions[1];
-      if (totalKw < targetKw) continue;
-      if (!best || totalKw < best.totalKw) {
-        best = {
-          totalKw,
-          unitCount,
-          breakdown: [
-            { kw: unitKwOptions[0], count: countA },
-            { kw: unitKwOptions[1], count: countB },
-          ].filter((u) => u.count > 0),
-        };
-      }
-    }
-  }
-  return best;
-}
-
 // Choose the confirmed inverter model whose AC range actually covers the DC/AC-derated
 // load. Returns { isCustom: true } (no brand/model guessed) for loads above the
 // largest confirmed tier (125 kW AC).
@@ -195,29 +192,6 @@ function selectInverter(installedKwp) {
     return {
       isCustom: true, brand: null, model: null, modelFamily: null, phase: null,
       acKw: null, datasheet: null, unitCount: null, units: null,
-    };
-  }
-
-  // A single confirmed unit covers it — no need to parallel multiple inverters.
-  const singleStepFits = tier.steps.some((kw) => kw >= derated);
-  if (tier.combo && !singleStepFits) {
-    const combo = bestParallelCombo(tier.comboUnitKw, tier.comboMaxUnits, derated);
-    const units = combo.breakdown.map((u) => ({
-      model: tier.modelTemplate.replace("{kw}", String(u.kw)),
-      kw: u.kw,
-      count: u.count,
-    }));
-    const model = units.map((u) => `${u.count}× ${u.model}`).join(" + ");
-    return {
-      isCustom: false,
-      brand: tier.brand,
-      model,
-      modelFamily: tier.modelFamily,
-      phase: tier.phase,
-      acKw: combo.totalKw,
-      datasheet: tier.datasheet,
-      unitCount: combo.unitCount,
-      units,
     };
   }
 
