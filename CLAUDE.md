@@ -47,10 +47,11 @@ konfirmuar me hiSol** — janë tarifat/çmimet e vitit 2026 dhe supozimet e pro
 **Çmimi** (`calculatePriceWithVat`, me TVSH 20%, tiers sipas `requestedKwp`):
 | Kufiri (kWp kërkuar) | Lek/kWp |
 |---|---|
-| ≤ 50 | 37,000 |
-| 51–99 | 35,000 |
-| 100–299 | 32,000 |
-| ≥ 300 | 30,000 |
+| ≤ 20 | 39,000 |
+| 21–50 | 38,000 |
+| 51–99 | 36,000 |
+| 100–299 | 33,000 |
+| ≥ 300 | 31,000 |
 
 Ka një "floor" (`boundaryPrice`) që siguron çmimi të mos bjerë vetëm sepse sistemi kaloi
 në një tier më të lirë pak mbi kufirin — çmimi minimal është ai i kufirit të mëparshëm.

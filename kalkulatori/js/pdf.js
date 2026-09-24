@@ -23,12 +23,8 @@ function hex(color) {
   return rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
 }
 
-function slugify(text) {
-  return text
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-zA-Z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+function sanitizeFilenamePart(text) {
+  return text.replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, " ").trim();
 }
 
 function truncate(text, max) {
@@ -192,11 +188,30 @@ export async function downloadQuotePdf({ clientName = "", clientLocation = "", c
   doc.setCreator(tt("pdf.docCreator", "hiSol Solar Calculator"));
 
   const bytes = await doc.save({ useObjectStreams: false });
+  const filenamePrefix = tt("pdf.filenamePrefix", "hiSol Oferte");
+  const cleanName = sanitizeFilenamePart(clientName.trim());
+  const filename = `${filenamePrefix}${cleanName ? ` ${cleanName}` : ""} ${formatDecimal(result.installedKwp, locale).replace(",", ".")}kWp.pdf`;
+
+  // On phones, a blob: URL doesn't actually download — the browser just opens it
+  // as a page, and sharing that page from there drags along the raw blob: link
+  // as text. Sharing the real File through the native share sheet avoids both:
+  // one tap gets a clean PDF attachment (Save to Files, WhatsApp, AirDrop, ...).
+  // Desktop Safari/Chrome also implement navigator.share (e.g. for AirDrop), but
+  // there a direct download is what people expect, so this is gated to touch
+  // devices (maxTouchPoints also flags iPadOS, which reports as "Macintosh").
+  const isTouchDevice = navigator.maxTouchPoints > 1 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const file = new File([bytes], filename, { type: "application/pdf" });
+  if (isTouchDevice && navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file] });
+      return;
+    } catch (err) {
+      if (err && err.name === "AbortError") return;
+    }
+  }
+
   const blob = new Blob([bytes], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
-  const filenamePrefix = tt("pdf.filenamePrefix", "hiSol-Oferte");
-  const filename = `${filenamePrefix}${clientName.trim() ? `-${slugify(clientName.trim())}` : ""}-${formatDecimal(result.installedKwp, locale).replace(",", ".")}kWp.pdf`;
-
   const a = document.createElement("a");
   a.href = url;
   a.download = filename;

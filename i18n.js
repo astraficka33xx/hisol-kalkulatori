@@ -302,7 +302,7 @@
       docAuthor: "hiSol Energy",
       docSubject: "Indicative offer and equipment datasheets",
       docCreator: "hiSol Solar Calculator",
-      filenamePrefix: "hiSol-Offer",
+      filenamePrefix: "hiSol Offer",
       datasheetLoadError: "The {label} datasheet could not be loaded.",
     },
   };

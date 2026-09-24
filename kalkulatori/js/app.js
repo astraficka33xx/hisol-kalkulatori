@@ -265,7 +265,7 @@ el("copyLinkBtn").addEventListener("click", async () => {
 
 // --- Offer request (WhatsApp) -------------------------------------------
 
-const HISOL_WHATSAPP_NUMBER = ""; // temporarily blank — number has an issue, pending replacement
+const HISOL_WHATSAPP_NUMBER = "355698787999"; // +355 69 878 7999, no leading +, no spaces
 
 const offerDialog = el("offerDialog");
 const offerBtn = el("offerBtn");
