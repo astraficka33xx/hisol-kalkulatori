@@ -106,7 +106,7 @@ Trigger-i në UI: butoni "Shkarko ofertën PDF" → dialog për emër/vendndodhj
 
 ## PWA / Service worker (`kalkulatori/sw.js`)
 
-- Versionohet me konstanten `VERSION` (aktualisht `"hisol-v5"`) — **duhet rritur çdo herë
+- Versionohet me konstanten `VERSION` (aktualisht `"hisol-v14"`) — **duhet rritur çdo herë
   që ndryshon një asset i precache-uar** (lista `PRECACHE_URLS`: HTML/CSS/JS/vendor/manifest/
   ikonat), përndryshe klientët mbeten me cache të vjetër. Historiku i git-ut e konfirmon këtë
   praktikë (commits "Bump service worker version" pas ndryshimeve të tjera).
