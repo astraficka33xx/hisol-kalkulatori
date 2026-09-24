@@ -80,6 +80,13 @@ h1, h2 { text-wrap: balance; }
 .cta-block .btn { background: var(--lime); color: #0c1a7a; border: none; height: 46px; padding: 0 22px; }
 
 .footer { padding: 30px 0 40px; border-top: 1px solid var(--border); text-align: center; font-size: 12.5px; color: var(--muted); }
+.footer__inner { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.lang-toggle { appearance: none; border: 1px solid var(--border); background: transparent; color: var(--ink); cursor: pointer; }
+.lang-toggle svg { width: 16px; height: 16px; }
+.lang-toggle--icon { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; }
+@media (max-width: 859px) { .lang-toggle--icon { display: none; } }
+.lang-toggle--footer { display: none; align-items: center; gap: 5px; border: none; padding: 0; font-size: 12.5px; font-weight: 700; color: var(--muted); }
+@media (max-width: 859px) { .lang-toggle--footer { display: inline-flex; } }
 
 .brands-section { padding: 10px 0 50px; }
 .brands-section h2 { font-size: clamp(24px, 3vw, 30px); margin: 0 0 28px; text-align: center; }
@@ -117,7 +124,10 @@ h1, h2 { text-wrap: balance; }
 <g transform="translate(588.5770,818.1987)"><path d="M 22.875 0 L 10 0 L 10 -100.0625 L 22.875 -100.0625 Z M 22.875 0 "/></g>
 </g>
 </svg></a>
-    <a class="btn" href="./" data-i18n="blog.backHome">← Kthehu te faqja</a>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <a class="btn" href="./" data-i18n="blog.backHome">← Kthehu te faqja</a>
+      <button type="button" class="lang-toggle lang-toggle--icon" data-lang-toggle aria-label="Switch to English"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9Z"/></svg></button>
+    </div>
   </div>
 </header>
 
@@ -329,6 +339,11 @@ h1, h2 { text-wrap: balance; }
   </section>
 </main>
 
-<footer class="footer" data-i18n="blog.copyright">© 2026 hiSol Energy</footer>
+<footer class="footer">
+  <div class="footer__inner">
+    <span data-i18n="blog.copyright">© 2026 hiSol Energy</span>
+    <button type="button" class="lang-toggle lang-toggle--footer" data-lang-toggle aria-label="Switch to English"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9Z"/></svg><span data-lang-toggle-text>EN</span></button>
+  </div>
+</footer>
 <script src="i18n.js"></script>
 </body></html>

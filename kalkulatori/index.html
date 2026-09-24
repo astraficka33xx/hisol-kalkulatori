@@ -23,6 +23,7 @@
       <div class="topbar__inner">
         <a class="logo-link" href="../" aria-label="hiSol"><img class="logo" src="assets/hisol-logo-header.png" alt="hiSol" /></a>
         <div class="topbar__actions">
+          <button type="button" class="lang-toggle lang-toggle--icon" data-lang-toggle aria-label="Switch to English"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9Z"/></svg></button>
           <button id="modelsBtn" class="btn btn--outline" type="button" data-i18n="calc.modelsBtn">Modelet tona</button>
           <button id="installBtn" class="btn btn--outline" type="button" hidden data-i18n="calc.installBtn">Shto hiSol në celular</button>
           <button id="copyLinkBtn" class="btn btn--outline" type="button" data-i18n="calc.copyLinkBtn">Kopjo linkun për miqtë</button>
@@ -224,7 +225,10 @@
     </main>
 
     <footer class="footer">
-      <p>© <span id="year"></span> <span data-i18n="calc.footer">hiSol Energy · contact@hisolenergy.com</span></p>
+      <div style="display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;">
+        <p>© <span id="year"></span> <span data-i18n="calc.footer">hiSol Energy · contact@hisolenergy.com</span></p>
+        <button type="button" class="lang-toggle lang-toggle--footer" data-lang-toggle aria-label="Switch to English"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9Z"/></svg><span data-lang-toggle-text>EN</span></button>
+      </div>
     </footer>
   </div>
 

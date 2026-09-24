@@ -369,8 +369,10 @@
     document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) { applyToPlaceholder(el, lang); });
     document.querySelectorAll("[data-i18n-aria-label]").forEach(function (el) { applyToAriaLabel(el, lang); });
     document.querySelectorAll("[data-lang-toggle]").forEach(function (btn) {
-      btn.textContent = lang === "en" ? "SQ" : "EN";
       btn.setAttribute("aria-label", lang === "en" ? "Kalo në shqip" : "Switch to English");
+    });
+    document.querySelectorAll("[data-lang-toggle-text]").forEach(function (el) {
+      el.textContent = lang === "en" ? "SQ" : "EN";
     });
     window.dispatchEvent(new CustomEvent("hisol:langchange", { detail: { lang: lang } }));
   }
