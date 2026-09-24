@@ -180,12 +180,19 @@ text", "Add Open Graph and Twitter Card meta tags".
 nga diakritikat (`ë`→`e`, `Ë`→`E`) **vetëm kur gjuha aktuale është shqip**; për anglisht
 diakritika s'ka kuptim, kështu që hiqet ai hap.
 
-### Toggle SQ/EN (`i18n.js`, shtator 2026)
+### Motori SQ/EN (`i18n.js`, shtator 2026) — **gati, por pa buton të dukshëm**
 
-Buton "EN"/"SQ" (`data-lang-toggle`) në krye të `index.html`, `blog.html` dhe
-`kalkulatori/index.html`. Zgjedhja ruhet në `localStorage` (`hisol-lang`) dhe vlen për të
-tria faqet (i njëjti origin). **`calculator.js` s'është prekur fare** — vetëm teksti/etiketat
-ndryshojnë, jo formulat/numrat.
+I gjithë motori i përkthimit (fjalori anglisht i plotë, hook-ët te `app.js`/`pdf.js`,
+`format.js` me `locale` parametër) **ekziston dhe funksionon**, por hiSol vendosi **të mos
+ketë asnjë buton/ikonë të dukshme** në faqe për momentin (as vendimi për dizajnin e butonit
+s'u mor). Butonat `data-lang-toggle` u hoqën qëllimisht nga `index.html`, `blog.html` dhe
+`kalkulatori/index.html` — **mos i shto mbrapsht pa e kërkuar shprehimisht përdoruesi**.
+`i18n.js` vetë ende dëgjon çdo element me `[data-lang-toggle]` (nëse dikush shton përsëri
+një buton me këtë atribut, do të funksionojë menjëherë pa ndryshime të tjera). Për momentin,
+anglishtja arrihet vetëm përmes `window.HiSolI18n.setLang("en")` nga console-i i browser-it,
+ose nëse shtohet një trigger i ri. Zgjedhja ruhet në `localStorage` (`hisol-lang`) dhe vlen
+për të tria faqet (i njëjti origin). **`calculator.js` s'është prekur fare** — vetëm
+teksti/etiketat ndryshojnë, jo formulat/numrat.
 
 **Si funksionon** (`i18n.js`, skript i sheshtë — jo modul — i ngarkuar nga të tria faqet,
 `../i18n.js` nga brenda `kalkulatori/`):
