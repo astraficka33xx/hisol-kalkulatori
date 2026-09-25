@@ -306,6 +306,15 @@ stilizuar me `--ink`/`--surface`/`--shadow-sm` ekzistuese):
   **pa** vijë jeshile majtas (hequr për të njëjtën arsye — fillimisht `border-left: 3px solid var(--lime)`).
   **Mos i rikthe vijat/nënvijat jeshile në asnjërën nga këto dy vende** pa konfirmim të ri
   eksplicit nga hiSol.
-- Seksionet "Përfundim", markat, FAQ, CTA-ja e vjetër, footer — **të pandryshuara**.
+- Seksioni "Përfundim" **u hoq krejtësisht** (ishte shkruar për "fact"-et e vjetra, s'kishte
+  kuptim më me artikuj të vërtetë) — bashkë me çelësat e papërdorur `blog.conclusionTitle`/
+  `conclusionP1`/`conclusionP2` te `i18n.js`.
+- **Markat (`#blogBrands`), FAQ (`#blogFaq`) dhe CTA-ja (`#blogCta`) shfaqen vetëm te lista e
+  blogut** — `list()` i vendos `display: ""`, `article(i)` i vendos `display: "none"`. Kur je
+  brenda një artikulli s'duhet të kesh mundësi të lëvizësh poshtë në markat/FAQ/CTA — leximi i
+  artikullit mbaron me "Të tjerë artikuj" (2 artikuj të propozuar, `(i+1)%N` dhe `(i+2)%N`,
+  kartela `.more-articles__item`) dhe pastaj direkt footer-i (i cili mbetet gjithmonë i
+  dukshëm, në çdo route). Kjo është e qëllimshme (konfirmuar nga hiSol): eksperienca e
+  leximit të mos "vazhdojë" në përmbajtje të përgjithshme të faqes.
 - **Anglishtja**: përmbajtja e 11 artikujve mbetet vetëm shqip (i18n s'e prek); pjesa tjetër e
   faqes (titulli, header/footer/FAQ) mbetet dygjuhëshe si më parë.
