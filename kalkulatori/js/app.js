@@ -423,6 +423,18 @@ el("modelsBtn").addEventListener("click", () => {
 });
 
 if ("serviceWorker" in navigator) {
+  // If a service worker was already controlling this page and a newer one
+  // takes over (a fresh deploy), reload once so the tab actually runs the
+  // new JS/CSS instead of silently keeping the old version in memory until
+  // the user manually closes and reopens the app.
+  const hadController = !!navigator.serviceWorker.controller;
+  let refreshedForUpdate = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadController || refreshedForUpdate) return;
+    refreshedForUpdate = true;
+    window.location.reload();
+  });
+
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js").catch(() => {});
   });
