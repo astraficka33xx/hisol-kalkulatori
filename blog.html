@@ -63,11 +63,6 @@ h1, h2 { text-wrap: balance; }
 .intro h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.1; margin: 0 0 14px; letter-spacing: -0.015em; }
 .intro p { font-size: 16px; color: var(--muted-2); line-height: 1.65; max-width: 62ch; margin: 0; }
 
-.conclusion { padding: 0 0 50px; }
-.conclusion h2 { font-size: clamp(22px, 3vw, 26px); margin: 0 0 12px; }
-.conclusion p { font-size: 15px; color: var(--muted-2); line-height: 1.65; margin: 0 0 10px; max-width: 68ch; }
-.conclusion p:last-child { margin-bottom: 0; }
-
 .article-list { padding: 30px 0 60px; display: flex; flex-direction: column; gap: 14px; }
 .article-item { background: var(--surface); border-radius: 20px; padding: 24px 28px; box-shadow: var(--shadow-sm); display: block; transition: box-shadow 0.15s ease, transform 0.15s ease; }
 .article-item:hover { box-shadow: 0 12px 30px rgba(22,32,77,0.1); transform: translateY(-1px); }
@@ -89,6 +84,15 @@ h1, h2 { text-wrap: balance; }
 .article-body strong { color: var(--ink); }
 .article-body blockquote { margin: 28px 0; padding: 16px 20px; background: var(--surface-alt); border-radius: 12px; color: var(--ink); font-style: italic; }
 @media (max-width: 600px) { .article-body { padding: 26px 22px; } }
+
+.more-articles { margin-top: 40px; }
+.more-articles h3 { font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 16px; }
+.more-articles__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 600px) { .more-articles__grid { grid-template-columns: 1fr; } }
+.more-articles__item { background: var(--surface); border-radius: 16px; padding: 18px 20px; box-shadow: var(--shadow-sm); display: block; transition: box-shadow 0.15s ease, transform 0.15s ease; }
+.more-articles__item:hover { box-shadow: 0 12px 30px rgba(22,32,77,0.1); transform: translateY(-1px); }
+.more-articles__item span { font-size: 12px; color: var(--muted); font-weight: 600; }
+.more-articles__item h4 { font-size: 15px; margin: 4px 0 0; line-height: 1.35; color: var(--ink); }
 
 .cta-block { background: linear-gradient(160deg, var(--navy) 0%, #16215c 55%, var(--blue) 130%); border-radius: 24px; padding: 32px; color: #fff; text-align: center; margin: 10px 0 60px; }
 .cta-block h2 { font-size: 22px; margin: 0 0 10px; }
@@ -154,13 +158,7 @@ h1, h2 { text-wrap: balance; }
 
   <div id="blogApp"></div>
 
-  <section class="conclusion">
-    <h2 data-i18n="blog.conclusionTitle">Përfundim</h2>
-    <p data-i18n="blog.conclusionP1">Energjia diellore nuk është aq e komplikuar sa duket. Me panelet e duhura, inverterin e përshtatshëm dhe një instalim të bërë mirë, një sistem fotovoltaik mund të ulë ndjeshëm faturën dhe të funksionojë për shumë vite.</p>
-    <p data-i18n="blog.conclusionP2">Kalkulatori hiSol të jep një vlerësim të parë. Oferta përfundimtare konfirmohet pas kontrollit të objektit, çatisë dhe lidhjes elektrike.</p>
-  </section>
-
-  <section class="brands-section">
+  <section class="brands-section" id="blogBrands">
     <h2 data-i18n="blog.brandsTitle">Markat me të cilat punojmë</h2>
     <div class="brand-grid">
       <div class="brand-card">
@@ -193,7 +191,7 @@ h1, h2 { text-wrap: balance; }
     </div>
   </section>
 
-  <section class="faq-section">
+  <section class="faq-section" id="blogFaq">
     <p class="eyebrow" data-i18n="blog.faqLabel">Pyetje të shpeshta</p>
     <h2 data-i18n="blog.faqTitle">Çfarë duhet të dish para se të vendosësh.</h2>
     <div class="faq">
@@ -220,7 +218,7 @@ h1, h2 { text-wrap: balance; }
     </div>
   </section>
 
-  <section class="cta-block">
+  <section class="cta-block" id="blogCta">
     <h2 data-i18n="blog.ctaTitle">Sa do të kushtonte për ty?</h2>
     <p data-i18n="blog.ctaBody">Kalkulatori jep përgjigje në më pak se një minutë, pa detyrim.</p>
     <a class="btn" href="kalkulatori/" data-i18n="blog.ctaButton">Bëj llogaritjen falas →</a>
@@ -240,9 +238,15 @@ const BLOG_ARTICLES = [{"t": "Çfarë përfshin një sistem diellor dhe si përc
 (function () {
   var app = document.getElementById("blogApp");
   var intro = document.getElementById("blogIntro");
+  var brands = document.getElementById("blogBrands");
+  var faq = document.getElementById("blogFaq");
+  var cta = document.getElementById("blogCta");
 
   function list() {
     intro.style.display = "";
+    brands.style.display = "";
+    faq.style.display = "";
+    cta.style.display = "";
     app.className = "article-list";
     app.innerHTML = BLOG_ARTICLES.map(function (b, i) {
       return '<a class="article-item" href="#a' + i + '"><h2>' + b.t + '</h2><p>' + b.ex + '</p><small>' + b.rt + ' min lexim</small></a>';
@@ -253,8 +257,18 @@ const BLOG_ARTICLES = [{"t": "Çfarë përfshin një sistem diellor dhe si përc
   function article(i) {
     var b = BLOG_ARTICLES[i];
     intro.style.display = "none";
+    brands.style.display = "none";
+    faq.style.display = "none";
+    cta.style.display = "none";
     app.className = "article-view";
-    app.innerHTML = '<a class="back-link" href="#">← Blog</a><h1>' + b.t + '</h1><div class="meta">hiSol Energy · ' + b.rt + ' min lexim</div><div class="article-body">' + b.h + '</div>';
+    var next1 = (i + 1) % BLOG_ARTICLES.length;
+    var next2 = (i + 2) % BLOG_ARTICLES.length;
+    var more = [next1, next2].map(function (j) {
+      var nb = BLOG_ARTICLES[j];
+      return '<a class="more-articles__item" href="#a' + j + '"><span>' + nb.rt + ' min lexim</span><h4>' + nb.t + '</h4></a>';
+    }).join('');
+    app.innerHTML = '<a class="back-link" href="#">← Blog</a><h1>' + b.t + '</h1><div class="meta">hiSol Energy · ' + b.rt + ' min lexim</div><div class="article-body">' + b.h + '</div>' +
+      '<div class="more-articles"><h3>Të tjerë artikuj</h3><div class="more-articles__grid">' + more + '</div></div>';
     window.scrollTo(0, 0);
   }
 

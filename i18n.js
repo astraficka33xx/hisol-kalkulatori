@@ -87,9 +87,6 @@
     blog: {
       backHome: "← Back to home",
       title: "Solar energy.",
-      conclusionTitle: "Conclusion",
-      conclusionP1: "Solar energy isn't as complicated as it looks. With the right panels, a well-matched inverter and a good installation, a photovoltaic system can significantly cut your bill and run for many years.",
-      conclusionP2: "The hiSol calculator gives you a first estimate. The final offer is confirmed after checking the property, the roof and the electrical connection.",
       brandsTitle: "Brands we work with",
       faqLabel: "Frequently asked questions",
       faqTitle: "What you should know before deciding.",
