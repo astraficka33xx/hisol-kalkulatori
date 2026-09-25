@@ -140,14 +140,31 @@ publikime (p.sh. "Bump service worker version" pas ndryshimeve në cache). D.m.t
 `git push` në `main` — s'ka hap ndërmjetës të verifikuar në repo. *(Konfirmo në GitHub repo
 settings → Pages nëse do siguri të plotë mbi branch-in burimor.)*
 
-**MOS bëj push në `main` pa konfirmim eksplicit të përdoruesit** — çdo push publikon direkt
-faqen live.
+**MOS bëj push/merge në `main` pa konfirmim të dyfishtë (2 herë) të përdoruesit** — çdo push
+publikon direkt faqen live. Kërkesa "publikoje" konsiderohet konfirmimi i parë; Claude duhet
+të pyesë shprehimisht një herë të dytë (p.sh. "Të konfirmoj edhe një herë: ta bashkoj (merge)
+PR-në në main tani, që të shkojë live?") dhe të presë përgjigjen përpara se të bëjë merge.
 
 ## Mënyra e punës me Claude Code (workflow për sesionet e ardhshme)
 
 Përdoruesi punon vetëm nga biseda te Claude (Claude Code Cloud), pa komanda teknike, njësoj
 si nga kompjuteri i zyrës. Për **çdo kërkesë ndryshimi** në faqe ose kalkulator, Claude duhet
 të ndjekë këtë procedurë, pa e kërkuar përdoruesi ta përsërisë:
+
+**Rregull themelor — konfirmim i dyfishtë përpara çdo ndryshimi**: Claude **s'bën asnjë
+ndryshim** (asnjë skedar i prekur në disk, asnjë commit) pa u konfirmuar **2 herë** nga
+përdoruesi, pavarësisht sa e vogël/e qartë duket kërkesa:
+1. Kur vjen një kërkesë ndryshimi, Claude përshkruan shkurt çka do të bëjë (skedarët/sjelljen
+   e prekur) dhe **pyet për konfirmimin e parë** — s'fillon të editojë asgjë ende.
+2. Pasi përdoruesi konfirmon herën e parë, Claude **pyet edhe një herë të dytë** (konfirmim i
+   qartë, i veçantë nga i pari — jo i njëjti mesazh i rilexuar) përpara se të prekë realisht
+   ndonjë skedar.
+3. Vetëm pas konfirmimit të dytë Claude vazhdon me hapat e mëposhtëm (sinkronizim, ndryshim,
+   testim, raportim).
+Ky rregull vlen për çdo ndryshim — kod, tekst, dizajn, dokumentacion (edhe CLAUDE.md) — pa
+përjashtim, edhe nëse kërkesa e mëparshme e përdoruesit dukej sikur e lejonte automatikisht.
+Kontrollet/auditimet **read-only** (p.sh. "bëj kontroll total", review sigurie, verifikim i
+faqes live) **nuk kërkojnë** këtë konfirmim — vetëm veprimet që prekin skedarë ose bëjnë commit.
 
 1. **Sinkronizim**: `git fetch origin main` dhe konfirmo se branch-i i punës është i azhurnuar
    me `origin/main` (ose bazohu mbi versionin më të fundit të tij) përpara se të fillosh.
@@ -160,18 +177,21 @@ të ndjekë këtë procedurë, pa e kërkuar përdoruesi ta përsërisë:
    pjesët prekura), pa detaje teknike të panevojshme.
 
 **Publikimi (kur përdoruesi e kërkon shprehimisht):**
-- Bëj commit të ndryshimeve në branch-in e punës dhe hape (ose përditëso) një Pull Request
-  drejt `main`.
-- Nëse ke leje mjaftueshme në repo (`astraficka33xx/hisol-kalkulatori`), bashkoje (merge) PR-në
-  vetë drejt `main` — kjo publikon faqen live nëpërmjet GitHub Pages.
+- Bëj commit të ndryshimeve në branch-in e punës (këto commits lokale/në branch s'kanë nevojë
+  për konfirmimin e dyfishtë të publikimit — vetëm push/merge në `main` e kërkon) dhe hape
+  (ose përditëso) një Pull Request drejt `main`.
+- Para se të bësh merge në `main`, kërko **konfirmimin e dytë** shprehimisht (shih rregullin
+  te "Publikimi (deploy)" më sipër) — edhe nëse përdoruesi tha "publikoje", kjo llogaritet
+  vetëm konfirmimi i parë.
+- Nëse ke leje mjaftueshme në repo (`astraficka33xx/hisol-kalkulatori`), pas konfirmimit të
+  dytë bashkoje (merge) PR-në vetë drejt `main` — kjo publikon faqen live nëpërmjet GitHub
+  Pages.
 - Nëse merge-i dështon për shkak lejesh/konfliktesh që s'i zgjidh dot vetë, mos e lër të
   papërfunduar në heshtje: trego saktësisht te GitHub ku duhet të klikojë përdoruesi (linku i
   PR-së dhe butoni "Merge pull request").
 - Puna s'konsiderohet e mbyllur derisa të verifikohet që ndryshimi është shfaqur realisht në
   `hisolenergy.com` (p.sh. duke kontrolluar commit-in e fundit të publikuar në GitHub Pages
   ose vetë faqen live).
-- Rregulli ekzistues mbetet në fuqi: **asnjë push/merge në `main` pa konfirmim eksplicit** —
-  kërkesa e përdoruesit "publikoje" në atë moment shërben si konfirmim.
 
 ## Stili i commit-eve (nga `git log`)
 
