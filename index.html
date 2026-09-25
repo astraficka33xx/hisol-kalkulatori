@@ -161,10 +161,12 @@ h1, h2, h3 { text-wrap: balance; }
 .trust-item p { font-size: 13.5px; color: var(--muted-2); margin: 0; line-height: 1.5; }
 
 .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
-.fact-card { background: var(--surface); border-radius: 20px; padding: 26px 22px; box-shadow: var(--shadow-sm); position: relative; }
+.fact-card { background: var(--surface); border-radius: 20px; padding: 26px 22px; box-shadow: var(--shadow-sm); position: relative; display: block; text-decoration: none; transition: box-shadow 0.15s ease, transform 0.15s ease; }
+.fact-card:hover { box-shadow: 0 12px 30px rgba(22,32,77,0.1); transform: translateY(-1px); }
 .fact-card__num { display: block; font-size: 13px; font-weight: 800; color: var(--lime-dark); margin-bottom: 10px; letter-spacing: 0.04em; }
 .fact-card h3 { font-size: 15.5px; margin: 0 0 8px; }
-.fact-card p { font-size: 14.5px; line-height: 1.6; color: var(--ink); margin: 0; }
+.fact-card p { font-size: 14.5px; line-height: 1.6; color: var(--ink); margin: 0 0 10px; }
+.fact-card__read { font-size: 12.5px; color: var(--muted); font-weight: 600; }
 
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; counter-reset: step; }
 .step-card { background: var(--surface); border-radius: 20px; padding: 26px 22px; box-shadow: var(--shadow-sm); position: relative; }
@@ -317,18 +319,21 @@ h1, h2, h3 { text-wrap: balance; }
       <p class="section-label" data-i18n="home.factsLabel">A e dini?</p>
     </div>
     <div class="facts-grid">
-      <div class="fact-card">
-        <h3 data-i18n="home.fact1Title">Panelet prodhojnë energji edhe në ditët me re</h3>
-        <p data-i18n="home.fact1Body">Edhe kur qielli është i vranët, panelet vazhdojnë të prodhojnë energji. Prodhimi është më i ulët se në ditët me diell, por nuk ndalon.</p>
-      </div>
-      <div class="fact-card">
-        <h3 data-i18n="home.fact2Title">Nxehtësia e madhe nuk do të thotë prodhim më i madh</h3>
-        <p data-i18n="home.fact2Body">Panelet kanë nevojë për dritë, jo për temperatura shumë të larta. Në ditët me diell dhe temperatura normale punojnë më mirë sesa në vapë ekstreme.</p>
-      </div>
-      <div class="fact-card">
-        <h3 data-i18n="home.fact3Title">Panelet kërkojnë shumë pak mirëmbajtje</h3>
-        <p data-i18n="home.fact3Body">Panelet nuk kanë pjesë që lëvizin dhe zakonisht nuk kërkojnë ndërhyrje të shpeshta. Në shumicën e rasteve mjafton një pastrim herë pas here, sidomos kur ka shumë pluhur.</p>
-      </div>
+      <a class="fact-card" href="blog.html#a5">
+        <h3 data-i18n="home.blogTeaser1Title">Pse Shqipëria është vend i mirë për panele diellore</h3>
+        <p data-i18n="home.blogTeaser1Body">Kur flitet për energji diellore, shpesh përmendet Gjermania, një nga vendet me më shumë panele në Europë. Por një panel në Shqipëri prodhon shumë më tepër energji…</p>
+        <span class="fact-card__read" data-i18n="home.blogTeaser1Read">4 min lexim</span>
+      </a>
+      <a class="fact-card" href="blog.html#a1">
+        <h3 data-i18n="home.blogTeaser2Title">Sa shpejt kthehet investimi në panele diellore?</h3>
+        <p data-i18n="home.blogTeaser2Body">Pyetja më e shpeshtë që marrim është pas sa vitesh kthehet investimi. Është pyetje e arsyeshme, sepse çdo investim vlerësohet edhe nga koha e kthimit.</p>
+        <span class="fact-card__read" data-i18n="home.blogTeaser2Read">5 min lexim</span>
+      </a>
+      <a class="fact-card" href="blog.html#a8">
+        <h3 data-i18n="home.blogTeaser3Title">Panelet prodhojnë edhe kur është vranët</h3>
+        <p data-i18n="home.blogTeaser3Body">A prodhojnë panelet kur qielli është i vranët? Përgjigjja është po. Prodhimi është më i ulët, por nuk ndalet.</p>
+        <span class="fact-card__read" data-i18n="home.blogTeaser3Read">3 min lexim</span>
+      </a>
     </div>
     <a class="btn btn--outline btn--sm" href="blog.html" style="margin-top: 22px;" data-i18n="home.moreFacts">Shiko më shumë fakte →</a>
   </section>
