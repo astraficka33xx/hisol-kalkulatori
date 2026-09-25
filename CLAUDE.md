@@ -279,3 +279,33 @@ HTML (shqip mbetet vlera default e elementit), pastaj shto çelësin+vlerën ang
 **Testim i domosdoshëm pas çdo ndryshimi këtu**: hap faqen, shtyp toggle-in EN→SQ→EN disa
 herë, dhe kontrollo (a) teksti anglisht del saktë, (b) kthimi në shqip **rikthen ekzaktësisht**
 tekstin origjinal (asnjë humbje/prishje HTML-je), (c) asnjë gabim konsole.
+
+## Blogu — 11 artikuj të gjatë me hash-routing (`blog.html`, shtator 2026)
+
+Blogu u ridizajnua nga 18 "fact"-e të shkurtëra (titull + 2-3 fjali) në **11 artikuj të gjatë**
+(~4-8 min lexim secili, me nën-tituj H2/H3, lista, ndonjë blockquote), dërguar shprehimisht
+nga hiSol si tekst final (embeduar fjalë-për-fjalë, pa asnjë ndryshim teksti/pikësimi —
+verifikuar programatikisht bajt-për-bajt kundrejt skedarit origjinal të dërguar).
+
+**Arkitektura**: **një faqe e vetme**, pa faqe të veçanta statike, pa build-step — hash-routing
+i sheshtë në JS (`location.hash`, `#a0`...`#a10`). Të dhënat e artikujve (titull `t`, kohë-
+leximi `rt`, ekstrakt `ex`, HTML e plotë `h` — **pa** fushë kategorie, u hoq shprehimisht)
+ruhen si `const BLOG_ARTICLES = [...]` brenda `<script>` në fund të `blog.html`. Funksionet
+`list()`/`article(i)`/`route()` popullojnë `<div id="blogApp">`; `#blogIntro` (titulli statik
+`<h1 data-i18n="blog.title">`, i përkthyeshëm SQ/EN si më parë) fshihet/shfaqet varësisht
+route-it (vetëm te lista, jo brenda artikullit).
+
+**Pamja** (klasat `.article-list`/`.article-item`/`.back-link`/`.article-view`/`.article-body`,
+stilizuar me `--ink`/`--surface`/`--shadow-sm` ekzistuese):
+- Titulli "Energjia diellore." **pa** eyebrow/nëntitull sipër, dhe kartat e listës **pa**
+  etiketë kategorie — thjeshtësi maksimale, e konfirmuar shprehimisht nga hiSol.
+- Link "← Blog" i lehtë (`font-weight: 400`, `color: var(--muted)`), **pa** nënvijë jeshile.
+- Nën titullin e artikullit: `hiSol Energy · X min lexim`, **pa** nënvijë jeshile (hequr pas
+  kontrollit të hiSol — fillimisht kishte `border-bottom: 3px solid var(--lime)`).
+- Blockquote-et brenda artikullit: kuti me sfond të lehtë (`--surface-alt`), tekst kursiv,
+  **pa** vijë jeshile majtas (hequr për të njëjtën arsye — fillimisht `border-left: 3px solid var(--lime)`).
+  **Mos i rikthe vijat/nënvijat jeshile në asnjërën nga këto dy vende** pa konfirmim të ri
+  eksplicit nga hiSol.
+- Seksionet "Përfundim", markat, FAQ, CTA-ja e vjetër, footer — **të pandryshuara**.
+- **Anglishtja**: përmbajtja e 11 artikujve mbetet vetëm shqip (i18n s'e prek); pjesa tjetër e
+  faqes (titulli, header/footer/FAQ) mbetet dygjuhëshe si më parë.
