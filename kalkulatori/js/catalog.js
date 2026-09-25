@@ -4,7 +4,6 @@
 // Each entry's datasheet path must exist under /datasheets.
 
 export const PRODUCT_CATALOG = [
-  { brand: "JA Solar", model: "JAM54D41 LB", power: "430–455 W", datasheet: "datasheets/ja-solar-455w.pdf" },
   { brand: "JA Solar", model: "JAM54D40 LB", power: "435–460 W", datasheet: "datasheets/ja-solar-jam54d40-460w.pdf" },
   { brand: "JA Solar", model: "JAM66D45 LB", power: "605–630 W", datasheet: "datasheets/ja-solar-jam66d45-630w.pdf" },
   { brand: "Jinko Solar", model: "JKM710-735N-66HL5-BDV", power: "710–735 W", datasheet: "datasheets/jinko-solar-730w.pdf" },
