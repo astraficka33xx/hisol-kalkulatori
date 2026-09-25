@@ -63,16 +63,32 @@ h1, h2 { text-wrap: balance; }
 .intro h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.1; margin: 0 0 14px; letter-spacing: -0.015em; }
 .intro p { font-size: 16px; color: var(--muted-2); line-height: 1.65; max-width: 62ch; margin: 0; }
 
-.facts { padding: 40px 0 60px; display: flex; flex-direction: column; gap: 14px; }
 .conclusion { padding: 0 0 50px; }
 .conclusion h2 { font-size: clamp(22px, 3vw, 26px); margin: 0 0 12px; }
 .conclusion p { font-size: 15px; color: var(--muted-2); line-height: 1.65; margin: 0 0 10px; max-width: 68ch; }
 .conclusion p:last-child { margin-bottom: 0; }
-.fact { background: var(--surface); border-radius: 20px; padding: 26px 28px; box-shadow: var(--shadow-sm); display: flex; gap: 20px; }
-.fact__num { font-size: 13px; font-weight: 800; color: var(--lime-dark); flex-shrink: 0; padding-top: 3px; min-width: 26px; }
-.fact h2 { font-size: 17px; margin: 0 0 8px; }
-.fact p { font-size: 14.5px; line-height: 1.65; color: var(--muted-2); margin: 0; }
-.fact p + p { margin-top: 8px; }
+
+.article-list { padding: 30px 0 60px; display: flex; flex-direction: column; gap: 14px; }
+.article-item { background: var(--surface); border-radius: 20px; padding: 24px 28px; box-shadow: var(--shadow-sm); display: block; transition: box-shadow 0.15s ease, transform 0.15s ease; }
+.article-item:hover { box-shadow: 0 12px 30px rgba(22,32,77,0.1); transform: translateY(-1px); }
+.article-item h2 { font-size: 18px; margin: 0 0 8px; line-height: 1.35; }
+.article-item p { font-size: 14.5px; line-height: 1.6; color: var(--muted-2); margin: 0; }
+.article-item small { display: block; margin-top: 10px; color: var(--muted); font-size: 12.5px; font-weight: 600; }
+
+.article-view { padding: 30px 0 60px; }
+.back-link { display: inline-block; font-size: 14px; font-weight: 400; color: var(--muted); margin: 0 0 24px; }
+.back-link:hover { color: var(--logo-color); }
+.article-view h1 { font-size: clamp(26px, 3.6vw, 34px); line-height: 1.2; margin: 0 0 14px; letter-spacing: -0.01em; }
+.article-view .meta { display: block; font-size: 13px; color: var(--muted); margin-bottom: 30px; }
+.article-body { background: var(--surface); border-radius: 20px; padding: 36px 40px; box-shadow: var(--shadow-sm); font-size: 16.5px; line-height: 1.75; color: var(--muted-2); }
+.article-body p { margin: 0 0 18px; }
+.article-body h2 { font-size: 21px; color: var(--ink); margin: 34px 0 12px; }
+.article-body h3 { font-size: 17px; color: var(--ink); margin: 24px 0 8px; }
+.article-body ul, .article-body ol { padding-left: 22px; margin: 0 0 18px; }
+.article-body li { margin: 6px 0; }
+.article-body strong { color: var(--ink); }
+.article-body blockquote { margin: 28px 0; padding: 16px 20px; background: var(--surface-alt); border-radius: 12px; color: var(--ink); font-style: italic; }
+@media (max-width: 600px) { .article-body { padding: 26px 22px; } }
 
 .cta-block { background: linear-gradient(160deg, var(--navy) 0%, #16215c 55%, var(--blue) 130%); border-radius: 24px; padding: 32px; color: #fff; text-align: center; margin: 10px 0 60px; }
 .cta-block h2 { font-size: 22px; margin: 0 0 10px; }
@@ -132,139 +148,11 @@ h1, h2 { text-wrap: balance; }
 </header>
 
 <main class="wrap">
-  <section class="intro">
+  <section class="intro" id="blogIntro">
     <h1 data-i18n="blog.title">Energjia diellore.</h1>
   </section>
 
-  <section class="facts">
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.0.h">Panelet prodhojnë edhe në ditët me re</h2>
-        <p data-i18n="blog.facts.0.p1">Edhe kur qielli është i vranët, panelet vazhdojnë të prodhojnë energji. Sasia është më e ulët se në një ditë me diell, por prodhimi nuk ndalon.</p>
-        <p data-i18n="blog.facts.0.p2">Retë e dendura e ulin ndjeshëm prodhimin, ndërsa një ditë me re të lehta mund të japë ende një sasi të kënaqshme energjie. Për këtë arsye, llogaritjet bëhen mbi prodhimin e pritshëm gjatë gjithë vitit dhe jo vetëm mbi ditët me diell të plotë.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.1.h">Panelet nuk prodhojnë energji vetëm në mesditë</h2>
-        <p data-i18n="blog.facts.1.p1">Prodhimi fillon që në orët e para të mëngjesit, rritet gjatë ditës dhe ulet gradualisht pasdite. Në mesditë zakonisht arrihet prodhimi më i lartë, por sistemi punon për disa orë gjatë gjithë ditës.</p>
-        <p data-i18n="blog.facts.1.p2">Kjo është veçanërisht e dobishme për bizneset që përdorin energji gjatë orarit të punës.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.2.h">kWp dhe kWh nuk janë e njëjta gjë</h2>
-        <p data-i18n="blog.facts.2.p1" data-i18n-html><strong>kWp</strong> tregon fuqinë e instaluar të sistemit. Për shembull, një sistem 6 kWp ka një fuqi të caktuar prodhimi në kushtet më të mira.</p>
-        <p data-i18n="blog.facts.2.p2" data-i18n-html><strong>kWh</strong> tregon sasinë e energjisë që sistemi prodhon gjatë një periudhe, si ditë, muaj ose vit.</p>
-        <p data-i18n="blog.facts.2.p3">Një mënyrë e thjeshtë për ta kuptuar është kjo: kWp është fuqia e motorit, ndërsa kWh është puna që motori ka bërë gjatë një periudhe.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.3.h">Sa hapësirë kërkon një sistem?</h2>
-        <p data-i18n="blog.facts.3.p1">Në përgjithësi, për çdo 1 kWp duhen rreth 4–4.5 m² hapësirë të lirë në çati. Kjo shifër mund të ndryshojë sipas fuqisë dhe përmasave të panelit, si edhe sipas mënyrës së montimit.</p>
-        <p data-i18n="blog.facts.3.p2">Për një sistem familjar, zakonisht nevojiten disa dhjetëra metra katrorë çati të lirë. Para instalimit kontrollohen edhe pengesat, oxhakët, strukturat dhe hapësirat që mund të krijojnë hije.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.4.h">Orientimi dhe hija ndikojnë shumë në prodhim</h2>
-        <p data-i18n="blog.facts.4.p1">Çatia me orientim të mirë ndaj diellit zakonisht prodhon më shumë energji. Po aq e rëndësishme është edhe shmangia e hijeve nga pemët, ndërtesat, oxhaqet ose objektet e tjera.</p>
-        <p data-i18n="blog.facts.4.p2">Edhe një hije e vogël mbi disa panele mund të ndikojë në prodhimin e gjithë vargut. Për këtë arsye, kontrolli i objektit është i nevojshëm para ofertës përfundimtare.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.5.h">Vapa e madhe nuk i ndihmon panelet</h2>
-        <p data-i18n="blog.facts.5.p1">Shumë njerëz mendojnë se sa më e nxehtë të jetë dita, aq më shumë prodhojnë panelet. Në të vërtetë, panelet kanë nevojë kryesisht për dritë.</p>
-        <p data-i18n="blog.facts.5.p2">Në një ditë me diell dhe temperaturë normale mund të punojnë më mirë sesa në një ditë shumë të nxehtë vere. Prandaj, ditët e ndritshme por jo tepër të nxehta janë shpesh shumë të mira për prodhim.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.6.h">Panelet nuk kanë pjesë lëvizëse</h2>
-        <p data-i18n="blog.facts.6.p1">Panelet nuk kanë motorë, rripa apo pjesë që rrotullohen. Kjo i bën të thjeshta për t'u mirëmbajtur dhe zakonisht nuk kërkojnë ndërhyrje të shpeshta.</p>
-        <p data-i18n="blog.facts.6.p2">Në shumicën e rasteve mjafton të kontrollohen herë pas here dhe të pastrohen kur grumbullohet pluhur ose papastërti.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.7.h">Panelet nuk ndalojnë së punuari pas pak vitesh</h2>
-        <p data-i18n="blog.facts.7.p1">Panelet nuk "skadojnë" pas disa vitesh. Prodhuesit japin garanci për ruajtjen e fuqisë, zakonisht deri në 25 ose 30 vite, sipas modelit dhe datasheet-it.</p>
-        <p data-i18n="blog.facts.7.p2">Me kalimin e kohës fuqia ulet gradualisht, jo menjëherë. Edhe pas shumë vitesh paneli vazhdon të prodhojë energji, por me një kapacitet pak më të ulët.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.8.h">Çfarë bën inverteri?</h2>
-        <p data-i18n="blog.facts.8.p1">Panelet prodhojnë energji në formën e rrymës së vazhduar. Inverteri e shndërron atë në energji që mund të përdoret nga pajisjet e shtëpisë ose të biznesit.</p>
-        <p data-i18n="blog.facts.8.p2">Ai gjithashtu monitoron sistemin dhe ndihmon që energjia të përdoret në mënyrë të sigurt e të kontrolluar. Prandaj inverteri është po aq i rëndësishëm sa vetë panelet.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.9.h">Çfarë ndodh kur ndërpritet energjia?</h2>
-        <p data-i18n="blog.facts.9.p1">Një sistem standard i lidhur me rrjetin ndalon përkohësisht kur rrjeti elektrik ndërpritet. Kjo bëhet për arsye sigurie, që energjia të mos rikthehet në linjë ndërsa ajo po riparohet.</p>
-        <p data-i18n="blog.facts.9.p2">Nëse dëshiron energji edhe gjatë ndërprerjeve, nevojitet një sistem hibrid me bateri dhe zakonisht përcaktohen pajisjet që do të mbahen aktive.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.10.h">Bateria diellore ruan energjinë për më vonë</h2>
-        <p data-i18n="blog.facts.10.p1">Panelet prodhojnë më shumë gjatë ditës, ndërsa një pjesë e konsumit mund të ndodhë në mbrëmje ose gjatë natës. Bateria ruan energjinë e prodhuar dhe e përdor atë kur panelet nuk po prodhojnë.</p>
-        <p data-i18n="blog.facts.10.p2">Kapaciteti i baterisë zgjidhet sipas pajisjeve që dëshiron të furnizosh dhe kohës për të cilën kërkon rezervë.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.11.h">Prodhimi ndryshon sipas stinës</h2>
-        <p data-i18n="blog.facts.11.p1">Gjatë verës zakonisht ka më shumë orë me diell, ndërsa në dimër ditët janë më të shkurtra dhe moti mund të jetë më i vranët. Kjo do të thotë se prodhimi nuk është i njëjtë çdo muaj.</p>
-        <p data-i18n="blog.facts.11.p2">Ajo që ka rëndësi është prodhimi i pritshëm gjatë gjithë vitit, jo vetëm rezultati i një dite ose një muaji.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.12.h">Disa panele prodhojnë edhe nga ana e pasme</h2>
-        <p data-i18n="blog.facts.12.p1">Panelet bifaciale mund të marrin dritë edhe nga pjesa e pasme. Kjo mund të sjellë prodhim shtesë kur paneli vendoset në një sipërfaqe që reflekton dritën.</p>
-        <p data-i18n="blog.facts.12.p2">Përfitimi varet nga mënyra e montimit, ngjyra e sipërfaqes dhe hapësira rreth panelit. Prandaj nuk japin të njëjtin rezultat në çdo çati.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.13.h">Pse shumë panele janë të zeza?</h2>
-        <p data-i18n="blog.facts.13.p1">Pamja e zezë vjen nga qelizat dhe shtresat mbrojtëse të panelit. Shumë njerëz i preferojnë sepse duken më moderne dhe përshtaten më mirë me çatitë.</p>
-        <p data-i18n="blog.facts.13.p2">Ngjyra, megjithatë, nuk është e vetmja gjë që përcakton cilësinë. Më të rëndësishme janë modeli, fuqia, performanca, garancia dhe datasheet-i i prodhuesit.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.14.h">Çfarë do të thotë kthimi i investimit?</h2>
-        <p data-i18n="blog.facts.14.p1">Kthimi i investimit është koha që nevojitet që kursimi nga energjia diellore të mbulojë koston fillestare të sistemit.</p>
-        <p data-i18n="blog.facts.14.p2">Kjo periudhë varet nga konsumi i pritshëm, çmimi i energjisë, madhësia e sistemit, mënyra e përdorimit të energjisë dhe kushtet e rrjetit. Pas kësaj periudhe, sistemi vazhdon të ulë faturën për sa kohë që funksionon.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.15.h">Sistemi duhet të përshtatet me konsumin</h2>
-        <p data-i18n="blog.facts.15.p1">Një sistem më i madh nuk është gjithmonë zgjidhja më e mirë. Madhësia duhet të përshtatet me energjinë që pritet të konsumosh, hapësirën në çati dhe mënyrën si përdoret energjia gjatë ditës.</p>
-        <p data-i18n="blog.facts.15.p2">Për një familje dhe për një biznes mund të nevojiten sisteme të ndryshme, edhe kur shuma e faturës mujore duket e njëjtë.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.16.h">Shqipëria ka kushte shumë të mira për energjinë diellore</h2>
-        <p data-i18n="blog.facts.16.p1">Shqipëria ka shumë ditë me diell gjatë vitit dhe kushte të mira për prodhimin e energjisë diellore. Megjithatë, prodhimi përfundimtar varet edhe nga qyteti, orientimi, pjerrësia, hija dhe mirëmbajtja.</p>
-        <p data-i18n="blog.facts.16.p2">Pikërisht për këtë arsye, kalkulatori jep një vlerësim fillestar, ndërsa oferta përfundimtare përcaktohet pas kontrollit teknik.</p>
-      </div>
-    </article>
-    <article class="fact">
-      <div>
-        <h2 data-i18n="blog.facts.17.h">Pse është i rëndësishëm monitorimi?</h2>
-        <p data-i18n="blog.facts.17.p1">Me aplikacionin e monitorimit mund të shohësh sa energji po prodhon sistemi, sa po përdor dhe nëse ka ndonjë problem.</p>
-        <p data-i18n="blog.facts.17.p2">Kjo të ndihmon ta kuptosh më mirë sistemin dhe të dallosh më shpejt çdo ndryshim në prodhim.</p>
-      </div>
-    </article>
-  </section>
+  <div id="blogApp"></div>
 
   <section class="conclusion">
     <h2 data-i18n="blog.conclusionTitle">Përfundim</h2>
@@ -346,4 +234,37 @@ h1, h2 { text-wrap: balance; }
   </div>
 </footer>
 <script src="i18n.js"></script>
+<script>
+const BLOG_ARTICLES = [{"t": "Çfarë përfshin një sistem diellor dhe si përcaktohet madhësia e tij", "rt": "5", "ex": "Shumë familje dhe biznese janë të interesuara për panele diellore, por nuk dinë ku të fillojnë. Pyetjet më të shpeshta janë çfarë madhësie u nevojitet, çfarë…", "h": "<p>Shumë familje dhe biznese janë të interesuara për panele diellore, por nuk dinë ku të fillojnë. Pyetjet më të shpeshta janë çfarë madhësie u nevojitet, çfarë përfshin sistemi dhe çfarë trajtohet veçmas. Në këtë artikull i sqarojmë këto pika shkurt, që çdo ofertë të jetë e qartë për ju.</p><h2>Njësia bazë kWp</h2><p>Kur flitet për panele, madhësia e sistemit matet në kWp. Mund ta krahasoni me fuqinë e motorit te një automjet. Një shtëpi zakonisht ka nevojë për 3 deri në 10 kWp, ndërsa një biznes, si një restorant apo një dyqan i madh, për 20 deri në 30 kWp.</p><p>Në Shqipëri, çdo kWp prodhon afërsisht 1,400 kWh në vit. Kjo vlerë mjafton për një vlerësim fillestar.</p><h2>Si ta vlerësoni vetë madhësinë e sistemit</h2><p>Merrni faturën e energjisë elektrike dhe shikoni sa kWh konsumoni në muaj. Rekomandohet të merrni mesataren e gjithë vitit, sepse vera dhe dimri ndryshojnë shumë. Shumëzojeni me 12 dhe pastaj pjesëtojeni me 1,400. Numri që del është afërsisht sa kWp ju duhen.</p><p>Për shembull, një familje që konsumon rreth 450 kWh në muaj ka nevojë për një sistem rreth 4 kWp. Një biznes me 2,500 kWh në muaj, rreth 21 ose 22 kWp.</p><p>Ky është vetëm një vlerësim fillestar. Madhësinë përfundimtare e përcaktojmë pas verifikimit të çatisë, orientimit të saj dhe hijeve përreth.</p><h2>Çfarë përfshin oferta jonë</h2><p>Oferta jonë përfshin një sistem të plotë, gati për funksionim, që përbëhet nga panelet, inverterin (pajisja që e kthen energjinë e paneleve në energji për shtëpinë), strukturën metalike ku mbahen panelet, montimin dhe gjithë punën elektrike deri te lidhja me rrjetin e shtëpisë ose të biznesit.</p><p>Panelet kanë 25 vjet garanci dhe inverteri 5 vjet. Afati nga porosia deri në vënien në punë është rreth 7 ditë.</p><p>Oferta jepet me një çmim fiks për gjithë projektin. Nuk ka kosto shtesë të papritura.</p><h2>Çfarë nuk përfshihet</h2><p>Për transparencë, sqarojmë që në fillim tri elemente që nuk janë pjesë e ofertës. I pari është dokumentacioni pranë OSHEE-së për statusin e vetëprodhuesit. I dyti është ndërrimi i matësit, pasi zakonisht OSHEE vendos një matës që mat energjinë në të dy drejtimet. I treti është bateria, e cila ofrohet me kërkesë.</p><h2>Hapi i parë</h2><p>Nuk nevojiten njohuri teknike. Na dërgoni faturat e 12 muajve të fundit dhe ne ju përgatisim propozimin e duhur për sistemin tuaj.</p><blockquote>Energjia diellore duhet të jetë e thjeshtë për këdo.</blockquote>"}, {"t": "Sa shpejt kthehet investimi në panele diellore?", "rt": "5", "ex": "Pyetja më e shpeshtë që marrim është pas sa vitesh kthehet investimi. Është pyetje e arsyeshme, sepse çdo investim vlerësohet edhe nga koha e kthimit.", "h": "<p>Pyetja më e shpeshtë që marrim është pas sa vitesh kthehet investimi. Është pyetje e arsyeshme, sepse çdo investim vlerësohet edhe nga koha e kthimit.</p><h2>Si llogaritet</h2><p>Llogaritja është e thjeshtë. Vlera e investimit pjesëtohet me kursimin vjetor në faturë. Rezultati tregon numrin e viteve për kthimin e investimit. Pas kësaj, energjia që prodhojnë panelet është pothuajse falas.</p><h2>Nga çfarë varet</h2><p>Kthimi i investimit varet kryesisht nga tre faktorë, që janë sa prodhon sistemi, sa e paguani energjinë sot dhe sa nga energjia e paneleve e përdorni vetë gjatë ditës.</p><p>Faktori i fundit është veçanërisht i rëndësishëm. Energjia që e përdorni në momentin që prodhohet ka vlerën më të madhe, sepse është energji që nuk e blini më. Ajo që shkon në rrjet vlen më pak, sidomos me rregullat e reja që vijnë në 2027.</p><h2>Për familjet</h2><p>Një familje me një sistem rreth 5 kWp prodhon afërsisht 7,000 kWh në vit. Kjo mbulon pothuajse gjithë konsumin e një shtëpie mesatare. Për shumicën e familjeve, investimi kthehet brenda 3 deri në 5 viteve. Pas kësaj, sistemi vazhdon të punojë edhe 20 vite e më shumë.</p><p>Në familjet me konsum shumë të ulët ose ku konsumi ndodh kryesisht në mbrëmje, kjo periudhë mund të jetë pak më e gjatë.</p><h2>Për bizneset</h2><p>Për bizneset, situata është edhe më e favorshme. Ato e paguajnë energjinë më shtrenjtë se familjet dhe punojnë kryesisht ditën, pikërisht kur prodhojnë panelet. Një restorant, një dyqan apo një punishte e përdor direkt pjesën më të madhe të energjisë. Për to, investimi kthehet shpesh brenda 2 deri në 3 viteve.</p><h2>Si ta përshpejtoni kthimin e investimit</h2><p>Përdorni sa më shumë energji gjatë orëve me diell, si lavatriçen, bojlerin dhe kondicionerin. Zgjidhni një sistem me madhësinë e duhur dhe siguroni që panelet të mos kenë hije.</p><h2>Ajo që nuk shfaqet në llogari</h2><p>Askush nuk e di sa do të kushtojë energjia pas 5 apo 10 vitesh. Kur keni panele, një pjesë e madhe e energjisë suaj nuk varet më nga ajo që ndodh në treg. Kjo siguri ka vlerën e vet, edhe pse nuk shfaqet në llogaritje.</p><p>Na dërgoni faturat e një viti dhe ne ju llogarisim kohën e kthimit të investimit për rastin tuaj.</p>"}, {"t": "Net billing nga 2027, çfarë ndryshon për ata që kanë panele", "rt": "4", "ex": "Nga 1 janari 2027 ndryshon mënyra si llogaritet energjia që panelet ia japin rrjetit. Sistemi i sotëm quhet net metering dhe do të zëvendësohet nga net billing.…", "h": "<p>Nga 1 janari 2027 ndryshon mënyra si llogaritet energjia që panelet ia japin rrjetit. Sistemi i sotëm quhet net metering dhe do të zëvendësohet nga net billing. Emrat tingëllojnë teknikë, por ideja është e thjeshtë.</p><h2>Si funksionon sot</h2><p>Sot matësi regjistron sa kWh merrni nga rrjeti dhe sa kWh i jepni. Në fund bëhet diferenca. Nëse ditën i jepni rrjetit 10 kWh më shumë se sa konsumoni, në mbrëmje mund t&#x27;i merrni po ato 10 kWh pa pagesë. Funksionon si një bankë energjie.</p><h2>Si do të funksionojë nga 2027</h2><p>Me net billing, llogaria nuk bëhet më në kWh, por në para. Energjia që merrni nga rrjeti paguhet si zakonisht. Energjia që i jepni rrjetit vlerësohet me një çmim tjetër, zakonisht më të ulët. Në faturë del diferenca në lekë.</p><p>Me fjalë të tjera, energjia që dërgoni në rrjet në mesditë nuk do të vlejë domosdoshmërisht sa ajo që merrni në mbrëmje. Ky ndryshim vjen si pjesë e përafrimit me rregullat e Bashkimit Europian.</p><h2>Çfarë do të thotë për ju</h2><p>Panelet mbeten një investim i mirë. Ndryshon vetëm mënyra si duhet menduar sistemi.</p><p>Energjia që e përdorni vetë, në momentin që prodhohet, bëhet edhe më e vlefshme. Prandaj ia vlen të përdorni më shumë pajisje gjatë ditës. Madhësia e sistemit duhet përshtatur me konsumin e vërtetë, jo thjesht sa më i madh. Bizneset që punojnë ditën preken shumë pak. Gjithashtu, bateritë bëhen më të vlefshme, sepse ruajnë energjinë e ditës për mbrëmjen.</p><h2>Pse ia vlen të mos prisni</h2><p>Çdo muaj pa panele është një muaj me faturë të plotë. Procedurat me OSHEE marrin kohë, dhe kur afrohet një ndryshim i tillë, shumëkush vendos njëherësh.</p><p>Detajet e zbatimit po finalizohen ende. Ne i ndjekim nga afër dhe i informojmë klientët tanë sapo të bëhen zyrtare.</p><h2>Si bëheni vetëprodhues</h2><p>Mblidhni faturat e 12 muajve të fundit, na kontaktoni për vlerësimin, instalojmë sistemin, bëhet aplikimi në OSHEE dhe ndërrimi i matësit. Pas kësaj, sistemi fillon të kursejë.</p>"}, {"t": "Udhëzues praktik për zgjedhjen e paneleve dhe inverterit", "rt": "4", "ex": "Në çdo ofertë për panele do të shihni fjalë si inverter, bifacial, garanci performance. Nuk është e nevojshme t'i njihni të gjitha në detaje. Mjafton të kuptoni…", "h": "<p>Në çdo ofertë për panele do të shihni fjalë si inverter, bifacial, garanci performance. Nuk është e nevojshme t&#x27;i njihni të gjitha në detaje. Mjafton të kuptoni disa koncepte bazë për të marrë një vendim të informuar.</p><h2>Panelet</h2><p>Paneli është pjesa që kap dritën dhe e kthen në energji. Fuqia e një paneli të vetëm nuk tregon shumë. Ajo që ka rëndësi është sa prodhon i gjithë sistemi gjatë viteve dhe sa mirë e ruan performancën.</p><p>Panelet me xham nga të dyja anët janë më të qëndrueshme. Mbrohen më mirë nga lagështia dhe vjetrohen më ngadalë. Disa prej tyre kapin dritë edhe nga pas, gjë për të cilën kemi shkruar veçmas.</p><p>Edhe estetika ka rëndësi. Panelet qëndrojnë mbi çatinë tuaj për 25 vjet, prandaj pamja e sistemit është pjesë e cilësisë.</p><h2>Garancia</h2><p>Ka dy lloje garancie. Njëra mbulon defektet e panelit. Tjetra garanton që paneli do të prodhojë ende mirë edhe pas 25 apo 30 vitesh.</p><p>Por pyetja më e rëndësishme është kush do t&#x27;ju përgjigjet kur të keni problem. Te hiSol, garancinë e paneleve e mbajmë ne vetë. Në rast problemi, na kontaktoni direkt ne.</p><h2>Inverteri</h2><p>Inverteri është truri i sistemit. Panelet prodhojnë rrymë të vazhduar, të cilën pajisjet e shtëpisë nuk e përdorin direkt. Inverteri e kthen në rrymën që përdorin pajisjet tuaja. Njëkohësisht kontrollon gjithë sistemin.</p><p>Panelet rrallë prishen, sepse nuk kanë pjesë që lëvizin. Inverteri është pajisje elektronike që punon vazhdimisht, prandaj cilësia e tij ka shumë rëndësi.</p><p>Tri pika ia vlen të dini. Një aplikacion në telefon ju tregon në çdo moment sa po prodhoni. Nëse panelet janë në dy anë të çatisë, inverteri duhet t&#x27;i menaxhojë veçmas. Gjithashtu, nëse mendoni të shtoni bateri më vonë, inverteri duhet ta lejojë këtë që tani.</p><h2>Elementët që nuk duken</h2><p>Struktura mbajtëse, kabllot dhe mbrojtjet elektrike nuk bien në sy, por janë ato që garantojnë sigurinë e sistemit për vite. Edhe pajisja më cilësore nuk performon si duhet nëse montohet gabim.</p><p>Te hiSol, cilësia vjen e para. Në çdo ofertë bashkëngjisim fletët teknike të pajisjeve, që ta dini saktë çfarë po merrni.</p>"}, {"t": "Panelet tona prodhojnë energji edhe nga ana e pasme", "rt": "4", "ex": "Zakonisht paneli diellor mendohet si një sipërfaqe që kap dritën vetëm nga përpara. Panelet që përdorim ne kanë një avantazh të rëndësishëm, sepse prodhojnë energji…", "h": "<p>Zakonisht paneli diellor mendohet si një sipërfaqe që kap dritën vetëm nga përpara. Panelet që përdorim ne kanë një avantazh të rëndësishëm, sepse prodhojnë energji edhe nga ana e pasme. Quhen panele bifaciale, që do të thotë me dy faqe.</p><h2>Si funksionon</h2><p>Një panel i zakonshëm ka pjesën e pasme të mbyllur. Drita që bie aty thjesht humbet.</p><p>Paneli bifacial ka xham edhe nga pas dhe kap dritën nga të dyja anët. Përpara kap diellin direkt. Nga pas kap dritën që reflektohet nga çatia, toka ose betoni poshtë tij.</p><p>Një shembull i thjeshtë është plazhi, ku drita vjen jo vetëm nga lart, por edhe e reflektuar nga rëra dhe uji. Paneli bifacial funksionon në të njëjtën mënyrë.</p><h2>Sa energji shtesë prodhon</h2><p>Varet nga vendi ku montohet. Mbi një çati me pjerrësi, ku paneli rri afër çatisë, përfitimi është i vogël. Mbi një çati të sheshtë, me panelet të ngritura pak, përfitimi është më i dukshëm. Mbi tokë, me hapësirë poshtë dhe një sipërfaqe të çelët, përfitimi është më i madhi.</p><p>Sa më e çelët sipërfaqja poshtë panelit, aq më shumë dritë reflektohet. Betoni i bardhë ose zhavorri reflektojnë shumë më tepër se dheu i errët.</p><p>Edhe një rritje e vogël e prodhimit çdo ditë, gjatë 25 viteve, sjell një diferencë të ndjeshme.</p><h2>Xhami nga të dyja anët</h2><p>Ka edhe një përfitim tjetër. Pjesa e brendshme e panelit rri e mbyllur mes dy xhamave. Kështu mbrohet më mirë nga lagështia, nga ndryshimet e temperaturës dhe nga plasaritjet e vogla. Paneli vjetrohet më ngadalë dhe mban fuqinë për më shumë vite.</p><p>Këto panele janë pak më të rënda, prandaj para montimit verifikojmë që çatia dhe struktura t&#x27;i mbajnë pa problem.</p><h2>Pse i përdorim për të gjithë</h2><p>Për sistemet e vogla familjare mund të përdornim panele më të thjeshta, por zgjodhëm të mos e bëjmë. Një familje meriton të njëjtën cilësi si një biznes i madh, dhe meqë garancinë e mbajmë ne, duam panelet më të qëndrueshme që mund të gjejmë.</p><p>Nëse keni çati të sheshtë ose tokë të lirë, na kontaktoni, pasi në këto raste ky avantazh është më i madh.</p>"}, {"t": "Pse Shqipëria është vend i mirë për panele diellore", "rt": "4", "ex": "Kur flitet për energji diellore, shpesh përmendet Gjermania, një nga vendet me më shumë panele në Europë. Por një panel në Shqipëri prodhon shumë më tepër energji…", "h": "<p>Kur flitet për energji diellore, shpesh përmendet Gjermania, një nga vendet me më shumë panele në Europë. Por një panel në Shqipëri prodhon shumë më tepër energji se i njëjti panel në Gjermani. Nëse atje ia vlen, këtu ia vlen edhe më shumë.</p><h2>Rrezatim i lartë diellor</h2><p>Shqipëria ka mbi 2,000 orë diell në vit, në disa zona edhe më shumë. Çdo kWp panele prodhon këtu rreth 1,400 kWh në vit. Për të njëjtin investim merrni më shumë energji dhe investimi kthehet më shpejt.</p><h2>Varësia nga reshjet</h2><p>Pothuajse gjithë energjia që prodhohet në Shqipëri vjen nga hidrocentralet. Në vitet me pak reshje, prodhimi ulet dhe vendi detyrohet të blejë energji nga jashtë.</p><p>Dielli e plotëson këtë mungesë. Kur lumenjtë janë të ulët, zakonisht në verë, dielli është në kulm. Çdo çati me panele e bën sistemin më të fortë.</p><h2>Vera dhe kondicionerët</h2><p>Në verë, kondicionerët punojnë vazhdimisht në shtëpi, hotele, restorante e dyqane. Pikërisht atëherë panelet prodhojnë më shumë. Pak vende kanë një përputhje kaq të mirë mes kohës kur prodhohet energjia dhe kohës kur duhet më shumë.</p><h2>Tregu sapo ka filluar</h2><p>Energjia diellore është rritur shpejt kohët e fundit. Megjithatë, pjesa më e madhe e çative në qytetet shqiptare janë ende pa panele. Potenciali i pashfrytëzuar është i madh, dhe kush fillon herët përfiton më gjatë.</p><h2>Kuadri ligjor</h2><p>Familjet dhe bizneset mund të bëhen vetëprodhues, domethënë të prodhojnë energjinë e tyre dhe të lidhen me rrjetin. Nga 2027 rregullat përditësohen sipas modelit europian, por vetëprodhimi mbetet i leverdishëm.</p><h2>Dimra të butë</h2><p>Në pjesën më të madhe të vendit bora është e rrallë dhe dimrat janë të lehtë. Panelet punojnë mirë gjatë gjithë vitit.</p><p>Shqipëria është një nga vendet më të favorshme në Europë për energji diellore, si për familjet ashtu edhe për bizneset. Dielli është burim falas dhe i disponueshëm çdo ditë.</p>"}, {"t": "Prodhimi i paneleve ndryshon sipas stinës", "rt": "4", "ex": "Prodhimi i paneleve ndryshon ndjeshëm nga një muaj në tjetrin. Në korrik shifrat janë të larta, ndërsa në dhjetor dukshëm më të ulëta. Kjo është krejtësisht normale…", "h": "<p>Prodhimi i paneleve ndryshon ndjeshëm nga një muaj në tjetrin. Në korrik shifrat janë të larta, ndërsa në dhjetor dukshëm më të ulëta. Kjo është krejtësisht normale dhe lidhet me ciklin natyror të diellit.</p><h2>Arsyet e ndryshimit</h2><p>Në verë ditët janë më të gjata dhe dielli qëndron më lart në qiell. Rrezet bien më drejt mbi panele. Në dimër ditët janë të shkurtra, dielli rri ulët dhe ka më shumë re e shi.</p><p>Një muaj vere prodhon zakonisht dy deri në tre herë më shumë se një muaj dimri. Kjo është normale dhe është e përfshirë në llogaritë tona që në fillim.</p><h2>Pranvera, një sezon i nënvlerësuar</h2><p>Shpesh mendohet se gushti, me temperaturat më të larta, është muaji më produktiv. Në fakt, ditët më të mira shpesh janë në prill dhe maj. Dielli është i fortë, ditët janë të gjata dhe panelet nuk nxehen shumë. Në këto kushte panelet punojnë me efiçencë maksimale.</p><h2>Çfarë do të thotë për faturën</h2><p>Kur llogarisim sistemin, shohim gjithë vitin, jo një muaj. Në verë panelet prodhojnë më shumë se sa konsumoni dhe teprica shkon në rrjet. Në dimër prodhojnë më pak dhe një pjesë e energjisë vjen nga rrjeti.</p><p>Me rregullat e reja që nga 2027, energjia e tepërt do të vlejë më pak. Prandaj madhësia e duhur dhe përdorimi i energjisë ditën kanë edhe më shumë rëndësi.</p><h2>Si ta shfrytëzoni çdo stinë</h2><p>Në verë, ndizni kondicionerin që pasdite, kur panelet ende prodhojnë, në vend që të prisni mbrëmjen. Në dimër, nëse ngroheni me kondicioner, përdoreni më shumë në orët me diell. Gjatë gjithë vitit, lavatriçja, pjatalarësja dhe bojleri mund të punojnë në mesditë.</p><p>Një prodhim më i ulët në dimër nuk duhet të shqetësojë. Ajo që ka rëndësi është sa prodhon sistemi në gjithë vitin, dhe kjo llogaritet që në ofertë.</p>"}, {"t": "Panelet nuk ndalojnë së punuari pas pak vitesh", "rt": "4", "ex": "Një pyetje e shpeshtë është nëse panelet dëmtohen pas 5 apo 6 vitesh. Ekziston bindja se panelet konsumohen shpejt dhe duhen zëvendësuar. Në realitet, nuk është kështu.", "h": "<p>Një pyetje e shpeshtë është nëse panelet dëmtohen pas 5 apo 6 vitesh. Ekziston bindja se panelet konsumohen shpejt dhe duhen zëvendësuar. Në realitet, nuk është kështu.</p><h2>Pa pjesë që konsumohen</h2><p>Panelet nuk kanë motorë, rripa apo pjesë që lëvizin. Janë thjesht qeliza të mbyllura mes xhamit dhe një kornize alumini. Përdorimi i përditshëm nuk i dëmton.</p><h2>Humbasin shumë pak me vitet</h2><p>Me kalimin e kohës, panelet humbasin shumë ngadalë një pjesë të vogël të fuqisë. Pas 25 vitesh prodhojnë ende rreth 90% të asaj që prodhonin ditën e parë. Me fjalë të tjera, vazhdojnë të punojnë shumë mirë edhe pas dekadash.</p><p>Kjo shkruhet edhe në garancinë e prodhuesit, që i mbulon deri në 30 vite.</p><h2>Inverteri është ndryshe</h2><p>Inverteri është pajisje elektronike dhe zgjat më pak se panelet, zakonisht 10 deri në 15 vite. Pra, gjatë gjithë jetës së sistemit mund të duhet ndërruar një herë. Kjo është pjesë normale e mirëmbajtjes afatgjatë. Deri në atë moment, sistemi ka kursyer shumë më tepër se ç&#x27;kushton një inverter i ri. Inverterët tanë kanë 5 vjet garanci.</p><h2>Çfarë e dëmton në të vërtetë një sistem</h2><p>Rrallë problemi vjen nga vetë panelet. Zakonisht shkaktohet nga montimi i dobët, kabllot e gabuara ose materialet e dobëta. Prandaj te ne montimi dhe puna elektrike janë pjesë e paketës dhe mbulohen nga garancia jonë.</p><h2>Pak mirëmbajtje</h2><p>Shiu i pastron panelet gjatë pjesës më të madhe të vitit. Në verë, pas periudhave të gjata pa reshje, mjafton një larje me ujë të thjeshtë një ose dy herë në vit. Rekomandohet edhe një kontroll vizual vjetor. Nëse në aplikacion vëreni rënie të papritur të prodhimit në një ditë me diell, na kontaktoni.</p><h2>Kush përgjigjet</h2><p>Garancia në letër nuk vlen shumë nëse askush nuk ju përgjigjet. Garancinë e paneleve e mbajmë ne vetë. Në rast problemi, na kontaktoni direkt ne.</p><p>Një sistem i montuar mirë punon 25 deri në 30 vjet ose më shumë. Është investim afatgjatë, jo blerje për disa vite.</p>"}, {"t": "Panelet prodhojnë edhe kur është vranët", "rt": "3", "ex": "A prodhojnë panelet kur qielli është i vranët? Përgjigjja është po. Prodhimi është më i ulët, por nuk ndalet.", "h": "<p>A prodhojnë panelet kur qielli është i vranët? Përgjigjja është po. Prodhimi është më i ulët, por nuk ndalet.</p><h2>Panelet kanë nevojë për dritë</h2><p>Panelet nuk kanë nevojë për diell direkt, por për dritë. Edhe në një ditë me re, drita natyrore kalon përmes reve dhe panelet e shndërrojnë në energji.</p><h2>Sa prodhojnë</h2><p>Varet nga retë. Kur retë janë të holla, prodhimi mund të arrijë mbi gjysmën e një dite me diell. Kur qielli është plotësisht i mbuluar, prodhimi bie ndjeshëm, por nuk shkon në zero.</p><p>Në Shqipëri ditët krejt të vranëta janë shumë më të pakta se ato me diell.</p><h2>Ditët me re janë tashmë në llogari</h2><p>Kur llogarisim sa do të prodhojë sistemi juaj, nuk supozojmë që çdo ditë ka diell. Përdorim të dhëna të shumë viteve për zonën tuaj, duke përfshirë ditët me re, shi dhe mjegull. Pra, ditët e vranëta nuk janë surprizë. Janë pjesë e llogarisë që në fillim.</p><h2>Shiu dhe pastrimi</h2><p>Shiu e ul prodhimin përkohësisht, por i pastron panelet nga pluhuri dhe papastërtitë. Shpesh, pas një shiu, panelet punojnë me efiçencë më të mirë.</p><h2>Po natën?</h2><p>Natën panelet nuk prodhojnë, sepse nuk ka dritë. Shtëpia ose biznesi juaj merr energji nga rrjeti si zakonisht. Nëse doni energjinë e diellit edhe në mbrëmje, mund të shtoni një bateri që ruan tepricën e ditës.</p><p>Ditët me re ulin prodhimin, por nuk e ndalojnë. Panelet vazhdojnë të punojnë gjatë gjithë vitit.</p>"}, {"t": "Panelet nuk prodhojnë vetëm në mesditë", "rt": "4", "ex": "Shpesh mendohet se panelet punojnë vetëm disa orë rreth mesditës, dhe për këtë arsye disa njerëz arrijnë në përfundimin se panelet nuk u shërbejnë. Në fakt, panelet…", "h": "<p>Shpesh mendohet se panelet punojnë vetëm disa orë rreth mesditës, dhe për këtë arsye disa njerëz arrijnë në përfundimin se panelet nuk u shërbejnë. Në fakt, panelet fillojnë të prodhojnë pak pas lindjes së diellit dhe vazhdojnë deri pak para perëndimit.</p><h2>Prodhimi gjatë një dite</h2><p>Nëse hapni aplikacionin në një ditë me diell, do të shihni një grafik në formë kodre. Në mëngjes prodhimi fillon ngadalë, paradite rritet shpejt, rreth mesditës arrin kulmin, pastaj pasdite bie gradualisht deri në mbrëmje.</p><p>Në verë, panelet prodhojnë 12 deri në 14 orë në ditë. Edhe në dimër, 7 deri në 9 orë.</p><h2>Gjysma prodhohet jashtë mesditës</h2><p>Orët e kulmit japin afërsisht gjysmën e energjisë së ditës. Gjysma tjetër prodhohet në mëngjes dhe pasdite.</p><h2>Drejtimi i çatisë ka rëndësi</h2><p>Një çati nga jugu prodhon më shumë në total. Një çati nga lindja prodhon më shumë në mëngjes, gjë që u përshtatet familjeve që konsumojnë shumë energji para se të dalin për punë. Një çati nga perëndimi prodhon më shumë pasdite, e mirë për bizneset që punojnë deri vonë dhe për familjet që kthehen pasdite. Kur panelet vendosen në të dyja anët e çatisë, prodhimi shpërndahet më barabar gjatë gjithë ditës.</p><p>Pra, një çati që nuk është e orientuar nga jugu mbetet e përshtatshme; thjesht prodhon më shumë në orë të tjera.</p><h2>Pajisjet që punojnë gjatë ditës</h2><p>Edhe kur nuk jeni në shtëpi, shumë pajisje punojnë ditën. Frigoriferi punon gjithë kohën. Bojleri mund të vendoset me orar që të ngrohë ujin në mesditë. Lavatriçja dhe pjatalarësja shpesh kanë nisje me vonesë. Kondicioneri mund të ndizet pasdite që shtëpia të jetë e freskët kur ktheheni.</p><h2>Për bizneset</h2><p>Restorantet, dyqanet, hotelet dhe zyrat punojnë kryesisht ditën. Pjesa më e madhe e energjisë së paneleve përdoret direkt. Kjo është arsyeja pse bizneset e kthejnë investimin më shpejt.</p><p>Nëse pjesa më e madhe e konsumit tuaj është në mbrëmje, keni dy zgjidhje. Të zhvendosni sa më shumë konsum në orët e ditës, ose të shtoni një bateri. Zgjidhjen më të mirë e vlerësojmë bashkë për rastin tuaj.</p>"}, {"t": "Vapa e madhe nuk i ndihmon panelet", "rt": "3", "ex": "Duket logjike që sa më shumë vapë, aq më shumë energji. Në fakt, temperaturat shumë të larta e ulin pak efiçencën e paneleve. Kjo nuk do të thotë që vera është e…", "h": "<p>Duket logjike që sa më shumë vapë, aq më shumë energji. Në fakt, temperaturat shumë të larta e ulin pak efiçencën e paneleve. Kjo nuk do të thotë që vera është e pafavorshme, përkundrazi, por ia vlen të kuptohet si funksionon.</p><h2>Panelet duan dritë, jo nxehtësi</h2><p>Panelet e kthejnë dritën në energji, jo nxehtësinë. Si shumica e pajisjeve elektronike, punojnë më mirë në temperatura të moderuara. Kur nxehen shumë, prodhimi ulet pak.</p><p>Në një ditë me 35 gradë në hije, paneli mbi çati mund të arrijë 60 gradë ose më shumë. Në ato orë humbet një pjesë të vogël të fuqisë.</p><h2>Atëherë pse vera prodhon më shumë?</h2><p>Sepse në verë ka shumë më tepër dritë. Ditët janë të gjata dhe dielli është lart. Kjo sasi drite e kompenson plotësisht humbjen nga nxehtësia. Vera mbetet stina me prodhimin më të madh, jo për shkak të vapës, por pavarësisht saj.</p><p>Për të njëjtën arsye, ditët më të mira shpesh janë në prill dhe maj, kur ka diell të fortë dhe temperatura të buta.</p><h2>Çfarë bëjmë ne</h2><p>Zgjedhim panele që e durojnë më mirë nxehtësinë. I montojmë me pak hapësirë nga çatia, që ajri të qarkullojë poshtë tyre dhe t&#x27;i freskojë. Përdorim kabllo të përshtatshme që nuk nxehen. Inverterin e vendosim në hije ose në një vend të ajrosur.</p><h2>A duhet t&#x27;i lagni panelet për t&#x27;i ftohur?</h2><p>Jo. Uji i ftohtë mbi xhamin e nxehtë në mesditë mund të krijojë tension në xham. Përfitimi është i vogël dhe nuk e justifikon rrezikun. Nëse doni t&#x27;i lani, bëjeni herët në mëngjes ose në mbrëmje.</p><p>Në Shqipëri drita e shumtë e mbulon lehtësisht humbjen nga vapa. Ajo që bën diferencën është montimi i duhur, dhe pikërisht kështu i instalojmë sistemet tona.</p>"}];
+
+(function () {
+  var app = document.getElementById("blogApp");
+  var intro = document.getElementById("blogIntro");
+
+  function list() {
+    intro.style.display = "";
+    app.className = "article-list";
+    app.innerHTML = BLOG_ARTICLES.map(function (b, i) {
+      return '<a class="article-item" href="#a' + i + '"><h2>' + b.t + '</h2><p>' + b.ex + '</p><small>' + b.rt + ' min lexim</small></a>';
+    }).join("");
+    window.scrollTo(0, 0);
+  }
+
+  function article(i) {
+    var b = BLOG_ARTICLES[i];
+    intro.style.display = "none";
+    app.className = "article-view";
+    app.innerHTML = '<a class="back-link" href="#">← Blog</a><h1>' + b.t + '</h1><div class="meta">hiSol Energy · ' + b.rt + ' min lexim</div><div class="article-body">' + b.h + '</div>';
+    window.scrollTo(0, 0);
+  }
+
+  function route() {
+    var m = location.hash.match(/^#a(\d+)/);
+    if (m && BLOG_ARTICLES[+m[1]]) { article(+m[1]); } else { list(); }
+  }
+
+  window.addEventListener("hashchange", route);
+  route();
+})();
+</script>
 </body></html>

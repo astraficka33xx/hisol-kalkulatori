@@ -280,41 +280,32 @@ HTML (shqip mbetet vlera default e elementit), pastaj shto çelësin+vlerën ang
 herë, dhe kontrollo (a) teksti anglisht del saktë, (b) kthimi në shqip **rikthen ekzaktësisht**
 tekstin origjinal (asnjë humbje/prishje HTML-je), (c) asnjë gabim konsole.
 
-## Ridizajnimi i planifikuar i `blog.html` (dizajni i konfirmuar, shtator 2026 — **ende PA u
-implementuar**)
+## Blogu — 11 artikuj të gjatë me hash-routing (`blog.html`, shtator 2026)
 
-hiSol ka dërguar 11 artikuj të gjatë (docx, ~700-900 fjalë secili, me nën-tituj H2/H3 dhe
-lista) për të zëvendësuar 18 "fact"-et e shkurtëra aktuale të `blog.html`. Dizajni është
-**konfirmuar** (pas disa iterimesh mbi një demo HTML që u dërgua te hiSol) si më poshtë, por
-**mos e zbato ende** — hiSol ka thënë shprehimisht të presësh derisa të dërgojë tekstin e
-korrigjuar/final të 11 artikujve përpara se të prekësh `blog.html`.
+Blogu u ridizajnua nga 18 "fact"-e të shkurtëra (titull + 2-3 fjali) në **11 artikuj të gjatë**
+(~4-8 min lexim secili, me nën-tituj H2/H3, lista, ndonjë blockquote), dërguar shprehimisht
+nga hiSol si tekst final (embeduar fjalë-për-fjalë, pa asnjë ndryshim teksti/pikësimi —
+verifikuar programatikisht bajt-për-bajt kundrejt skedarit origjinal të dërguar).
 
-**Arkitektura** (nga një mockup i dërguar nga hiSol): **një faqe e vetme** me hash-routing në
-JS të sheshtë (`location.hash`, `#a0`, `#a1`, ... `#a10`) — jo faqe të veçanta statike, jo
-build-step. Të dhënat e artikujve (titull, kategori, kohë-leximi, ekstrakt, HTML e plotë)
-ruhen si një array JS (`const B = [...]`) brenda `blog.html`. Dy funksione: `list()` (rendon
-listën e kartave-teaser) dhe `article(i)` (rendon artikullin e plotë); `route()` lexon
-`location.hash` dhe thërret njërin ose tjetrin; `hashchange` listener e rithërret `route()`.
+**Arkitektura**: **një faqe e vetme**, pa faqe të veçanta statike, pa build-step — hash-routing
+i sheshtë në JS (`location.hash`, `#a0`...`#a10`). Të dhënat e artikujve (titull `t`, kohë-
+leximi `rt`, ekstrakt `ex`, HTML e plotë `h` — **pa** fushë kategorie, u hoq shprehimisht)
+ruhen si `const BLOG_ARTICLES = [...]` brenda `<script>` në fund të `blog.html`. Funksionet
+`list()`/`article(i)`/`route()` popullojnë `<div id="blogApp">`; `#blogIntro` (titulli statik
+`<h1 data-i18n="blog.title">`, i përkthyeshëm SQ/EN si më parë) fshihet/shfaqet varësisht
+route-it (vetëm te lista, jo brenda artikullit).
 
-**Pamja e konfirmuar** (stilizim me `--ink`/`--lime`/`--surface`/`--shadow-sm` ekzistuese të
-`blog.html`, jo ngjyrat vendmbajtëse të mockup-it origjinal):
-- Titulli i faqes mbetet thjesht `<h1>Energjia diellore.</h1>` — **pa** eyebrow "hiSol Mëso"
-  sipër dhe **pa** nëntitull poshtë (u hoqën shprehimisht, hiSol deshi maksimalisht të
-  thjeshtë).
-- Lista: karta si `.fact` (sfond `--surface`, `border-radius: 20px`, `box-shadow: var(--shadow-sm)`),
-  por çdo kartë klikohet drejt te `#a{i}` dhe tregon vetëm titull + ekstrakt + "X min lexim" —
-  **pa** etiketë kategorie (fusha `c` e të dhënave ekziston, por s'shfaqet aktualisht, sipas
-  kërkesës së hiSol për thjeshtësi).
-- Artikulli: link "← Blog" **i lehtë, jo bold** (`font-weight: 400`, `color: var(--muted)`) —
-  kjo ishte korrigjim i qëllimshëm nga hiSol pas parë demo-s (fillimisht e bëra bold, gabim);
-  poshtë tij titulli, `hiSol Energy · X min lexim`, vijë poshtë me `border-bottom: 3px solid var(--lime)`,
-  pastaj korpi i artikullit brenda një karte të bardhë (`.article-body`), dhe në fund kartelë
-  CTA drejt kalkulatorit (të njëjtin stil `.cta-block` që ekziston tashmë te `blog.html`).
-- Karta e brand-eve dhe seksioni FAQ (ekzistues, poshtë "fact"-eve tani) **mbeten të
-  pandryshuar**, poshtë listës së re të blogut.
-- **Anglishtja**: përmbajtja e 11 artikujve mbetet vetëm shqip për fazën e parë (jo praktike
-  të përkthehen ~8000 fjalë menjëherë) — pjesa tjetër e faqes (header/footer/FAQ) mbetet
-  dygjuhëshe si më parë.
-
-Demo i plotë (HTML funksional, i dërguar te hiSol dhe i konfirmuar) ndodhet në historikun e
-bisedës — kërko "hiSol-blog-demo-v2.html" nëse duhet referencë e saktë e kodit.
+**Pamja** (klasat `.article-list`/`.article-item`/`.back-link`/`.article-view`/`.article-body`,
+stilizuar me `--ink`/`--surface`/`--shadow-sm` ekzistuese):
+- Titulli "Energjia diellore." **pa** eyebrow/nëntitull sipër, dhe kartat e listës **pa**
+  etiketë kategorie — thjeshtësi maksimale, e konfirmuar shprehimisht nga hiSol.
+- Link "← Blog" i lehtë (`font-weight: 400`, `color: var(--muted)`), **pa** nënvijë jeshile.
+- Nën titullin e artikullit: `hiSol Energy · X min lexim`, **pa** nënvijë jeshile (hequr pas
+  kontrollit të hiSol — fillimisht kishte `border-bottom: 3px solid var(--lime)`).
+- Blockquote-et brenda artikullit: kuti me sfond të lehtë (`--surface-alt`), tekst kursiv,
+  **pa** vijë jeshile majtas (hequr për të njëjtën arsye — fillimisht `border-left: 3px solid var(--lime)`).
+  **Mos i rikthe vijat/nënvijat jeshile në asnjërën nga këto dy vende** pa konfirmim të ri
+  eksplicit nga hiSol.
+- Seksionet "Përfundim", markat, FAQ, CTA-ja e vjetër, footer — **të pandryshuara**.
+- **Anglishtja**: përmbajtja e 11 artikujve mbetet vetëm shqip (i18n s'e prek); pjesa tjetër e
+  faqes (titulli, header/footer/FAQ) mbetet dygjuhëshe si më parë.
