@@ -316,5 +316,20 @@ stilizuar me `--ink`/`--surface`/`--shadow-sm` ekzistuese):
   kartela `.more-articles__item`) dhe pastaj direkt footer-i (i cili mbetet gjithmonë i
   dukshëm, në çdo route). Kjo është e qëllimshme (konfirmuar nga hiSol): eksperienca e
   leximit të mos "vazhdojë" në përmbajtje të përgjithshme të faqes.
-- **Anglishtja**: përmbajtja e 11 artikujve mbetet vetëm shqip (i18n s'e prek); pjesa tjetër e
-  faqes (titulli, header/footer/FAQ) mbetet dygjuhëshe si më parë.
+- **Anglishtja (shtator 2026, e implementuar plotësisht)**: çdo artikull ka tani fushat
+  `t_en`/`ex_en`/`h_en` përveç `t`/`ex`/`h` (shqip mbetet burimi i vërtetë, anglishtja
+  përkthim manual, i ruajtur në të njëjtin objekt). Helper-at `isEn()`/`bt(b)`/`bex(b)`/
+  `bh(b)`/`readLabel(rt)` te `blog.html` zgjedhin fushën e duhur sipas
+  `window.HiSolI18n.getLang()`. `route()` dëgjon **si** `hashchange` **ashtu edhe**
+  `hisol:langchange` — kështu ndërrimi i gjuhës rirendon menjëherë listën ose artikullin
+  aktual, pa lëvizje hash-i, pa ricarikim faqeje. "Të tjerë artikuj"/"min lexim" përkthehen
+  gjithashtu (`readLabel()`, teksti "More articles"/"Të tjerë artikuj" brenda `article()`).
+  **Kur shton/ndryshon një artikull**: duhet plotësuar edhe fusha `_en` përkatëse, përndryshe
+  anglishtja do të shfaqë `undefined`.
+- Faqja kryesore (`index.html`, seksioni "A e dini?"/`#fakte`): 3 kartat statike të vjetra
+  ("fact1/2/3") u zëvendësuan me **3 teaser artikujsh nga blogu**, secili `<a class="fact-card">`
+  që lidhet direkt te artikulli specifik (`blog.html#a5`, `#a1`, `#a8` — Shqipëria, ROI,
+  Vranët, në këtë rradhë, konfirmuar nga hiSol). Titulli/teksti/koha e leximit janë
+  `data-i18n` statik (çelësat `home.blogTeaser1/2/3Title/Body/Read` te `i18n.js`), pasi këto
+  karta **nuk** lexojnë nga `BLOG_ARTICLES` (janë faqe të veçanta, HTML statike, jo JS).
+  Çelësat e vjetër `home.fact1/2/3Title/Body` u hoqën nga `i18n.js`.
