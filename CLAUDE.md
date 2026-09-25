@@ -279,3 +279,42 @@ HTML (shqip mbetet vlera default e elementit), pastaj shto çelësin+vlerën ang
 **Testim i domosdoshëm pas çdo ndryshimi këtu**: hap faqen, shtyp toggle-in EN→SQ→EN disa
 herë, dhe kontrollo (a) teksti anglisht del saktë, (b) kthimi në shqip **rikthen ekzaktësisht**
 tekstin origjinal (asnjë humbje/prishje HTML-je), (c) asnjë gabim konsole.
+
+## Ridizajnimi i planifikuar i `blog.html` (dizajni i konfirmuar, shtator 2026 — **ende PA u
+implementuar**)
+
+hiSol ka dërguar 11 artikuj të gjatë (docx, ~700-900 fjalë secili, me nën-tituj H2/H3 dhe
+lista) për të zëvendësuar 18 "fact"-et e shkurtëra aktuale të `blog.html`. Dizajni është
+**konfirmuar** (pas disa iterimesh mbi një demo HTML që u dërgua te hiSol) si më poshtë, por
+**mos e zbato ende** — hiSol ka thënë shprehimisht të presësh derisa të dërgojë tekstin e
+korrigjuar/final të 11 artikujve përpara se të prekësh `blog.html`.
+
+**Arkitektura** (nga një mockup i dërguar nga hiSol): **një faqe e vetme** me hash-routing në
+JS të sheshtë (`location.hash`, `#a0`, `#a1`, ... `#a10`) — jo faqe të veçanta statike, jo
+build-step. Të dhënat e artikujve (titull, kategori, kohë-leximi, ekstrakt, HTML e plotë)
+ruhen si një array JS (`const B = [...]`) brenda `blog.html`. Dy funksione: `list()` (rendon
+listën e kartave-teaser) dhe `article(i)` (rendon artikullin e plotë); `route()` lexon
+`location.hash` dhe thërret njërin ose tjetrin; `hashchange` listener e rithërret `route()`.
+
+**Pamja e konfirmuar** (stilizim me `--ink`/`--lime`/`--surface`/`--shadow-sm` ekzistuese të
+`blog.html`, jo ngjyrat vendmbajtëse të mockup-it origjinal):
+- Titulli i faqes mbetet thjesht `<h1>Energjia diellore.</h1>` — **pa** eyebrow "hiSol Mëso"
+  sipër dhe **pa** nëntitull poshtë (u hoqën shprehimisht, hiSol deshi maksimalisht të
+  thjeshtë).
+- Lista: karta si `.fact` (sfond `--surface`, `border-radius: 20px`, `box-shadow: var(--shadow-sm)`),
+  por çdo kartë klikohet drejt te `#a{i}` dhe tregon vetëm titull + ekstrakt + "X min lexim" —
+  **pa** etiketë kategorie (fusha `c` e të dhënave ekziston, por s'shfaqet aktualisht, sipas
+  kërkesës së hiSol për thjeshtësi).
+- Artikulli: link "← Blog" **i lehtë, jo bold** (`font-weight: 400`, `color: var(--muted)`) —
+  kjo ishte korrigjim i qëllimshëm nga hiSol pas parë demo-s (fillimisht e bëra bold, gabim);
+  poshtë tij titulli, `hiSol Energy · X min lexim`, vijë poshtë me `border-bottom: 3px solid var(--lime)`,
+  pastaj korpi i artikullit brenda një karte të bardhë (`.article-body`), dhe në fund kartelë
+  CTA drejt kalkulatorit (të njëjtin stil `.cta-block` që ekziston tashmë te `blog.html`).
+- Karta e brand-eve dhe seksioni FAQ (ekzistues, poshtë "fact"-eve tani) **mbeten të
+  pandryshuar**, poshtë listës së re të blogut.
+- **Anglishtja**: përmbajtja e 11 artikujve mbetet vetëm shqip për fazën e parë (jo praktike
+  të përkthehen ~8000 fjalë menjëherë) — pjesa tjetër e faqes (header/footer/FAQ) mbetet
+  dygjuhëshe si më parë.
+
+Demo i plotë (HTML funksional, i dërguar te hiSol dhe i konfirmuar) ndodhet në historikun e
+bisedës — kërko "hiSol-blog-demo-v2.html" nëse duhet referencë e saktë e kodit.
