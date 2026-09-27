@@ -47,9 +47,11 @@ konfirmuar me hiSol** — janë tarifat/çmimet e vitit 2026 dhe supozimet e pro
 **Çmimi** (`calculatePriceWithVat`, me TVSH 20%, tiers sipas `requestedKwp`):
 | Kufiri (kWp kërkuar) | Lek/kWp |
 |---|---|
-| ≤ 20 | 41,000 |
-| 21–50 | 39,000 |
-| 51–99 | 37,000 |
+| 0–6 | 48,000 |
+| 6–20 | 43,000 |
+| 21–30 | 39,000 |
+| 30–50 | 36,800 |
+| 51–99 | 35,000 |
 | 100–299 | 33,000 |
 | ≥ 300 | 31,000 |
 
