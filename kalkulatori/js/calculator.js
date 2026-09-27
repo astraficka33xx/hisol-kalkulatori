@@ -161,16 +161,16 @@ function calculatePriceWithVat(requestedKwp, installedKwp) {
   let floorPrice = 0;
 
   if (requestedKwp <= 20) {
-    pricePerKwp = 39000;
+    pricePerKwp = 41000;
   } else if (requestedKwp <= 50) {
-    pricePerKwp = 38000;
-    floorPrice = boundaryPrice(20, 39000);
+    pricePerKwp = 39000;
+    floorPrice = boundaryPrice(20, 41000);
   } else if (requestedKwp <= 99) {
-    pricePerKwp = 36000;
-    floorPrice = boundaryPrice(50, 38000);
+    pricePerKwp = 37000;
+    floorPrice = boundaryPrice(50, 39000);
   } else if (requestedKwp < 300) {
     pricePerKwp = 33000;
-    floorPrice = boundaryPrice(99, 36000);
+    floorPrice = boundaryPrice(99, 37000);
   } else {
     pricePerKwp = 31000;
     floorPrice = boundaryPrice(299, 33000);
