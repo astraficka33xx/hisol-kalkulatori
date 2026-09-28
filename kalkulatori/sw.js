@@ -1,4 +1,4 @@
-const VERSION = "hisol-v19";
+const VERSION = "hisol-v20";
 const PRECACHE = `${VERSION}-precache`;
 const RUNTIME = `${VERSION}-runtime`;
 
@@ -23,6 +23,16 @@ const PRECACHE_URLS = [
   "assets/app-icon-192.png",
   "assets/app-icon-512.png",
 ];
+
+// App code that affects pricing/behavior: always prefer a fresh copy over
+// the network when online, falling back to the cached copy only offline.
+// Large, rarely-changing assets (logos, datasheets, pdf-lib) stay cache-first
+// below, since they don't need to be instantly fresh.
+const NETWORK_FIRST_URLS = new Set(
+  ["css/styles.css", "../i18n.js", "js/app.js", "js/calculator.js", "js/format.js", "js/catalog.js", "js/pdf.js"].map(
+    (path) => new URL(path, self.location.href).pathname
+  )
+);
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -61,6 +71,23 @@ self.addEventListener("fetch", (event) => {
           return response;
         })
         .catch(() => caches.match("index.html"))
+    );
+    return;
+  }
+
+  // App code (JS/CSS): network-first, so an online visitor always runs the
+  // latest logic; only falls back to the cached copy when offline.
+  if (NETWORK_FIRST_URLS.has(url.pathname)) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(PRECACHE).then((cache) => cache.put(request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
     );
     return;
   }

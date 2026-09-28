@@ -108,12 +108,24 @@ Trigger-i në UI: butoni "Shkarko ofertën PDF" → dialog për emër/vendndodhj
 
 ## PWA / Service worker (`kalkulatori/sw.js`)
 
-- Versionohet me konstanten `VERSION` (aktualisht `"hisol-v14"`) — **duhet rritur çdo herë
+- Versionohet me konstanten `VERSION` (aktualisht `"hisol-v20"`) — **duhet rritur çdo herë
   që ndryshon një asset i precache-uar** (lista `PRECACHE_URLS`: HTML/CSS/JS/vendor/manifest/
   ikonat), përndryshe klientët mbeten me cache të vjetër. Historiku i git-ut e konfirmon këtë
   praktikë (commits "Bump service worker version" pas ndryshimeve të tjera).
 - Navigimet: network-first me fallback te `index.html` nga cache kur offline.
-- Gjithçka tjetër (assets, datasheets, vendor): cache-first, popullohet runtime cache.
+- **Kodi i aplikacionit (JS/CSS — `calculator.js`, `app.js`, `format.js`, `catalog.js`,
+  `pdf.js`, `styles.css`, `../i18n.js`, lista `NETWORK_FIRST_URLS`): network-first** (shtator
+  2026, pas një rasti real ku një klient mori çmime shumë të vjetra sepse celulari i tij
+  s'kishte marrë kurrë asnjë version të ri) — kur pajisja është online merret gjithmonë
+  kopja e fundit nga interneti; cache-i përdoret **vetëm si rezervë kur je offline**. **Mos e
+  kthe në cache-first** pa konfirmim të ri eksplicit nga hiSol — qëllimi i drejtpërdrejtë
+  është të mos mbetet kurrë asnjë pajisje e "kyçur" në një version të vjetër të llogaritjeve.
+- Gjithçka tjetër (assets fikse, logot, datasheet-et, `pdf-lib`): cache-first, popullohet
+  runtime cache — nuk ndryshojnë kurrë, s'kanë nevojë të jenë "instantly fresh".
+- `app.js` regjistron service worker-in me `{ updateViaCache: "none" }` dhe thërret
+  `registration.update()` në çdo hapje faqeje — detyron një kontroll të vërtetë (jo të
+  vjetëruar nga cache-i i HTTP-së) për version të ri, në vend që t'i lërë browser-it ta
+  kontrollojë vetë kur të duket më e volitshme.
 - Instalimi si app: `app.js` dëgjon `beforeinstallprompt`/`appinstalled` dhe menaxhon
   dialogun "Shto hiSol në celular".
 
