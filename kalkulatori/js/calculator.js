@@ -179,7 +179,7 @@ function calculatePriceWithVat(requestedKwp, installedKwp) {
     floorPrice = boundaryPrice(99, 35000);
   } else {
     pricePerKwp = 31000;
-    floorPrice = boundaryPrice(299, 33000);
+    floorPrice = boundaryPrice(300, 33000);
   }
 
   // The floor keeps the price from ever dropping just because a system crossed
