@@ -144,8 +144,12 @@ function annualConsumptionFromBill(customerType, monthlyBill) {
 
 // Price at a given requested-kWp tier boundary, using the given price/kWp,
 // with the installed kWp rounded up to a whole number of panels for that boundary.
-function boundaryPrice(kwpThreshold, pricePerKwp) {
-  const watts = kwpThreshold <= CONFIG.panels.residential.maxReferenceKwp
+// `roof` must match the same residential/commercial panel pick `calculateSystem`
+// makes below (tile always gets the residential panel, regardless of size) —
+// otherwise the floor can be computed against the wrong panel wattage and
+// under-shoot the real price a tile-roof system reaches near that boundary.
+function boundaryPrice(kwpThreshold, pricePerKwp, roof) {
+  const watts = roof === "tile" || kwpThreshold <= CONFIG.panels.residential.maxReferenceKwp
     ? CONFIG.panels.residential.watts
     : CONFIG.panels.commercial.watts;
   const roundedInstalledKwp = (Math.ceil((kwpThreshold * 1000) / watts) * watts) / 1000;
@@ -154,7 +158,7 @@ function boundaryPrice(kwpThreshold, pricePerKwp) {
 
 // Tiered system price including VAT. Returns null for custom/oversized projects
 // (above maximumPricedKwp) that need a bespoke quote.
-function calculatePriceWithVat(requestedKwp, installedKwp) {
+function calculatePriceWithVat(requestedKwp, installedKwp, roof) {
   if (requestedKwp > CONFIG.maximumPricedKwp) return null;
 
   let pricePerKwp;
@@ -164,22 +168,22 @@ function calculatePriceWithVat(requestedKwp, installedKwp) {
     pricePerKwp = 48000;
   } else if (requestedKwp <= 20) {
     pricePerKwp = 43000;
-    floorPrice = boundaryPrice(6, 48000);
+    floorPrice = boundaryPrice(6, 48000, roof);
   } else if (requestedKwp <= 30) {
     pricePerKwp = 39000;
-    floorPrice = boundaryPrice(20, 43000);
+    floorPrice = boundaryPrice(20, 43000, roof);
   } else if (requestedKwp <= 50) {
     pricePerKwp = 36800;
-    floorPrice = boundaryPrice(30, 39000);
+    floorPrice = boundaryPrice(30, 39000, roof);
   } else if (requestedKwp <= 99) {
     pricePerKwp = 35000;
-    floorPrice = boundaryPrice(50, 36800);
+    floorPrice = boundaryPrice(50, 36800, roof);
   } else if (requestedKwp < 300) {
     pricePerKwp = 33000;
-    floorPrice = boundaryPrice(99, 35000);
+    floorPrice = boundaryPrice(99, 35000, roof);
   } else {
     pricePerKwp = 31000;
-    floorPrice = boundaryPrice(300, 33000);
+    floorPrice = boundaryPrice(300, 33000, roof);
   }
 
   // The floor keeps the price from ever dropping just because a system crossed
@@ -265,7 +269,7 @@ export function calculateSystem(input) {
       ? `${inv.unitCount} × inverterë ${inv.brand} (${inv.model}), ${inv.phase}, gjithsej rreth ${inv.acKw} kW AC`
       : `${inv.brand} ${inv.model} (${inv.phase}, rreth ${inv.acKw} kW AC)`;
 
-  const priceWithVat = calculatePriceWithVat(requestedKwp, installedKwp);
+  const priceWithVat = calculatePriceWithVat(requestedKwp, installedKwp, roof);
   const priceWithoutVat = priceWithVat ? Math.round(priceWithVat / (1 + CONFIG.vat) / 1000) * 1000 : null;
   const effectiveRate = priceWithVat ? priceWithVat / installedKwp : null;
   const isCustom = priceWithVat === null;
