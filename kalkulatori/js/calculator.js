@@ -137,6 +137,14 @@ function electricityRate(customerType, monthlyBill) {
   return monthlyBill / householdTierThreshold <= 700 ? householdTierThreshold : 11.4;
 }
 
+// Same residential-tier threshold as electricityRate, but keyed off an estimated
+// monthly kWh directly rather than a bill amount — used for "Nga fuqia" requests,
+// which have no bill to read a tier from.
+function electricityRateFromMonthlyKwh(customerType, monthlyKwh) {
+  if (customerType === "biznes") return 16.8;
+  return monthlyKwh <= 700 ? 10.2 : 11.4;
+}
+
 // Estimate annual consumption (kWh) implied by an average monthly bill.
 function annualConsumptionFromBill(customerType, monthlyBill) {
   return (monthlyBill / electricityRate(customerType, monthlyBill)) * 12;
@@ -280,16 +288,32 @@ export function calculateSystem(input) {
   let paybackSlow = null;
   let householdRate = null;
 
-  if (annualConsumption && priceWithVat) {
-    const rate = electricityRate(customer, monthlyBill);
-    householdRate = customer === "familjar" ? rate : null;
+  if (priceWithVat) {
     const selfConsumptionFactor = customer === "familjar"
       ? CONFIG.householdSelfConsumption
       : CONFIG.businessSelfConsumption;
 
-    const lowUsableKwh = Math.min(annualProduction * selfConsumptionFactor, annualConsumption);
-    const highUsableKwh = Math.min(annualProduction, annualConsumption);
+    let rate;
+    let lowUsableKwh;
+    let highUsableKwh;
 
+    if (annualConsumption) {
+      // "Nga fatura": cap usable energy by what the customer actually consumes.
+      rate = electricityRate(customer, monthlyBill);
+      lowUsableKwh = Math.min(annualProduction * selfConsumptionFactor, annualConsumption);
+      highUsableKwh = Math.min(annualProduction, annualConsumption);
+    } else {
+      // "Nga fuqia": no bill to read a consumption/tier from — back out the
+      // implied annual consumption from the requested kWp (the exact inverse
+      // of the sizing formula above), so the numbers match what a bill sized
+      // to this same kWp would have given.
+      const impliedAnnualConsumption = (requestedKwp * CONFIG.expectedYield) / coverage;
+      rate = electricityRateFromMonthlyKwh(customer, impliedAnnualConsumption / 12);
+      lowUsableKwh = annualProduction * selfConsumptionFactor;
+      highUsableKwh = Math.min(annualProduction, impliedAnnualConsumption);
+    }
+
+    householdRate = customer === "familjar" ? rate : null;
     savingsLow = lowUsableKwh * rate;
     savingsHigh = highUsableKwh * rate;
     if (savingsHigh > 0) paybackFast = priceWithVat / savingsHigh;
