@@ -82,9 +82,18 @@ përdor kalkulatori** — mbeten vetëm si referencë te katalogu (`catalog.js`)
 faqja kryesore, datasheet-et) në shtator 2026 — jo më as referencë.
 Mbi 125 kW AC → `isCustom: true` (s'ka model të supozuar, thjesht "përcaktohet në projekt").
 
-**Kursimet/payback**: llogariten vetëm kur `method === "fatura"` dhe ka çmim (jo custom).
+**Kursimet/payback**: llogariten sa herë ka çmim (jo custom), për **të dyja** metodat:
+- `method === "fatura"`: energjia e përdorshme kufizohet nga konsumi real i nxjerrë prej faturës
+  (`annualConsumption`).
+- `method === "fuqia"` (shtator/tetor 2026): s'ka faturë, pra nxjerret **konsumi i
+  nënkuptuar** duke e kthyer mbrapsht pikërisht formulën e sizing-ut (`requestedKwp *
+  expectedYield / coverage`) — kështu një klient që fut direkt kWp-në merr **saktësisht të
+  njëjtin çmim dhe kohë kthimi** si klienti që do të kishte dhënë faturën përkatëse për të
+  njëjtën kWp (verifikuar numerikisht për disa raste, përfshirë kufirin 700 kWh/muaj).
+  `electricityRateFromMonthlyKwh` zbaton të njëjtin prag tarife (700 kWh/muaj) si
+  `electricityRate`, thjesht mbi kWh-in e nënkuptuar në vend të faturës.
 Tarifa e energjisë: biznes fiks 16.8 lek/kWh; familjar 10.2 ose 11.4 lek/kWh sipas nivelit
-të faturës (pragu 700 lekë ekuivalent). Auto-konsumi: 45% familjar, 72% biznes.
+të faturës/konsumit (pragu 700 kWh/muaj). Auto-konsumi: 45% familjar, 72% biznes.
 
 ## Katalogu i produkteve (`catalog.js`)
 
